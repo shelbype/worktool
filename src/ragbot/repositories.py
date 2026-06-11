@@ -233,8 +233,8 @@ class PostgresKnowledgeRepository:
         with self._connect() as conn:
             rows = conn.execute(
                 """
-                SELECT id, document_id, title, content, image_refs, metadata,
-                       embedding::text AS embedding, status
+                SELECT id, document_id, title, content, search_text, answer_content,
+                       image_refs, metadata, embedding::text AS embedding, status
                 FROM knowledge_chunks
                 WHERE status = 'active'
                 ORDER BY updated_at DESC
@@ -289,8 +289,8 @@ class PostgresKnowledgeRepository:
         with self._connect() as conn:
             rows = conn.execute(
                 f"""
-                SELECT id, document_id, title, content, image_refs, metadata,
-                       embedding::text AS embedding, status
+                SELECT id, document_id, title, content, search_text, answer_content,
+                       image_refs, metadata, embedding::text AS embedding, status
                 FROM {table}
                 WHERE status = 'active'
                   AND (%(product_module)s::text IS NULL OR metadata->>'product_module' = %(product_module)s::text)
@@ -321,8 +321,8 @@ class PostgresKnowledgeRepository:
         with self._connect() as conn:
             row = conn.execute(
                 f"""
-                SELECT id, document_id, title, content, image_refs, metadata,
-                       embedding::text AS embedding, status
+                SELECT id, document_id, title, content, search_text, answer_content,
+                       image_refs, metadata, embedding::text AS embedding, status
                 FROM {table}
                 WHERE id = %s
                 """,
@@ -514,6 +514,8 @@ class PostgresKnowledgeRepository:
                 document_id TEXT NOT NULL REFERENCES help_documents(id) ON DELETE CASCADE,
                 title TEXT NOT NULL,
                 content TEXT NOT NULL,
+                search_text TEXT,
+                answer_content TEXT,
                 image_refs JSONB NOT NULL DEFAULT '[]',
                 metadata JSONB NOT NULL DEFAULT '{{}}',
                 embedding vector({dimensions}),
@@ -542,11 +544,12 @@ class PostgresKnowledgeRepository:
             conn.execute(
                 f"""
                 INSERT INTO {table} (
-                    id, document_id, title, content, image_refs, metadata,
-                    embedding, status, updated_at
+                    id, document_id, title, content, search_text, answer_content,
+                    image_refs, metadata, embedding, status, updated_at
                 )
                 VALUES (
                     %(id)s, %(document_id)s, %(title)s, %(content)s,
+                    %(search_text)s, %(answer_content)s,
                     %(image_refs)s::jsonb, %(metadata)s::jsonb,
                     %(embedding)s::vector, %(status)s, now()
                 )
@@ -554,6 +557,8 @@ class PostgresKnowledgeRepository:
                     document_id = EXCLUDED.document_id,
                     title = EXCLUDED.title,
                     content = EXCLUDED.content,
+                    search_text = EXCLUDED.search_text,
+                    answer_content = EXCLUDED.answer_content,
                     image_refs = EXCLUDED.image_refs,
                     metadata = EXCLUDED.metadata,
                     embedding = EXCLUDED.embedding,
@@ -565,6 +570,8 @@ class PostgresKnowledgeRepository:
                     "document_id": document_id,
                     "title": chunk.title,
                     "content": chunk.content,
+                    "search_text": chunk.search_text,
+                    "answer_content": chunk.answer_content,
                     "image_refs": self._image_refs_json(chunk.image_refs),
                     "metadata": json.dumps(chunk.metadata, ensure_ascii=False),
                     "embedding": self._vector_literal(chunk.embedding),
@@ -623,6 +630,8 @@ class PostgresKnowledgeRepository:
             document_id=row["document_id"],
             title=row["title"],
             content=row["content"],
+            search_text=row.get("search_text"),
+            answer_content=row.get("answer_content"),
             image_refs=[
                 ImageRef(
                     url=ref.get("url", ""),

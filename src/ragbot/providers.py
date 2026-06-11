@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 import hashlib
 import math
 import re
@@ -36,7 +37,7 @@ class HashEmbeddingProvider:
 
     def _tokens(self, text: str) -> list[str]:
         latin = re.findall(r"[a-zA-Z0-9_./-]+", text.lower())
-        chinese = re.findall(r"[\u4e00-\u9fff]{2,}", text)
+        chinese = re.findall(r"[一-鿿]{2,}", text)
         chinese_terms: list[str] = []
         for word in chinese:
             chinese_terms.append(word)
@@ -45,7 +46,7 @@ class HashEmbeddingProvider:
 
 
 class HttpEmbeddingProvider:
-    """OpenAI-compatible embedding API provider."""
+    """OpenAI-compatible embedding API provider with LRU caching."""
 
     def __init__(
         self,
@@ -60,9 +61,14 @@ class HttpEmbeddingProvider:
         self.model = model
         self.dimensions = dimensions
         self.encoding_format = encoding_format
+        # Cache up to 500 embeddings to avoid redundant API calls.
+        self._embed_cached = functools.lru_cache(maxsize=500)(self._embed_uncached)
 
     def embed(self, text: str) -> list[float]:
-        payload: dict[str, object] = {"model": self.model, "input": text}
+        return list(self._embed_cached(self.model, text))
+
+    def _embed_uncached(self, model: str, text: str) -> tuple[float, ...]:
+        payload: dict[str, object] = {"model": model, "input": text}
         if self.dimensions:
             payload["dimensions"] = self.dimensions
         if self.encoding_format:
@@ -75,7 +81,7 @@ class HttpEmbeddingProvider:
         )
         response.raise_for_status()
         data = response.json()
-        return [float(value) for value in data["data"][0]["embedding"]]
+        return tuple(float(value) for value in data["data"][0]["embedding"])
 
 
 class MockLLMProvider:
@@ -100,9 +106,17 @@ class HttpLLMProvider:
             "1. 用真人客服助理口吻回答，可以称呼“老师”，但不要每句都重复称呼。\n"
             "2. 不要使用机械开头，例如“可以，按下面步骤处理”“根据帮助文档”。\n"
             "3. 操作类问题优先用编号步骤，保留菜单名、按钮名、注意事项。\n"
-            "4. 不要输出图片占位符、关键词、图片说明、OCR 字样，也不要重复文章标题。\n"
-            "5. 如果知识片段不足以确认答案，请只回复“稍等老师，这个问题 @校校助理 帮您看下，尽快回复您。”\n"
-            "6. 语气自然、简洁、可执行，不使用表情，不做价格、合同、退款等承诺。\n\n"
+            "4. 如果知识片段不足以确认答案，请只回复“稍等老师，这个问题 @校校助理 帮您看下，尽快回复您。”\n"
+            "5. 语气自然、简洁、可执行，不使用表情，不做价格、合同、退款等承诺。\n\n"
+            "参考示例：\n"
+            "问：学生如何查看错题分析？\n"
+            "答：老师，学生可以在学生端首页点击“错题本”，选择对应科目即可查看错题分析和订正建议。\n\n"
+            "问：怎么创建班级？\n"
+            "答：老师您好，创建班级的步骤是：\n"
+            "1. 进入“班级管理”页面，点击右上角“新建班级”\n"
+            "2. 填写班级名称、选择科目和年级\n"
+            "3. 点击“确定”即可完成创建\n"
+            "创建后可以在班级列表找到新班级进行排课。\n\n"
             f"客户问题：{question}\n\n"
             "知识片段：\n" + "\n---\n".join(contexts)
         )

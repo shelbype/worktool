@@ -98,11 +98,13 @@ class RetrievalService:
             audience = chunk.metadata.get("audience")
             audience = audience if isinstance(audience, str) and audience in AUDIENCES else None
             title_tokens = self._tokens(chunk.title)
-            body_tokens = self._tokens(chunk.content)
+            # Use search_text for keyword matching if available (optimized for retrieval)
+            search_content = chunk.effective_search_text
+            body_tokens = self._tokens(search_content)
             keyword_score = self._keyword_score(query_tokens, body_tokens | title_tokens)
             vector_score = cosine_similarity(query_embedding, chunk.embedding)
             title_boost = self._title_boost(query_tokens, title_tokens, query, chunk.title)
-            operation_boost = self._operation_boost(query, chunk.title, chunk.content)
+            operation_boost = self._operation_boost(query, chunk.title, search_content)
             rerank_score = min(1.0, 0.45 * keyword_score + 0.45 * vector_score + title_boost + operation_boost)
             if rerank_score > 0:
                 hits.append(RetrievalHit(chunk, keyword_score, vector_score, rerank_score, audience))

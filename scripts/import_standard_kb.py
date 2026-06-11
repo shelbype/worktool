@@ -234,6 +234,8 @@ def build_import_records(
         audiences = infer_audiences(row)
         image_refs = parse_image_refs(row.get("图片引用", ""))
         content = build_chunk_content(row)
+        search_text = build_search_text(row)
+        answer_content = build_answer_content(row)
         document_status = DocumentStatus.ACTIVE
         if status == PENDING_STATUS and not activate_pending:
             document_status = DocumentStatus.ARCHIVED
@@ -247,6 +249,8 @@ def build_import_records(
                 "chunk_id": stable_chunk_id(knowledge_id),
                 "title": row["问题标题"],
                 "content": content,
+                "search_text": search_text,
+                "answer_content": answer_content,
                 "image_refs": image_refs,
                 "metadata": metadata,
                 "audiences": audiences,
@@ -307,6 +311,7 @@ def optional_str(value: object) -> str | None:
 
 
 def build_chunk_content(row: dict[str, str]) -> str:
+    """Build the full content string (kept for backward compatibility)."""
     parts = [
         section("问题", row.get("问题标题", "")),
         section("用户可能问法", row.get("用户问法示例", "")),
@@ -322,6 +327,41 @@ def build_chunk_content(row: dict[str, str]) -> str:
     ]
     content = "\n\n".join(part for part in parts if part)
     return remove_content_noise(content)
+
+
+def build_search_text(row: dict[str, str]) -> str:
+    """Build search-optimized text for embedding and retrieval.
+
+    Contains only fields meant for matching, not for LLM answer generation:
+    问题标题, 用户问法示例, 意图关键词, RAG检索摘要
+    """
+    parts = [
+        section("问题", row.get("问题标题", "")),
+        section("用户可能问法", row.get("用户问法示例", "")),
+        section("意图关键词", row.get("意图关键词", "")),
+        section("检索摘要", row.get("RAG检索摘要", "")),
+    ]
+    text = "\n\n".join(part for part in parts if part)
+    return remove_content_noise(text)
+
+
+def build_answer_content(row: dict[str, str]) -> str:
+    """Build answer-only content for LLM context.
+
+    Contains only fields suitable for generating customer-facing responses:
+    标准回答, 操作步骤, 前置条件, 排查项, 注意事项, 不适用场景, 转人工条件
+    """
+    parts = [
+        section("标准回答", row.get("标准回答", "")),
+        section("操作步骤", row.get("操作步骤", "")),
+        section("前置条件", row.get("前置条件", "")),
+        section("排查项", row.get("排查项", "")),
+        section("注意事项", row.get("注意事项", "")),
+        section("不适用场景", row.get("不适用场景", "")),
+        section("转人工条件", row.get("转人工条件", "")),
+    ]
+    text = "\n\n".join(part for part in parts if part)
+    return remove_content_noise(text)
 
 
 def section(label: str, value: str) -> str:
@@ -406,13 +446,17 @@ def build_chunks(records: list[dict[str, Any]], *, embed: bool) -> list[Knowledg
     embedding_provider = build_embedding_provider(get_settings()) if embed else None
     chunks: list[KnowledgeChunk] = []
     for record in records:
-        embedding = embedding_provider.embed(record["content"]) if embedding_provider else []
+        # Embed the search_text (optimized for retrieval) if available, otherwise content
+        text_to_embed = record.get("search_text") or record["content"]
+        embedding = embedding_provider.embed(text_to_embed) if embedding_provider else []
         chunks.append(
             KnowledgeChunk(
                 id=record["chunk_id"],
                 document_id=record["document_id"],
                 title=record["title"],
                 content=record["content"],
+                search_text=record.get("search_text"),
+                answer_content=record.get("answer_content"),
                 metadata=record["metadata"],
                 image_refs=record["image_refs"],
                 embedding=embedding,
@@ -464,9 +508,14 @@ def validate_records_before_execute(records: list[dict[str, Any]]) -> list[str]:
     for record in records:
         if not record["content"]:
             errors.append(f"{record['knowledge_id']} 清洗后正文为空")
+        answer = record.get("answer_content") or ""
+        if not answer.strip():
+            errors.append(f"{record['knowledge_id']} 回答正文为空，无法生成客服回答")
         for pattern in NOISE_PATTERNS:
             if pattern in record["content"]:
                 errors.append(f"{record['knowledge_id']} 正文仍包含噪声：{pattern}")
+            if pattern in answer:
+                errors.append(f"{record['knowledge_id']} 回答正文包含噪声：{pattern}")
         if not record["audiences"]:
             errors.append(f"{record['knowledge_id']} 未识别角色库")
     return errors

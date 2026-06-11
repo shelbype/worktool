@@ -55,6 +55,14 @@ def main() -> None:
     eval_routing = subparsers.add_parser("eval-routing")
     eval_routing.add_argument("--cases", default="eval/questions.json")
 
+    eval_full = subparsers.add_parser("eval-full")
+    eval_full.add_argument("--cases", default="eval/questions.json")
+    eval_full.add_argument("--source", default="db/init")
+    eval_full.add_argument("--load-source", action="store_true")
+    eval_full.add_argument("--baseline", default="eval/baseline.json")
+    eval_full.add_argument("--save-baseline", action="store_true")
+    eval_full.add_argument("--tolerance", type=float, default=0.05)
+
     quality_report = subparsers.add_parser("quality-report")
     quality_report.add_argument("--limit", type=int, default=100)
     quality_report.add_argument("--top", type=int, default=10)
@@ -155,6 +163,23 @@ def main() -> None:
             AudienceRouter(settings.audience_routing_path, settings.max_route_audiences),
         )
         print(json.dumps(result, ensure_ascii=False, indent=2))
+        return
+
+    if args.command == "eval-full":
+        result = run_eval_full(
+            settings,
+            repository,
+            Path(args.cases),
+            Path(args.source),
+            Path(args.baseline),
+            load_source=args.load_source,
+            save_baseline=args.save_baseline,
+            tolerance=args.tolerance,
+        )
+        report = result["report"]
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        if not result["passed"]:
+            raise SystemExit(1)
         return
 
     if args.command == "quality-report":
@@ -272,7 +297,7 @@ def evaluate_retrieval_cases(cases: list[dict[str, object]], retrieval: Retrieva
         should_handoff = bool(case.get("should_handoff", not should_auto_reply))
         result = retrieval.retrieve(question)
         top_titles = [hit.chunk.title for hit in result.hits[:3]]
-        top_contents = [hit.chunk.content for hit in result.hits[:3]]
+        top_contents = [hit.chunk.effective_answer_content for hit in result.hits[:3]]
         top1_hit: bool | None = None
         top3_hit: bool | None = None
         if expected_keywords or expected_source_ids:
@@ -364,6 +389,124 @@ def evaluate_routing_cases(cases: list[dict[str, object]], router: AudienceRoute
     }
 
 
+def run_eval_full(
+    settings: Settings,
+    repository,
+    cases_path: Path,
+    source_path: Path,
+    baseline_path: Path,
+    *,
+    load_source: bool = False,
+    save_baseline: bool = False,
+    tolerance: float = 0.05,
+) -> dict[str, object]:
+    """Run full evaluation (retrieval + routing) and compare against baseline.
+
+    Returns {"passed": bool, "report": dict} with exit code 1 when any metric
+    drops more than tolerance (default 5%) below baseline.
+    """
+    # Prepare repository with data if needed
+    if isinstance(repository, InMemoryKnowledgeRepository) or load_source:
+        if settings.audience_routing_enabled:
+            rebuild_audience_index(settings, repository, source_path)
+        else:
+            import_helpcenter_documents(
+                settings, repository, source_path,
+                clear=isinstance(repository, InMemoryKnowledgeRepository),
+            )
+
+    retrieval = RetrievalService(repository, build_embedding_provider(settings), settings)
+    cases = load_eval_cases(cases_path)
+
+    retrieval_report = evaluate_retrieval_cases(cases, retrieval)
+    routing_report = evaluate_routing_cases(
+        cases,
+        AudienceRouter(settings.audience_routing_path, settings.max_route_audiences),
+    )
+
+    current_metrics = {
+        "top1_hit_rate": retrieval_report["top1_hit_rate"],
+        "top3_hit_rate": retrieval_report["top3_hit_rate"],
+        "auto_reply_accuracy": retrieval_report["auto_reply_accuracy"],
+        "handoff_accuracy": retrieval_report["handoff_accuracy"],
+        "false_auto_reply_count": retrieval_report["false_auto_reply_count"],
+        "routing_top1_accuracy": routing_report["top1_accuracy"],
+        "routing_covered_accuracy": routing_report["covered_accuracy"],
+    }
+
+    if save_baseline:
+        baseline_path.parent.mkdir(parents=True, exist_ok=True)
+        baseline = {
+            "description": "Baseline metrics for regression comparison.",
+            "tolerance": tolerance,
+            "metrics": current_metrics,
+        }
+        baseline_path.write_text(json.dumps(baseline, ensure_ascii=False, indent=2), encoding="utf-8")
+        return {
+            "passed": True,
+            "report": {
+                "action": "saved_baseline",
+                "baseline": str(baseline_path),
+                "metrics": current_metrics,
+                "retrieval_details": retrieval_report,
+                "routing_details": routing_report,
+            },
+        }
+
+    # Compare against baseline
+    baseline = None
+    if baseline_path.exists():
+        baseline = json.loads(baseline_path.read_text(encoding="utf-8"))
+        baseline_metrics = baseline.get("metrics", {})
+    else:
+        baseline_metrics = {}
+
+    diffs: list[str] = []
+    passed = True
+    metric_keys = [
+        ("top1_hit_rate", "Top-1 hit rate"),
+        ("top3_hit_rate", "Top-3 hit rate"),
+        ("auto_reply_accuracy", "Auto-reply accuracy"),
+        ("handoff_accuracy", "Handoff accuracy"),
+        ("routing_top1_accuracy", "Routing top-1 accuracy"),
+        ("routing_covered_accuracy", "Routing covered accuracy"),
+    ]
+
+    for key, label in metric_keys:
+        current = current_metrics.get(key, 0)
+        baseline_val = baseline_metrics.get(key)
+        if baseline_val is None:
+            diffs.append(f"{label}: {current:.4f} (no baseline)")
+            continue
+        delta = current - baseline_val
+        status = "PASS" if delta >= -tolerance else "FAIL"
+        diffs.append(f"{label}: {current:.4f} vs {baseline_val:.4f} (delta={delta:+.4f}) [{status}]")
+        if delta < -tolerance:
+            passed = False
+
+    # False auto-reply count: fail if increases
+    false_auto = current_metrics.get("false_auto_reply_count", 0)
+    baseline_false = baseline_metrics.get("false_auto_reply_count")
+    if baseline_false is not None and false_auto > baseline_false:
+        diffs.append(
+            f"False auto-reply: {false_auto} vs {baseline_false} (+{false_auto - baseline_false}) [FAIL]"
+        )
+        passed = False
+
+    return {
+        "passed": passed,
+        "report": {
+            "action": "compare_baseline",
+            "baseline": str(baseline_path),
+            "passed": passed,
+            "metrics": current_metrics,
+            "diffs": diffs,
+            "retrieval_details": retrieval_report,
+            "routing_details": routing_report,
+        },
+    }
+
+
 def _would_auto_reply(question: str, result: RetrievalResult) -> bool:
     if _requires_human(question):
         return False
@@ -387,7 +530,7 @@ def _case_matches(expected_keywords: list[str], expected_source_ids: list[str], 
         if expected_source_ids and source_id in expected_source_ids:
             return True
     if expected_keywords:
-        text = "\n".join([hit.chunk.title for hit in hits] + [hit.chunk.content for hit in hits])
+        text = "\n".join([hit.chunk.title for hit in hits] + [hit.chunk.effective_search_text for hit in hits])
         return any(keyword and keyword in text for keyword in expected_keywords)
     return False
 

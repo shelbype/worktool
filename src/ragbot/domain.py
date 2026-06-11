@@ -64,7 +64,19 @@ class KnowledgeChunk:
     image_refs: list[ImageRef] = field(default_factory=list)
     embedding: list[float] = field(default_factory=list)
     status: DocumentStatus = DocumentStatus.ACTIVE
+    search_text: str | None = None
+    answer_content: str | None = None
     id: str = field(default_factory=lambda: new_id("chunk"))
+
+    @property
+    def effective_search_text(self) -> str:
+        """Return search_text if set, otherwise fall back to content."""
+        return self.search_text or self.content
+
+    @property
+    def effective_answer_content(self) -> str:
+        """Return answer_content if set, otherwise fall back to content."""
+        return self.answer_content or self.content
 
 
 @dataclass(slots=True)

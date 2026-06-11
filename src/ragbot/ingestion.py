@@ -53,7 +53,9 @@ class IngestionService:
                 image_refs=image_refs,
                 status=document.status,
             )
-            chunks.append(replace(chunk, embedding=self.embedding_provider.embed(content)))
+            # Embed search_text if available, otherwise content
+            embed_text = content  # HTML-document ingestion uses the same content for both
+            chunks.append(replace(chunk, embedding=self.embedding_provider.embed(embed_text)))
         return chunks
 
     def _clean_html(self, html: str, explicit_image_urls: list[str]) -> tuple[str, list[ImageRef]]:

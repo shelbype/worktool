@@ -13,7 +13,9 @@ class AnswerService:
 
     def answer(self, question: str, retrieval: RetrievalResult) -> AnswerDecision:
         cited_chunk_ids = [hit.chunk_reference for hit in retrieval.hits]
-        contexts = self._compact_contexts([hit.chunk.content for hit in retrieval.hits])
+        # Use effective_answer_content (answer-only content) for LLM context generation.
+        # Falls back to full content if answer_content is not set.
+        contexts = self._compact_contexts([hit.chunk.effective_answer_content for hit in retrieval.hits])
         if retrieval.confidence == ConfidenceLevel.LOW:
             return AnswerDecision(
                 answer=None,
