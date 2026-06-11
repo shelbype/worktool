@@ -1,0 +1,61 @@
+﻿{
+  "input": "/home/admin/worktool/analysis/服务器正式知识库_标准模板规范化版.csv",
+  "total_rows": 74,
+  "status_counts": {
+    "可入库": 66,
+    "待复核": 8
+  },
+  "import_records": 66,
+  "active_records": 66,
+  "archived_records": 0,
+  "skipped_rows": 8,
+  "skipped_row_ids_preview": [
+    "kb-server-0007",
+    "kb-server-0008",
+    "kb-server-0009",
+    "kb-server-0014",
+    "kb-server-0022",
+    "kb-server-0054",
+    "kb-server-0055",
+    "kb-server-0059"
+  ],
+  "category_counts": {
+    "订单/合同/报课/收费": 2,
+    "数据/报表/学习报告": 1,
+    "账号登录/密码/手机号": 5,
+    "作业/布置/批改/反馈": 20,
+    "班级/排课/课时/考勤": 14,
+    "权限/角色/公池": 7,
+    "小程序/公众号/二维码": 1,
+    "题库/录题/单词书/模考": 10,
+    "浏览器/网络/缓存": 6
+  },
+  "audience_counts": {
+    "student": 43,
+    "teacher": 45,
+    "academic": 38,
+    "sales": 13,
+    "principal": 21
+  },
+  "content_min_chars": 554,
+  "content_avg_chars": 1045.6,
+  "content_max_chars": 1722,
+  "image_ref_records": 65,
+  "image_refs": 453,
+  "validation_errors": [],
+  "validation_warnings": [],
+  "execute_requested": true,
+  "clear_existing": true,
+  "include_pending": false,
+  "skip_audience_index": false,
+  "executed": true,
+  "backup_tables": [
+    "kb_backup_20260611_172908_help_documents",
+    "kb_backup_20260611_172908_knowledge_chunks",
+    "kb_backup_20260611_172908_knowledge_chunks_student",
+    "kb_backup_20260611_172908_knowledge_chunks_teacher",
+    "kb_backup_20260611_172908_knowledge_chunks_principal",
+    "kb_backup_20260611_172908_knowledge_chunks_academic",
+    "kb_backup_20260611_172908_knowledge_chunks_sales"
+  ]
+}

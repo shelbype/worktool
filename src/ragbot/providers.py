@@ -1,0 +1,131 @@
+from __future__ import annotations
+
+import hashlib
+import math
+import re
+from typing import Protocol
+
+import httpx
+
+
+class EmbeddingProvider(Protocol):
+    def embed(self, text: str) -> list[float]:
+        ...
+
+
+class LLMProvider(Protocol):
+    def generate_answer(self, question: str, contexts: list[str]) -> str:
+        ...
+
+
+class HashEmbeddingProvider:
+    """Deterministic local embedding for development and tests."""
+
+    def __init__(self, dimensions: int = 64) -> None:
+        self.dimensions = dimensions
+
+    def embed(self, text: str) -> list[float]:
+        vector = [0.0] * self.dimensions
+        tokens = self._tokens(text)
+        for token in tokens:
+            digest = hashlib.sha256(token.encode("utf-8")).digest()
+            index = int.from_bytes(digest[:4], "big") % self.dimensions
+            vector[index] += 1.0
+        norm = math.sqrt(sum(value * value for value in vector)) or 1.0
+        return [value / norm for value in vector]
+
+    def _tokens(self, text: str) -> list[str]:
+        latin = re.findall(r"[a-zA-Z0-9_./-]+", text.lower())
+        chinese = re.findall(r"[\u4e00-\u9fff]{2,}", text)
+        chinese_terms: list[str] = []
+        for word in chinese:
+            chinese_terms.append(word)
+            chinese_terms.extend(word[index : index + 2] for index in range(max(1, len(word) - 1)))
+        return latin + chinese_terms
+
+
+class HttpEmbeddingProvider:
+    """OpenAI-compatible embedding API provider."""
+
+    def __init__(
+        self,
+        api_base: str,
+        api_key: str,
+        model: str,
+        dimensions: int | None = None,
+        encoding_format: str | None = "float",
+    ) -> None:
+        self.api_base = api_base.rstrip("/")
+        self.api_key = api_key
+        self.model = model
+        self.dimensions = dimensions
+        self.encoding_format = encoding_format
+
+    def embed(self, text: str) -> list[float]:
+        payload: dict[str, object] = {"model": self.model, "input": text}
+        if self.dimensions:
+            payload["dimensions"] = self.dimensions
+        if self.encoding_format:
+            payload["encoding_format"] = self.encoding_format
+        response = httpx.post(
+            f"{self.api_base}/embeddings",
+            headers={"Authorization": f"Bearer {self.api_key}"},
+            json=payload,
+            timeout=30,
+        )
+        response.raise_for_status()
+        data = response.json()
+        return [float(value) for value in data["data"][0]["embedding"]]
+
+
+class MockLLMProvider:
+    def generate_answer(self, question: str, contexts: list[str]) -> str:
+        if not contexts:
+            return "稍等老师，这个问题 @校校助理 帮您看下，尽快回复您。"
+        context = contexts[0].strip().replace("\n", " ")
+        return f"老师，您可以先看下这个说明：{context}"
+
+
+class HttpLLMProvider:
+    def __init__(self, api_base: str, api_key: str, model: str, max_tokens: int = 500) -> None:
+        self.api_base = api_base.rstrip("/")
+        self.api_key = api_key
+        self.model = model
+        self.max_tokens = max_tokens
+
+    def generate_answer(self, question: str, contexts: list[str]) -> str:
+        prompt = (
+            "你是教育 SaaS 客服助手。请只基于给定知识片段回答客户问题，不要编造。\n"
+            "回答要求：\n"
+            "1. 用真人客服助理口吻回答，可以称呼“老师”，但不要每句都重复称呼。\n"
+            "2. 不要使用机械开头，例如“可以，按下面步骤处理”“根据帮助文档”。\n"
+            "3. 操作类问题优先用编号步骤，保留菜单名、按钮名、注意事项。\n"
+            "4. 不要输出图片占位符、关键词、图片说明、OCR 字样，也不要重复文章标题。\n"
+            "5. 如果知识片段不足以确认答案，请只回复“稍等老师，这个问题 @校校助理 帮您看下，尽快回复您。”\n"
+            "6. 语气自然、简洁、可执行，不使用表情，不做价格、合同、退款等承诺。\n\n"
+            f"客户问题：{question}\n\n"
+            "知识片段：\n" + "\n---\n".join(contexts)
+        )
+        response = httpx.post(
+            f"{self.api_base}/chat/completions",
+            headers={"Authorization": f"Bearer {self.api_key}"},
+            json={
+                "model": self.model,
+                "messages": [{"role": "user", "content": prompt}],
+                "temperature": 0.2,
+                "max_tokens": self.max_tokens,
+            },
+            timeout=30,
+        )
+        response.raise_for_status()
+        data = response.json()
+        return data["choices"][0]["message"]["content"].strip()
+
+
+def cosine_similarity(left: list[float], right: list[float]) -> float:
+    if not left or not right or len(left) != len(right):
+        return 0.0
+    dot = sum(a * b for a, b in zip(left, right))
+    left_norm = math.sqrt(sum(a * a for a in left)) or 1.0
+    right_norm = math.sqrt(sum(b * b for b in right)) or 1.0
+    return max(0.0, min(1.0, dot / (left_norm * right_norm)))

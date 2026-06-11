@@ -1,0 +1,41 @@
+{
+  "source_file": "analysis\\server_formal_knowledge_base.csv",
+  "raw_chunk_count": 171,
+  "removed_title_lines": 283,
+  "removed_image_inline_lines": 842,
+  "removed_image_description_lines": 1297,
+  "empty_content_removed": 1,
+  "short_chunks_merged": 9,
+  "exact_duplicates_removed": 1,
+  "near_duplicate_pairs": 3,
+  "final_chunk_count": 160,
+  "quality_flag_counts": {
+    "title_noise_removed": 140,
+    "image_noise_removed": 159,
+    "short_content": 5,
+    "generic_intro": 30,
+    "not_actionable": 2,
+    "near_duplicate": 6
+  },
+  "category_counts": {
+    "使用技巧": 12,
+    "初次使用指南": 21,
+    "新功能上线": 12,
+    "核心功能介绍": 69,
+    "热门文章": 35,
+    "热门问题": 11
+  },
+  "audience_counts": {
+    "学生": 118,
+    "老师": 115,
+    "教务": 109,
+    "销售": 48,
+    "校长": 56
+  },
+  "output_files": [
+    "analysis\\服务器正式知识库_清洗版.csv",
+    "analysis\\服务器正式知识库_清洗版.md",
+    "analysis\\服务器正式知识库_清洗报告.md",
+    "analysis\\服务器正式知识库_清洗摘要.json"
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "max_route_audiences": 3,
+  "default_audiences": ["student", "teacher", "principal", "academic", "sales"],
+  "audiences": {
+    "student": {
+      "label": "学生",
+      "keywords": ["学生", "学员", "家长", "家长端", "学生端", "VIP学生", "非VIP", "错题", "学习报告", "作答", "账号续期", "绑定学生"],
+      "routing_keywords": ["学生", "学员", "家长", "家长端", "学生端", "VIP", "学习报告", "作答", "续期", "绑定学生"]
+    },
+    "teacher": {
+      "label": "老师",
+      "keywords": ["老师", "助教", "课堂反馈", "布置作业", "作业", "批改", "题库", "模考", "单词书", "错题分析", "口语", "写作"],
+      "routing_keywords": ["老师", "助教", "课堂反馈", "布置作业", "作业", "批改", "题库", "模考", "单词书", "错题分析"]
+    },
+    "principal": {
+      "label": "校长",
+      "keywords": ["校长", "校长端", "运营数据", "实时数据", "数据分析", "统计", "报表", "运营"],
+      "routing_keywords": ["校长", "校长端", "运营", "运营数据", "实时数据", "数据分析", "统计", "报表"]
+    },
+    "academic": {
+      "label": "教务",
+      "keywords": ["教务", "班级", "新建班级", "创建班级", "课程", "排课", "课表", "考勤", "员工", "老师账号", "权限", "企业微信", "客户端", "设备平台"],
+      "routing_keywords": ["教务", "班级", "新建班级", "创建班级", "课程", "排课", "课表", "考勤", "员工", "老师账号", "权限", "企业微信", "客户端", "设备"]
+    },
+    "sales": {
+      "label": "销售",
+      "keywords": ["销售", "课程顾问", "线索", "市场线索", "公池", "订单", "合同", "签约", "报课", "退费", "退款", "发票", "报价"],
+      "routing_keywords": ["销售", "课程顾问", "线索", "市场线索", "公池", "订单", "合同", "签约", "报课", "退费", "退款", "发票", "报价"]
+    }
+  },
+  "source_overrides": {
+    "helpcenter:56": ["academic"],
+    "helpcenter:66": ["academic"],
+    "helpcenter:67": ["student", "academic"],
+    "helpcenter:68": ["academic"],
+    "helpcenter:69": ["academic"],
+    "helpcenter:70": ["sales"],
+    "helpcenter:74": ["student"],
+    "helpcenter:76": ["student", "teacher", "principal", "academic", "sales"],
+    "helpcenter:77": ["sales"],
+    "helpcenter:78": ["student"],
+    "helpcenter:80": ["teacher"],
+    "helpcenter:86": ["academic"],
+    "helpcenter:89": ["teacher"],
+    "helpcenter:90": ["academic"],
+    "helpcenter:98": ["principal"],
+    "helpcenter:118": ["sales"],
+    "helpcenter:127": ["principal"],
+    "helpcenter:128": ["student"],
+    "helpcenter:129": ["student"],
+    "helpcenter:134": ["academic"],
+    "helpcenter:159": ["sales", "principal"],
+    "helpcenter:167": ["teacher", "academic"],
+    "helpcenter:168": ["student", "academic"],
+    "helpcenter:170": ["student", "sales"],
+    "helpcenter:191": ["sales"],
+    "helpcenter:240": ["teacher"],
+    "helpcenter:241": ["student"],
+    "helpcenter:250": ["academic"],
+    "helpcenter:251": ["academic"]
+  },
+  "source_excludes": {}
+}

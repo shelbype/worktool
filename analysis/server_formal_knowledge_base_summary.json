@@ -1,0 +1,71 @@
+{
+  "source_dir": "db\\init",
+  "source_files": [
+    "db\\init\\osp_helpcenter_art.xls",
+    "db\\init\\osp_helpcenter_artsubhead.xls",
+    "db\\init\\osp_helpcenter_artsubinc.xls",
+    "db\\init\\osp_helpcenter_cate.xls",
+    "db\\init\\osp_helpcenter_kws.xls"
+  ],
+  "documents": 141,
+  "chunks": 171,
+  "image_refs_total_on_chunks": 1297,
+  "embedding_dim": 64,
+  "audience_tables": [
+    "knowledge_chunks_student",
+    "knowledge_chunks_teacher",
+    "knowledge_chunks_principal",
+    "knowledge_chunks_academic",
+    "knowledge_chunks_sales"
+  ],
+  "audience_chunk_counts": [
+    [
+      "student",
+      126
+    ],
+    [
+      "teacher",
+      124
+    ],
+    [
+      "academic",
+      116
+    ],
+    [
+      "principal",
+      60
+    ],
+    [
+      "sales",
+      51
+    ]
+  ],
+  "category_chunk_counts": [
+    [
+      "核心功能介绍",
+      72
+    ],
+    [
+      "热门文章",
+      39
+    ],
+    [
+      "初次使用指南",
+      22
+    ],
+    [
+      "新功能上线",
+      15
+    ],
+    [
+      "使用技巧",
+      12
+    ],
+    [
+      "热门问题",
+      11
+    ]
+  ],
+  "csv": "analysis\\server_formal_knowledge_base.csv",
+  "md": "analysis\\server_formal_knowledge_base.md"
+}

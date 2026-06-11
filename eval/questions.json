@@ -1,0 +1,1908 @@
+[
+  {
+    "id": "class_create_001",
+    "question": "怎么新建班级",
+    "expected_keywords": [
+      "班级管理",
+      "创建班级",
+      "教务创建课程班级"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "class_create_002",
+    "question": "如何创建一个一对一班级",
+    "expected_keywords": [
+      "班级管理",
+      "创建班级",
+      "一对一"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "class_schedule_001",
+    "question": "新建班级后怎么排课",
+    "expected_keywords": [
+      "高效排课",
+      "排课",
+      "班级管理"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "class_teacher_001",
+    "question": "班级创建好了为什么选不到老师",
+    "expected_keywords": [
+      "员工管理",
+      "班级管理",
+      "老师"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "teacher",
+      "academic"
+    ]
+  },
+  {
+    "id": "class_homework_001",
+    "question": "还没有排课的班级能不能布置作业",
+    "expected_keywords": [
+      "还没有排课的班级",
+      "布置作业"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "teacher",
+      "academic"
+    ]
+  },
+  {
+    "id": "student_create_001",
+    "question": "教务怎么创建学员账号",
+    "expected_keywords": [
+      "创建学员账号",
+      "学员管理"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "student",
+      "academic"
+    ]
+  },
+  {
+    "id": "student_manage_001",
+    "question": "学员管理在哪里看",
+    "expected_keywords": [
+      "学员管理"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "student"
+    ]
+  },
+  {
+    "id": "student_password_001",
+    "question": "学生忘记密码怎么重置",
+    "expected_keywords": [
+      "无法登录系统",
+      "学员管理",
+      "密码"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "student"
+    ]
+  },
+  {
+    "id": "student_bind_001",
+    "question": "家长端怎么绑定学生",
+    "expected_keywords": [
+      "家长端小程序",
+      "学生端小程序",
+      "绑定"
+    ],
+    "should_auto_reply": false,
+    "should_handoff": true,
+    "expected_audiences": [
+      "student"
+    ]
+  },
+  {
+    "id": "student_extend_001",
+    "question": "学生账号如何续期",
+    "expected_keywords": [
+      "学生账号如何续期",
+      "续期"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "student"
+    ]
+  },
+  {
+    "id": "employee_create_001",
+    "question": "怎么新增老师账号",
+    "expected_keywords": [
+      "创建员工账号",
+      "员工管理"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "employee_permission_001",
+    "question": "员工端口权限有哪些",
+    "expected_keywords": [
+      "端口权限",
+      "员工管理"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "wechat_001",
+    "question": "企业微信怎么用",
+    "expected_keywords": [
+      "企业微信"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "notification_001",
+    "question": "怎么更快收到消息通知",
+    "expected_keywords": [
+      "接收消息通知",
+      "消息通知"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "device_001",
+    "question": "使用校校系统有哪些设备平台要求",
+    "expected_keywords": [
+      "设备平台要求",
+      "Chrome",
+      "Safari"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "client_windows_001",
+    "question": "Windows校校客户端怎么下载",
+    "expected_keywords": [
+      "Windows校校客户端"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "client_macos_001",
+    "question": "Mac客户端安装说明在哪里",
+    "expected_keywords": [
+      "MacOS校校客户端"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "course_manage_001",
+    "question": "怎么创建课程",
+    "expected_keywords": [
+      "课程管理",
+      "创建课程"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "schedule_export_001",
+    "question": "课表怎么导出",
+    "expected_keywords": [
+      "课表管理",
+      "课表功能",
+      "导出"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "schedule_view_001",
+    "question": "视图模式下如何一键排课",
+    "expected_keywords": [
+      "视图模式",
+      "一键排课"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "attendance_001",
+    "question": "考勤功能怎么用",
+    "expected_keywords": [
+      "考勤功能"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "feedback_001",
+    "question": "老师如何填写课堂反馈",
+    "expected_keywords": [
+      "填写课堂反馈",
+      "课堂反馈"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "teacher",
+      "student"
+    ]
+  },
+  {
+    "id": "homework_001",
+    "question": "老师怎么布置作业",
+    "expected_keywords": [
+      "布置作业",
+      "作业功能"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "teacher",
+      "student"
+    ]
+  },
+  {
+    "id": "homework_outline_001",
+    "question": "如何用作业大纲发布作业",
+    "expected_keywords": [
+      "作业大纲"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "teacher",
+      "student"
+    ]
+  },
+  {
+    "id": "homework_loading_001",
+    "question": "学生作业无法加载怎么办",
+    "expected_keywords": [
+      "无法加载",
+      "作业"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "teacher",
+      "student"
+    ]
+  },
+  {
+    "id": "audio_loading_001",
+    "question": "学生做题音频无法加载怎么处理",
+    "expected_keywords": [
+      "音频无法加载"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "teacher",
+      "student"
+    ]
+  },
+  {
+    "id": "exam_submit_001",
+    "question": "学生完成测试后提交不了怎么办",
+    "expected_keywords": [
+      "无法提交",
+      "完成测试"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "teacher",
+      "student"
+    ]
+  },
+  {
+    "id": "order_create_001",
+    "question": "销售端怎么快速生成订单",
+    "expected_keywords": [
+      "快速生成订单",
+      "订单管理"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "sales"
+    ]
+  },
+  {
+    "id": "contract_sign_001",
+    "question": "电子合同签署流程是什么",
+    "expected_keywords": [
+      "电子合同签署流程"
+    ],
+    "should_auto_reply": false,
+    "should_handoff": true,
+    "expected_audiences": [
+      "sales"
+    ]
+  },
+  {
+    "id": "refund_001",
+    "question": "订单退费怎么操作",
+    "expected_keywords": [
+      "订单退费",
+      "取消"
+    ],
+    "should_auto_reply": false,
+    "should_handoff": true,
+    "expected_audiences": [
+      "sales"
+    ]
+  },
+  {
+    "id": "mock_test_001",
+    "question": "老师如何布置新托福2026模考测试",
+    "expected_keywords": [
+      "新托福2026模考测试"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "teacher"
+    ]
+  },
+  {
+    "id": "wordbook_001",
+    "question": "老师如何上传单词书",
+    "expected_keywords": [
+      "上传单词书",
+      "单词书"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "teacher"
+    ]
+  },
+  {
+    "id": "question_bank_001",
+    "question": "机构题库怎么录题",
+    "expected_keywords": [
+      "机构题库",
+      "快捷录题"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "teacher"
+    ]
+  },
+  {
+    "id": "sales_lead_001",
+    "question": "销售线索怎么协作",
+    "expected_keywords": [
+      "销售线索协作",
+      "线索"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "expected_audiences": [
+      "sales"
+    ]
+  },
+  {
+    "id": "sensitive_price_001",
+    "question": "现在续费可以打几折",
+    "expected_keywords": [],
+    "should_auto_reply": false,
+    "should_handoff": true,
+    "expected_audiences": [
+      "sales"
+    ]
+  },
+  {
+    "id": "unknown_001",
+    "question": "校区门口停车位怎么申请",
+    "expected_keywords": [],
+    "should_auto_reply": false,
+    "should_handoff": true
+  },
+  {
+    "id": "ai_intro_001",
+    "module": "初次使用指南",
+    "question": "校校AI是什么",
+    "expected_source_ids": [
+      "helpcenter:18",
+      "helpcenter:82"
+    ],
+    "expected_keywords": [
+      "校校AI"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": false
+  },
+  {
+    "id": "ai_assistant_001",
+    "module": "新功能上线",
+    "question": "AI小新智能助手能做什么",
+    "expected_source_ids": [
+      "helpcenter:249"
+    ],
+    "expected_keywords": [
+      "AI小新智能助手"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": false
+  },
+  {
+    "id": "wechat_002",
+    "module": "初次使用指南",
+    "question": "怎么快速玩转企业微信",
+    "expected_source_ids": [
+      "helpcenter:56"
+    ],
+    "expected_keywords": [
+      "企业微信"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "ports_001",
+    "module": "热门文章",
+    "question": "系统各端口权限说明",
+    "expected_source_ids": [
+      "helpcenter:76"
+    ],
+    "expected_keywords": [
+      "端口权限"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": false,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "vip_student_001",
+    "module": "热门文章",
+    "question": "VIP学生账号和普通学生账号有什么区别",
+    "expected_source_ids": [
+      "helpcenter:74"
+    ],
+    "expected_keywords": [
+      "VIP学生账号"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": false
+  },
+  {
+    "id": "student_miniapp_001",
+    "module": "热门文章",
+    "question": "学生端小程序怎么用",
+    "expected_source_ids": [
+      "helpcenter:78",
+      "helpcenter:128"
+    ],
+    "expected_keywords": [
+      "学生端小程序"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "student"
+    ]
+  },
+  {
+    "id": "teacher_miniapp_001",
+    "module": "热门文章",
+    "question": "老师端小程序怎么用",
+    "expected_source_ids": [
+      "helpcenter:75",
+      "helpcenter:103"
+    ],
+    "expected_keywords": [
+      "老师端小程序"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true
+  },
+  {
+    "id": "principal_miniapp_001",
+    "module": "核心功能介绍",
+    "question": "校长端小程序怎么用",
+    "expected_source_ids": [
+      "helpcenter:98"
+    ],
+    "expected_keywords": [
+      "校长端小程序"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true
+  },
+  {
+    "id": "sales_miniapp_001",
+    "module": "核心功能介绍",
+    "question": "销售端小程序怎么用",
+    "expected_source_ids": [
+      "helpcenter:118"
+    ],
+    "expected_keywords": [
+      "销售端小程序"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "sales"
+    ]
+  },
+  {
+    "id": "academic_miniapp_001",
+    "module": "核心功能介绍",
+    "question": "教务端小程序怎么用",
+    "expected_source_ids": [
+      "helpcenter:100"
+    ],
+    "expected_keywords": [
+      "教务端小程序"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true
+  },
+  {
+    "id": "home_page_001",
+    "module": "核心功能介绍",
+    "question": "首页功能怎么使用",
+    "expected_source_ids": [
+      "helpcenter:84",
+      "helpcenter:106",
+      "helpcenter:119",
+      "helpcenter:130",
+      "helpcenter:148"
+    ],
+    "expected_keywords": [
+      "首页功能",
+      "首页"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true
+  },
+  {
+    "id": "employee_manage_001",
+    "module": "核心功能介绍",
+    "question": "员工管理功能怎么用",
+    "expected_source_ids": [
+      "helpcenter:85",
+      "helpcenter:131"
+    ],
+    "expected_keywords": [
+      "员工管理"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "employee_create_002",
+    "module": "初次使用指南",
+    "question": "教务如何创建员工账号",
+    "expected_source_ids": [
+      "helpcenter:66"
+    ],
+    "expected_keywords": [
+      "创建员工账号"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "student_create_002",
+    "module": "初次使用指南",
+    "question": "入门时怎么创建学员账号",
+    "expected_source_ids": [
+      "helpcenter:67"
+    ],
+    "expected_keywords": [
+      "创建学员账号"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "student",
+      "academic"
+    ]
+  },
+  {
+    "id": "course_class_001",
+    "module": "初次使用指南",
+    "question": "教务怎么创建课程班级",
+    "expected_source_ids": [
+      "helpcenter:68"
+    ],
+    "expected_keywords": [
+      "创建课程班级"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "academic",
+      "sales"
+    ]
+  },
+  {
+    "id": "schedule_001",
+    "module": "初次使用指南",
+    "question": "教务如何高效排课",
+    "expected_source_ids": [
+      "helpcenter:69",
+      "helpcenter:86"
+    ],
+    "expected_keywords": [
+      "高效排课"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "course_manage_002",
+    "module": "核心功能介绍",
+    "question": "课程管理怎么用",
+    "expected_source_ids": [
+      "helpcenter:88",
+      "helpcenter:133"
+    ],
+    "expected_keywords": [
+      "课程管理"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "class_manage_003",
+    "module": "核心功能介绍",
+    "question": "班级管理功能怎么用",
+    "expected_source_ids": [
+      "helpcenter:90",
+      "helpcenter:134",
+      "helpcenter:150"
+    ],
+    "expected_keywords": [
+      "班级管理"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "timetable_manage_001",
+    "module": "核心功能介绍",
+    "question": "课表管理功能怎么用",
+    "expected_source_ids": [
+      "helpcenter:91",
+      "helpcenter:122",
+      "helpcenter:135",
+      "helpcenter:152"
+    ],
+    "expected_keywords": [
+      "课表管理",
+      "课表功能"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true
+  },
+  {
+    "id": "attendance_002",
+    "module": "核心功能介绍",
+    "question": "如何使用考勤功能",
+    "expected_source_ids": [
+      "helpcenter:92",
+      "helpcenter:136"
+    ],
+    "expected_keywords": [
+      "考勤功能"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "application_001",
+    "module": "核心功能介绍",
+    "question": "申请功能怎么用",
+    "expected_source_ids": [
+      "helpcenter:94",
+      "helpcenter:114",
+      "helpcenter:137",
+      "helpcenter:156"
+    ],
+    "expected_keywords": [
+      "申请功能"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "approval_001",
+    "module": "核心功能介绍",
+    "question": "审批功能怎么用",
+    "expected_source_ids": [
+      "helpcenter:113",
+      "helpcenter:141"
+    ],
+    "expected_keywords": [
+      "审批功能"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true
+  },
+  {
+    "id": "pool_001",
+    "module": "核心功能介绍",
+    "question": "公池功能怎么用",
+    "expected_source_ids": [
+      "helpcenter:95",
+      "helpcenter:115",
+      "helpcenter:138"
+    ],
+    "expected_keywords": [
+      "公池"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true
+  },
+  {
+    "id": "lead_pool_001",
+    "module": "核心功能介绍",
+    "question": "公池线索管理怎么操作",
+    "expected_source_ids": [
+      "helpcenter:95"
+    ],
+    "expected_keywords": [
+      "公池",
+      "线索管理"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "sales"
+    ]
+  },
+  {
+    "id": "potential_customer_001",
+    "module": "核心功能介绍",
+    "question": "潜客管理怎么用",
+    "expected_source_ids": [
+      "helpcenter:107"
+    ],
+    "expected_keywords": [
+      "潜客管理"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true
+  },
+  {
+    "id": "channel_001",
+    "module": "核心功能介绍",
+    "question": "渠道管理怎么用",
+    "expected_source_ids": [
+      "helpcenter:116"
+    ],
+    "expected_keywords": [
+      "渠道管理"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true
+  },
+  {
+    "id": "order_manage_001",
+    "module": "核心功能介绍",
+    "question": "订单管理怎么用",
+    "expected_source_ids": [
+      "helpcenter:97",
+      "helpcenter:139"
+    ],
+    "expected_keywords": [
+      "订单管理"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "sales"
+    ]
+  },
+  {
+    "id": "contract_order_001",
+    "module": "核心功能介绍",
+    "question": "合同订单管理怎么用",
+    "expected_source_ids": [
+      "helpcenter:112"
+    ],
+    "expected_keywords": [
+      "合同订单管理"
+    ],
+    "should_auto_reply": false,
+    "should_handoff": true,
+    "requires_image": true,
+    "expected_audiences": [
+      "sales"
+    ]
+  },
+  {
+    "id": "finance_001",
+    "module": "核心功能介绍",
+    "question": "财务功能怎么用",
+    "expected_source_ids": [
+      "helpcenter:144"
+    ],
+    "expected_keywords": [
+      "财务功能"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true
+  },
+  {
+    "id": "data_analysis_001",
+    "module": "核心功能介绍",
+    "question": "数据分析功能怎么用",
+    "expected_source_ids": [
+      "helpcenter:99",
+      "helpcenter:145"
+    ],
+    "expected_keywords": [
+      "数据分析"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true
+  },
+  {
+    "id": "data_report_001",
+    "module": "核心功能介绍",
+    "question": "数据统计报告怎么看",
+    "expected_source_ids": [
+      "helpcenter:117"
+    ],
+    "expected_keywords": [
+      "数据统计报告"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true
+  },
+  {
+    "id": "system_setting_001",
+    "module": "核心功能介绍",
+    "question": "系统设置怎么用",
+    "expected_source_ids": [
+      "helpcenter:146"
+    ],
+    "expected_keywords": [
+      "系统设置"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true
+  },
+  {
+    "id": "homework_feature_001",
+    "module": "核心功能介绍",
+    "question": "作业功能怎么用",
+    "expected_source_ids": [
+      "helpcenter:120",
+      "helpcenter:151"
+    ],
+    "expected_keywords": [
+      "作业功能"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "teacher",
+      "student"
+    ]
+  },
+  {
+    "id": "homework_outline_002",
+    "module": "热门文章",
+    "question": "作业大纲怎么发布作业",
+    "expected_source_ids": [
+      "helpcenter:79",
+      "helpcenter:62"
+    ],
+    "expected_keywords": [
+      "作业大纲"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "teacher",
+      "student"
+    ]
+  },
+  {
+    "id": "realtime_homework_001",
+    "module": "热门文章",
+    "question": "实时作业怎么玩",
+    "expected_source_ids": [
+      "helpcenter:81"
+    ],
+    "expected_keywords": [
+      "实时作业"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true
+  },
+  {
+    "id": "common_homework_001",
+    "module": "使用技巧",
+    "question": "常用作业怎么设置",
+    "expected_source_ids": [
+      "helpcenter:161"
+    ],
+    "expected_keywords": [
+      "常用作业"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "teacher"
+    ]
+  },
+  {
+    "id": "homework_completed_not_sync_001",
+    "module": "热门问题",
+    "question": "学生已完成作业老师端显示未完成怎么办",
+    "expected_source_ids": [
+      "helpcenter:102"
+    ],
+    "expected_keywords": [
+      "作业显示未完成"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": false,
+    "expected_audiences": [
+      "teacher",
+      "student"
+    ]
+  },
+  {
+    "id": "homework_monitor_001",
+    "module": "使用技巧",
+    "question": "学生做作业过程有监控手段吗",
+    "expected_source_ids": [
+      "helpcenter:162"
+    ],
+    "expected_keywords": [
+      "监控手段"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": false,
+    "expected_audiences": [
+      "teacher",
+      "student"
+    ]
+  },
+  {
+    "id": "pending_correction_001",
+    "module": "使用技巧",
+    "question": "老师怎么查看待批改作业",
+    "expected_source_ids": [
+      "helpcenter:164"
+    ],
+    "expected_keywords": [
+      "待批改作业"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true
+  },
+  {
+    "id": "pending_feedback_001",
+    "module": "使用技巧",
+    "question": "老师怎么查看待反馈课程",
+    "expected_source_ids": [
+      "helpcenter:165"
+    ],
+    "expected_keywords": [
+      "待反馈课程"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true
+  },
+  {
+    "id": "feedback_custom_001",
+    "module": "热门文章",
+    "question": "课堂反馈评分项怎么自定义",
+    "expected_source_ids": [
+      "helpcenter:96"
+    ],
+    "expected_keywords": [
+      "课堂反馈评分项"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "teacher",
+      "student"
+    ]
+  },
+  {
+    "id": "feedback_view_001",
+    "module": "核心功能介绍",
+    "question": "如何查看反馈",
+    "expected_source_ids": [
+      "helpcenter:123"
+    ],
+    "expected_keywords": [
+      "查看反馈"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "teacher",
+      "student"
+    ]
+  },
+  {
+    "id": "mock_intro_001",
+    "module": "热门文章",
+    "question": "入学模考怎么用",
+    "expected_source_ids": [
+      "helpcenter:93"
+    ],
+    "expected_keywords": [
+      "入学模考"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true
+  },
+  {
+    "id": "toefl_student_001",
+    "module": "热门问题",
+    "question": "学生如何作答新托福2026模考测试",
+    "expected_source_ids": [
+      "helpcenter:241"
+    ],
+    "expected_keywords": [
+      "新托福2026模考测试"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "teacher",
+      "student"
+    ]
+  },
+  {
+    "id": "toefl_teacher_002",
+    "module": "热门文章",
+    "question": "老师怎么布置托福模考",
+    "expected_source_ids": [
+      "helpcenter:240"
+    ],
+    "expected_keywords": [
+      "布置新托福2026模考测试"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "teacher",
+      "student"
+    ]
+  },
+  {
+    "id": "class_mock_issue_001",
+    "module": "热门问题",
+    "question": "班级无法布置模考和题型训练怎么办",
+    "expected_source_ids": [
+      "helpcenter:215"
+    ],
+    "expected_keywords": [
+      "无法布置模考"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": false,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "mock_memory_001",
+    "module": "热门文章",
+    "question": "学生模考提示内存不足怎么办",
+    "expected_source_ids": [
+      "helpcenter:199"
+    ],
+    "expected_keywords": [
+      "内存不足"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": false
+  },
+  {
+    "id": "speaking_record_001",
+    "module": "热门文章",
+    "question": "口语录音未检测到录音怎么办",
+    "expected_source_ids": [
+      "helpcenter:195"
+    ],
+    "expected_keywords": [
+      "口语录音"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": false,
+    "expected_audiences": [
+      "teacher",
+      "student"
+    ]
+  },
+  {
+    "id": "question_bank_feature_001",
+    "module": "核心功能介绍",
+    "question": "题库功能怎么用",
+    "expected_source_ids": [
+      "helpcenter:234",
+      "helpcenter:153"
+    ],
+    "expected_keywords": [
+      "题库功能"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "teacher"
+    ]
+  },
+  {
+    "id": "question_bank_create_001",
+    "module": "初次使用指南",
+    "question": "老师怎么创建机构自有题库",
+    "expected_source_ids": [
+      "helpcenter:63"
+    ],
+    "expected_keywords": [
+      "机构自有题库"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "teacher"
+    ]
+  },
+  {
+    "id": "teaching_research_001",
+    "module": "核心功能介绍",
+    "question": "教研功能怎么用",
+    "expected_source_ids": [
+      "helpcenter:154"
+    ],
+    "expected_keywords": [
+      "教研功能"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "teacher"
+    ]
+  },
+  {
+    "id": "teaching_content_001",
+    "module": "初次使用指南",
+    "question": "老师助教怎么添加机构教研内容",
+    "expected_source_ids": [
+      "helpcenter:64"
+    ],
+    "expected_keywords": [
+      "机构教研内容"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "teacher"
+    ]
+  },
+  {
+    "id": "wordbook_feature_001",
+    "module": "核心功能介绍",
+    "question": "单词书功能怎么用",
+    "expected_source_ids": [
+      "helpcenter:185",
+      "helpcenter:233"
+    ],
+    "expected_keywords": [
+      "单词书"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "teacher"
+    ]
+  },
+  {
+    "id": "wordbook_assign_001",
+    "module": "热门文章",
+    "question": "老师怎么布置单词书并查看学习情况",
+    "expected_source_ids": [
+      "helpcenter:189"
+    ],
+    "expected_keywords": [
+      "布置单词书"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "teacher"
+    ]
+  },
+  {
+    "id": "wordbook_student_001",
+    "module": "热门文章",
+    "question": "学生如何使用单词书学习词汇",
+    "expected_source_ids": [
+      "helpcenter:190"
+    ],
+    "expected_keywords": [
+      "单词书学习词汇"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "teacher"
+    ]
+  },
+  {
+    "id": "student_new_word_001",
+    "module": "热门文章",
+    "question": "学生添加生词后怎么查看",
+    "expected_source_ids": [
+      "helpcenter:183",
+      "helpcenter:184"
+    ],
+    "expected_keywords": [
+      "添加生词"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "student"
+    ]
+  },
+  {
+    "id": "wrong_wordbook_001",
+    "module": "使用技巧",
+    "question": "老师助教端怎么查看学生错词本",
+    "expected_source_ids": [
+      "helpcenter:228"
+    ],
+    "expected_keywords": [
+      "错词本"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "teacher"
+    ]
+  },
+  {
+    "id": "wrong_question_001",
+    "module": "核心功能介绍",
+    "question": "错题功能怎么用",
+    "expected_source_ids": [
+      "helpcenter:126"
+    ],
+    "expected_keywords": [
+      "错题功能"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "student",
+      "teacher"
+    ]
+  },
+  {
+    "id": "wrong_question_student_001",
+    "module": "使用技巧",
+    "question": "学生怎么查看自己的错题分析",
+    "expected_source_ids": [
+      "helpcenter:160"
+    ],
+    "expected_keywords": [
+      "错题分析"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "student",
+      "teacher"
+    ]
+  },
+  {
+    "id": "wrong_question_teacher_001",
+    "module": "使用技巧",
+    "question": "老师可以看到学生错题分析吗",
+    "expected_source_ids": [
+      "helpcenter:163"
+    ],
+    "expected_keywords": [
+      "错题分析"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": false,
+    "expected_audiences": [
+      "teacher"
+    ]
+  },
+  {
+    "id": "adaptive_training_001",
+    "module": "核心功能介绍",
+    "question": "自适应训练怎么用",
+    "expected_source_ids": [
+      "helpcenter:121"
+    ],
+    "expected_keywords": [
+      "自适应训练"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "teacher",
+      "student"
+    ]
+  },
+  {
+    "id": "note_feature_001",
+    "module": "核心功能介绍",
+    "question": "笔记功能怎么用",
+    "expected_source_ids": [
+      "helpcenter:124"
+    ],
+    "expected_keywords": [
+      "笔记功能"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "student",
+      "teacher"
+    ]
+  },
+  {
+    "id": "study_report_001",
+    "module": "核心功能介绍",
+    "question": "学习报告怎么看",
+    "expected_source_ids": [
+      "helpcenter:125"
+    ],
+    "expected_keywords": [
+      "学习报告"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "student"
+    ]
+  },
+  {
+    "id": "student_transfer_001",
+    "module": "热门文章",
+    "question": "学生如何转班",
+    "expected_source_ids": [
+      "helpcenter:198"
+    ],
+    "expected_keywords": [
+      "转班"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "student"
+    ]
+  },
+  {
+    "id": "public_pool_phone_001",
+    "module": "热门文章",
+    "question": "添加学生提示号码已在公池占用怎么办",
+    "expected_source_ids": [
+      "helpcenter:170"
+    ],
+    "expected_keywords": [
+      "公池占用"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": false,
+    "expected_audiences": [
+      "student",
+      "sales"
+    ]
+  },
+  {
+    "id": "online_class_001",
+    "module": "核心功能介绍",
+    "question": "在线课堂怎么玩",
+    "expected_source_ids": [
+      "helpcenter:171"
+    ],
+    "expected_keywords": [
+      "在线课堂"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "teacher",
+      "student"
+    ]
+  },
+  {
+    "id": "lesson_adjust_001",
+    "module": "使用技巧",
+    "question": "老师学生如何线上流程化调课",
+    "expected_source_ids": [
+      "helpcenter:167"
+    ],
+    "expected_keywords": [
+      "流程化调课"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "teacher",
+      "student",
+      "academic"
+    ]
+  },
+  {
+    "id": "common_time_001",
+    "module": "热门文章",
+    "question": "排课时上课常用时间段怎么添加",
+    "expected_source_ids": [
+      "helpcenter:83"
+    ],
+    "expected_keywords": [
+      "常用时间段"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "quick_schedule_001",
+    "module": "使用技巧",
+    "question": "快捷排课有什么操作技巧",
+    "expected_source_ids": [
+      "helpcenter:236"
+    ],
+    "expected_keywords": [
+      "快捷排课"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "ai_schedule_update_001",
+    "module": "新功能上线",
+    "question": "AI排课调课更新了什么",
+    "expected_source_ids": [
+      "helpcenter:248"
+    ],
+    "expected_keywords": [
+      "AI 排课",
+      "调课"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": false,
+    "expected_audiences": [
+      "academic"
+    ]
+  },
+  {
+    "id": "sale_realtime_data_001",
+    "module": "使用技巧",
+    "question": "课程顾问能看到客户实时学习数据吗",
+    "expected_source_ids": [
+      "helpcenter:159"
+    ],
+    "expected_keywords": [
+      "实时学习数据"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": false,
+    "expected_audiences": [
+      "sales",
+      "principal"
+    ]
+  },
+  {
+    "id": "market_lead_001",
+    "module": "初次使用指南",
+    "question": "市场线索怎么录入跟进",
+    "expected_source_ids": [
+      "helpcenter:57"
+    ],
+    "expected_keywords": [
+      "市场线索"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "sales"
+    ]
+  },
+  {
+    "id": "student_order_sign_001",
+    "module": "初次使用指南",
+    "question": "学员订单签约流程怎么走",
+    "expected_source_ids": [
+      "helpcenter:59"
+    ],
+    "expected_keywords": [
+      "学员订单签约流程"
+    ],
+    "should_auto_reply": false,
+    "should_handoff": true,
+    "requires_image": true,
+    "expected_audiences": [
+      "sales"
+    ]
+  },
+  {
+    "id": "order_confirm_change_001",
+    "module": "使用技巧",
+    "question": "正式学员订单还能撤销或修改吗",
+    "expected_source_ids": [
+      "helpcenter:158"
+    ],
+    "expected_keywords": [
+      "撤销",
+      "修改"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": false,
+    "expected_audiences": [
+      "sales"
+    ]
+  },
+  {
+    "id": "econtract_template_001",
+    "module": "初次使用指南",
+    "question": "电子合同模板怎么添加",
+    "expected_source_ids": [
+      "helpcenter:70"
+    ],
+    "expected_keywords": [
+      "电子合同模版"
+    ],
+    "should_auto_reply": false,
+    "should_handoff": true,
+    "requires_image": true,
+    "expected_audiences": [
+      "sales"
+    ]
+  },
+  {
+    "id": "refund_002",
+    "module": "热门文章",
+    "question": "订单取消怎么操作",
+    "expected_source_ids": [
+      "helpcenter:191"
+    ],
+    "expected_keywords": [
+      "订单退费",
+      "取消"
+    ],
+    "should_auto_reply": false,
+    "should_handoff": true,
+    "requires_image": true,
+    "expected_audiences": [
+      "sales"
+    ]
+  },
+  {
+    "id": "data_fields_001",
+    "module": "热门文章",
+    "question": "学生老师分析字段说明在哪里看",
+    "expected_source_ids": [
+      "helpcenter:242"
+    ],
+    "expected_keywords": [
+      "学生老师分析字段"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": false,
+    "expected_audiences": [
+      "student",
+      "teacher",
+      "principal"
+    ]
+  },
+  {
+    "id": "operation_data_001",
+    "module": "初次使用指南",
+    "question": "校长端如何实时查看运营数据",
+    "expected_source_ids": [
+      "helpcenter:127"
+    ],
+    "expected_keywords": [
+      "运营数据"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "principal"
+    ]
+  },
+  {
+    "id": "writing_speaking_score_001",
+    "module": "热门文章",
+    "question": "写作口语智能评分怎么开启",
+    "expected_source_ids": [
+      "helpcenter:169"
+    ],
+    "expected_keywords": [
+      "智能评分"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "teacher"
+    ]
+  },
+  {
+    "id": "cloud_disk_001",
+    "module": "核心功能介绍",
+    "question": "云盘功能怎么用",
+    "expected_source_ids": [
+      "helpcenter:155"
+    ],
+    "expected_keywords": [
+      "云盘功能"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "student",
+      "teacher",
+      "academic"
+    ]
+  },
+  {
+    "id": "course_application_001",
+    "module": "核心功能介绍",
+    "question": "报课功能怎么用",
+    "expected_source_ids": [
+      "helpcenter:235"
+    ],
+    "expected_keywords": [
+      "报课功能"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "academic",
+      "sales"
+    ]
+  },
+  {
+    "id": "student_data_001",
+    "module": "核心功能介绍",
+    "question": "学生端如何查看数据",
+    "expected_source_ids": [
+      "helpcenter:157"
+    ],
+    "expected_keywords": [
+      "查看数据"
+    ],
+    "should_auto_reply": true,
+    "should_handoff": false,
+    "requires_image": true,
+    "expected_audiences": [
+      "student"
+    ]
+  },
+  {
+    "id": "unknown_002",
+    "module": "无答案",
+    "question": "今天上海天气怎么样",
+    "expected_keywords": [],
+    "should_auto_reply": false,
+    "should_handoff": true,
+    "requires_image": false
+  },
+  {
+    "id": "unknown_003",
+    "module": "无答案",
+    "question": "校区附近有什么好吃的",
+    "expected_keywords": [],
+    "should_auto_reply": false,
+    "should_handoff": true,
+    "requires_image": false
+  },
+  {
+    "id": "unknown_004",
+    "module": "无答案",
+    "question": "老板今天几点来公司",
+    "expected_keywords": [],
+    "should_auto_reply": false,
+    "should_handoff": true,
+    "requires_image": false
+  },
+  {
+    "id": "sensitive_invoice_001",
+    "module": "合同/退费",
+    "question": "发票什么时候能开",
+    "expected_keywords": [],
+    "should_auto_reply": false,
+    "should_handoff": true,
+    "requires_image": false,
+    "expected_audiences": [
+      "sales"
+    ]
+  },
+  {
+    "id": "sensitive_compensation_001",
+    "module": "合同/退费",
+    "question": "系统问题造成损失能赔偿吗",
+    "expected_keywords": [],
+    "should_auto_reply": false,
+    "should_handoff": true,
+    "requires_image": false
+  }
+]

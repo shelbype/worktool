@@ -1,0 +1,58 @@
+{
+  "source_file": "analysis\\服务器正式知识库_清洗版.csv",
+  "input_clean_chunk_count": 160,
+  "kept_categories": [
+    "初次使用指南",
+    "使用技巧",
+    "热门问题",
+    "热门文章"
+  ],
+  "removed_category_counts": {
+    "新功能上线": 12,
+    "核心功能介绍": 69
+  },
+  "kept_category_counts": {
+    "使用技巧": 12,
+    "初次使用指南": 18,
+    "热门文章": 33,
+    "热门问题": 11
+  },
+  "input_kept_by_category_count": 79,
+  "final_answer_chunk_count": 74,
+  "empty_after_answer_optimization_removed": 0,
+  "removed_promo_lines": 2,
+  "removed_intro_lines": 0,
+  "removed_heading_lines": 144,
+  "quality_flag_counts": {
+    "image_noise_removed": 73,
+    "heading_noise_removed": 45,
+    "title_noise_removed": 65,
+    "short_content": 4,
+    "short_answer": 1,
+    "intro_or_promo_sentence_removed": 5,
+    "marketing_phrase_removed": 9,
+    "not_actionable": 1,
+    "answer_not_actionable": 1,
+    "near_duplicate": 3
+  },
+  "output_files": [
+    "analysis\\服务器正式知识库_客服回答优化版.csv",
+    "analysis\\服务器正式知识库_客服回答优化版.md",
+    "analysis\\服务器正式知识库_客服回答优化报告.md",
+    "analysis\\服务器正式知识库_客服回答优化摘要.json"
+  ],
+  "role_counts": {
+    "学生": 46,
+    "老师": 51,
+    "教务": 45,
+    "销售": 13,
+    "校长": 22
+  },
+  "removed_category_chunk_count": 81,
+  "removed_article_noise_count": 5,
+  "removed_article_noise_titles": {
+    "一分钟了解校校AI是什么？": 5
+  },
+  "removed_intro_or_promo_sentence_lines": 6,
+  "removed_marketing_phrase_lines_or_clauses": 19
+}

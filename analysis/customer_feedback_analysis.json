@@ -1,0 +1,1743 @@
+{
+  "source_file": "db\\init\\客户反馈记录.xlsx",
+  "sheets": [
+    {
+      "sheet": "企业版用户",
+      "rows": 5944,
+      "columns": [
+        "反馈日期",
+        "值班人员",
+        "客户问题",
+        "问题描述",
+        "客户名称",
+        "所属客户经理",
+        "端口",
+        "问题类型",
+        "处理进度",
+        "反馈进度",
+        "附件",
+        "跟进人",
+        "问题回答",
+        "备注",
+        "备注 (1)",
+        "父记录"
+      ]
+    },
+    {
+      "sheet": "专业版用户",
+      "rows": 90,
+      "columns": [
+        "反馈日期",
+        "客户问题描述",
+        "问题来源",
+        "端口",
+        "问题类型",
+        "处理进度",
+        "解决方案",
+        "附件",
+        "备注"
+      ]
+    },
+    {
+      "sheet": "企业版每日数据汇总 ",
+      "rows": 9,
+      "columns": [
+        "日期",
+        "问题总数",
+        "问题类型",
+        "已反馈",
+        "沟通中",
+        "未反馈",
+        "未反馈原因",
+        "未命名",
+        "未命名5"
+      ]
+    },
+    {
+      "sheet": "常见问答",
+      "rows": 10,
+      "columns": [
+        "时间",
+        "问题",
+        "解决方案"
+      ]
+    },
+    {
+      "sheet": "客户数据2月",
+      "rows": 480,
+      "columns": [
+        "反馈日期",
+        "值班人员",
+        "客户问题",
+        "问题描述",
+        "客户名称",
+        "端口",
+        "问题类型",
+        "处理进度",
+        "反馈进度",
+        "附件",
+        "问题回答",
+        "备注"
+      ]
+    },
+    {
+      "sheet": "客户数据3月",
+      "rows": 900,
+      "columns": [
+        "反馈日期",
+        "值班人员",
+        "客户问题",
+        "问题描述",
+        "客户名称",
+        "所属客户经理",
+        "端口",
+        "问题类型",
+        "处理进度",
+        "反馈进度",
+        "附件",
+        "问题回答",
+        "备注"
+      ]
+    },
+    {
+      "sheet": "客户数据4月",
+      "rows": 1232,
+      "columns": [
+        "反馈日期",
+        "值班人员",
+        "客户问题",
+        "问题描述",
+        "客户名称",
+        "所属客户经理",
+        "端口",
+        "问题类型",
+        "处理进度",
+        "反馈进度",
+        "附件",
+        "问题回答",
+        "备注"
+      ]
+    },
+    {
+      "sheet": "客户数据6月",
+      "rows": 1880,
+      "columns": [
+        "反馈日期",
+        "值班人员",
+        "客户问题",
+        "问题描述",
+        "客户名称",
+        "所属客户经理",
+        "端口",
+        "问题类型",
+        "处理进度",
+        "反馈进度",
+        "附件",
+        "问题回答",
+        "备注"
+      ]
+    },
+    {
+      "sheet": "客户数据5月",
+      "rows": 1575,
+      "columns": [
+        "反馈日期",
+        "值班人员",
+        "客户问题",
+        "问题描述",
+        "客户名称",
+        "所属客户经理",
+        "端口",
+        "问题类型",
+        "处理进度",
+        "反馈进度",
+        "附件",
+        "问题回答",
+        "备注"
+      ]
+    },
+    {
+      "sheet": "客户数据7月",
+      "rows": 2162,
+      "columns": [
+        "反馈日期",
+        "值班人员",
+        "客户问题",
+        "问题描述",
+        "客户名称",
+        "所属客户经理",
+        "端口",
+        "问题类型",
+        "处理进度",
+        "反馈进度",
+        "附件",
+        "问题回答",
+        "备注"
+      ]
+    },
+    {
+      "sheet": "客户数据8月",
+      "rows": 2414,
+      "columns": [
+        "反馈日期",
+        "值班人员",
+        "客户问题",
+        "问题描述",
+        "客户名称",
+        "所属客户经理",
+        "端口",
+        "问题类型",
+        "处理进度",
+        "反馈进度",
+        "附件",
+        "问题回答",
+        "备注"
+      ]
+    },
+    {
+      "sheet": "客户数据9月",
+      "rows": 2618,
+      "columns": [
+        "反馈日期",
+        "值班人员",
+        "客户问题",
+        "问题描述",
+        "客户名称",
+        "所属客户经理",
+        "端口",
+        "问题类型",
+        "处理进度",
+        "反馈进度",
+        "附件",
+        "问题回答",
+        "备注"
+      ]
+    },
+    {
+      "sheet": "客户反馈数据10月",
+      "rows": 2792,
+      "columns": [
+        "反馈日期",
+        "值班人员",
+        "客户问题",
+        "问题描述",
+        "客户名称",
+        "所属客户经理",
+        "端口",
+        "问题类型",
+        "处理进度",
+        "反馈进度",
+        "附件",
+        "问题回答",
+        "备注"
+      ]
+    },
+    {
+      "sheet": "客户反馈数据10月（副本）",
+      "rows": 2792,
+      "columns": [
+        "反馈日期",
+        "值班人员",
+        "客户问题",
+        "问题描述",
+        "客户名称",
+        "所属客户经理",
+        "端口",
+        "问题类型",
+        "处理进度",
+        "反馈进度",
+        "附件",
+        "问题回答",
+        "备注"
+      ]
+    }
+  ],
+  "raw_records_excluding_summary_and_duplicate": 22065,
+  "unique_records": 6477,
+  "unique_answered": 2455,
+  "faq_rows": 10,
+  "faq_answered": 7,
+  "operation_usage_unique": 2093,
+  "operation_usage_answered": 1537,
+  "bucket_counts": [
+    [
+      "ticket_or_handoff",
+      3117
+    ],
+    [
+      "kb_candidate",
+      1118
+    ],
+    [
+      "no_answer_or_low_value",
+      1045
+    ],
+    [
+      "review_rewrite_needed",
+      938
+    ],
+    [
+      "risk_review",
+      259
+    ]
+  ],
+  "type_counts": [
+    [
+      "操作疑问",
+      1139
+    ],
+    [
+      "使用问题",
+      954
+    ],
+    [
+      "其他",
+      865
+    ],
+    [
+      "需求",
+      614
+    ],
+    [
+      "bug",
+      548
+    ],
+    [
+      "题目问题",
+      522
+    ],
+    [
+      "入学模考配置",
+      454
+    ],
+    [
+      "录入需求",
+      439
+    ],
+    [
+      "优化",
+      382
+    ],
+    [
+      "(blank)",
+      276
+    ],
+    [
+      "数据导出",
+      120
+    ],
+    [
+      "机构题目问题",
+      67
+    ],
+    [
+      "数据恢复需求",
+      60
+    ],
+    [
+      "题目需求",
+      23
+    ],
+    [
+      "查询需求",
+      8
+    ],
+    [
+      "系统词表问题",
+      4
+    ],
+    [
+      "已处理",
+      2
+    ]
+  ],
+  "port_counts": [
+    [
+      "老师",
+      4473
+    ],
+    [
+      "学生",
+      732
+    ],
+    [
+      "教务",
+      636
+    ],
+    [
+      "销售",
+      363
+    ],
+    [
+      "校长",
+      205
+    ],
+    [
+      "(blank)",
+      21
+    ],
+    [
+      "市场",
+      18
+    ],
+    [
+      "家长",
+      13
+    ],
+    [
+      "财务",
+      8
+    ],
+    [
+      "助教",
+      6
+    ],
+    [
+      "入学模考配置",
+      2
+    ]
+  ],
+  "audience_counts": [
+    [
+      "teacher",
+      4479
+    ],
+    [
+      "student",
+      745
+    ],
+    [
+      "academic",
+      636
+    ],
+    [
+      "sales",
+      389
+    ],
+    [
+      "principal",
+      205
+    ],
+    [
+      "(unmapped)",
+      23
+    ]
+  ],
+  "category_counts": [
+    [
+      "题库/录题/单词书/模考",
+      1995
+    ],
+    [
+      "作业/布置/批改/反馈",
+      1772
+    ],
+    [
+      "班级/排课/课时/考勤",
+      1025
+    ],
+    [
+      "音频/录音/听力",
+      704
+    ],
+    [
+      "账号登录/密码/手机号",
+      644
+    ],
+    [
+      "权限/角色/公池",
+      501
+    ],
+    [
+      "订单/合同/报课/收费",
+      394
+    ],
+    [
+      "浏览器/网络/缓存",
+      382
+    ],
+    [
+      "小程序/公众号/二维码",
+      325
+    ]
+  ],
+  "kb_candidate_count": 1118,
+  "rewrite_candidate_count": 938,
+  "risk_review_count": 259,
+  "ticket_or_handoff_count": 3117,
+  "kb_candidate_samples": [
+    {
+      "audience": "student",
+      "port": "学生",
+      "type": "使用问题",
+      "question": "有学生反映 模考练习中，听力听一半就没有了",
+      "desc": "模考答题，听力未完整播放",
+      "answer": "老师，可能是由于网络或者缓存的原因 学生可以多刷新页面或者关闭页面重新进入 由于网络问题引起的音频加载失败，可以下载音频作答，系统会有提示的，具体规则如下： 如果超过15秒没有加载成功，会间歇性（第1/3/6次）提示：可以将音频下载下来到本地播放 同时，在播放音频界面，右侧有按钮，可以跳过音频（在下载音频到本地听过之后可以跳过）",
+      "attachment": "4cf63e75b25b900e8b7ffa536fd58f4.jpg",
+      "bucket": "kb_candidate",
+      "categories": [
+        "音频/录音/听力",
+        "浏览器/网络/缓存",
+        "题库/录题/单词书/模考"
+      ]
+    },
+    {
+      "audience": "student",
+      "port": "学生",
+      "type": "使用问题",
+      "question": "老师们，校校上面这套题，登录进去没有办法做测试",
+      "desc": "学生无法做入学模考测试",
+      "answer": "登陆过员工账号，有身份数据缓存",
+      "attachment": "1585ee1c04ce188630b80535f41c41e.jpg",
+      "bucket": "kb_candidate",
+      "categories": [
+        "账号登录/密码/手机号",
+        "浏览器/网络/缓存",
+        "权限/角色/公池",
+        "题库/录题/单词书/模考"
+      ]
+    },
+    {
+      "audience": "student",
+      "port": "学生",
+      "type": "使用问题",
+      "question": "您好 我想问一下学生模考托福，多选题拖不动怎么操作呢？",
+      "desc": "托福模考测试，多选题拖不动选项",
+      "answer": "学生未使用谷歌浏览器答题",
+      "attachment": "4f9ebfd59dfabd7322a49de017f1e1c.jpg",
+      "bucket": "kb_candidate",
+      "categories": [
+        "浏览器/网络/缓存",
+        "题库/录题/单词书/模考"
+      ]
+    },
+    {
+      "audience": "student",
+      "port": "学生",
+      "type": "使用问题",
+      "question": "您好 我想问一下给学生布置托福TPO72听力为啥显示音频加载中，然后就做不了，是这一套音频有bug么？",
+      "desc": "学生答题音频加载不出来",
+      "answer": "音频没有问题，建议使用谷歌浏览器",
+      "attachment": "bae6da968d683db4c31607db58a3af5.jpg",
+      "bucket": "kb_candidate",
+      "categories": [
+        "作业/布置/批改/反馈",
+        "音频/录音/听力",
+        "浏览器/网络/缓存"
+      ]
+    },
+    {
+      "audience": "sales",
+      "port": "销售",
+      "type": "操作疑问",
+      "question": "老师 这个界面我们备注学生情况会写在沟通内容那里 但是教务那边是看不到的 怎么给教务老师开这个权限呢",
+      "desc": "教务如何看到潜客沟通内容",
+      "answer": "可以给教务“公池”的权限",
+      "attachment": "",
+      "bucket": "kb_candidate",
+      "categories": [
+        "权限/角色/公池"
+      ]
+    },
+    {
+      "audience": "academic",
+      "port": "教务",
+      "type": "操作疑问",
+      "question": "请问学生费用报错班 我操作转班显示这个是什么意思",
+      "desc": "老师操作学生转班提示无剩余课时",
+      "answer": "因为 要转入的班级 没有设置总课时",
+      "attachment": "7034cbdabac0c43d684aa4477806eca0_.png",
+      "bucket": "kb_candidate",
+      "categories": [
+        "班级/排课/课时/考勤"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "使用问题",
+      "question": "请问系统上传单词为什么会吞掉了一个list呢？",
+      "desc": "老师上传单词有一个单元未显示",
+      "answer": "单词文件表头数据不全",
+      "attachment": "fbbf73cb5ebe5346dd2b57e5a47ef33.png",
+      "bucket": "kb_candidate",
+      "categories": []
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "操作疑问",
+      "question": "，你好，想问一下自定义作业需要注意些什么呢？填写好之后系统显示数据不完整...",
+      "desc": "布置自定义作业显示数据不完整",
+      "answer": "作业的布置时间影响的，开始时间和结束时间不能一样，需要调整一下",
+      "attachment": "98a5f49e0575c7328540058c98f9962.png",
+      "bucket": "kb_candidate",
+      "categories": [
+        "作业/布置/批改/反馈"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "操作疑问",
+      "question": "我想看入学pte的模考题，因为我想给学生做之前看看题目有没有问题，怎么预览pte的入学模考题呢",
+      "desc": "如何查看入学模考pte的试卷题目",
+      "answer": "老师可以做下入学模考，或者在pte班级内预览题目",
+      "attachment": "",
+      "bucket": "kb_candidate",
+      "categories": [
+        "班级/排课/课时/考勤",
+        "题库/录题/单词书/模考"
+      ]
+    },
+    {
+      "audience": "sales",
+      "port": "销售",
+      "type": "使用问题",
+      "question": "请问顾问端在输入的时候，为什么学杂费是没内容？",
+      "desc": "销售端创建订单，学杂显示没有数据",
+      "answer": "学杂需要教务添加",
+      "attachment": "2a7953ea0266d21d66eaa017aa8d658.png",
+      "bucket": "kb_candidate",
+      "categories": [
+        "订单/合同/报课/收费"
+      ]
+    },
+    {
+      "audience": "sales",
+      "port": "销售",
+      "type": "操作疑问",
+      "question": "老师 这个选项可以添加国际学科这个选项吗",
+      "desc": "销售端报课课程如何新增",
+      "answer": "教务端创建下课程，销售建订单时，就可以添加",
+      "attachment": "cc001820d20b202e39d49020abcac20.jpg",
+      "bucket": "kb_candidate",
+      "categories": [
+        "订单/合同/报课/收费"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "使用问题",
+      "question": "校校老师，今天这组单词，不能手工批改哦",
+      "desc": "单词作业没有办法修改正误",
+      "answer": "未切换到老师身份",
+      "attachment": "",
+      "bucket": "kb_candidate",
+      "categories": [
+        "作业/布置/批改/反馈",
+        "权限/角色/公池"
+      ]
+    },
+    {
+      "audience": "student",
+      "port": "学生",
+      "type": "使用问题",
+      "question": "麻烦看一下 这套题口语应该有点问题，好几个学生说跳不出来",
+      "desc": "学生雅思口语音频加载不出来",
+      "answer": "未使用谷歌浏览器",
+      "attachment": "",
+      "bucket": "kb_candidate",
+      "categories": [
+        "音频/录音/听力",
+        "浏览器/网络/缓存"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "操作疑问",
+      "question": "你好 我们布置作业的时候有这么一个问题 比如我在系统里一次给学生布置10套托福写作题，学生做完1遍之后提交了结果发现成绩不是很理想，他就想重新再做一遍，这些题他还能重复做吗？",
+      "desc": "布置给学生的题，学生想重做如何操作",
+      "answer": "布置的作业学生只能提交一次，如果想要多次答题，可以在题库中选择题目开放题库给学生，学生可以在题库进行多次练习，有做题记录可以查看",
+      "attachment": "",
+      "bucket": "kb_candidate",
+      "categories": [
+        "作业/布置/批改/反馈",
+        "题库/录题/单词书/模考"
+      ]
+    },
+    {
+      "audience": "academic",
+      "port": "教务",
+      "type": "使用问题",
+      "question": "您好 为什么老师课表排的是2场试听，但是后台的已排课李只有一个",
+      "desc": "老师课表的试听排课和排课申请的数据不对应",
+      "answer": "数据正常，有一个是一月份预约的课程是排到2月26号的",
+      "attachment": "b41dce353492f0ed136e1b8e1009592.png,9c0aeb5ee8627176b7f47445aa72e9f.png",
+      "bucket": "kb_candidate",
+      "categories": [
+        "班级/排课/课时/考勤"
+      ]
+    },
+    {
+      "audience": "academic",
+      "port": "教务",
+      "type": "使用问题",
+      "question": "各位好 我这想导出一些数据 这是显示没权限么 怎么操作一下 我这选了1个 都导不出",
+      "desc": "公池导出潜客数据勾选了一个也显示数据过大",
+      "answer": "公池名单导出是导出的公池全部数据，可以筛选条件后再导出，勾选用于潜客分配",
+      "attachment": "82719af4ce3b2369df7931342001b3a.png",
+      "bucket": "kb_candidate",
+      "categories": [
+        "权限/角色/公池"
+      ]
+    },
+    {
+      "audience": "student",
+      "port": "学生",
+      "type": "使用问题",
+      "question": "老师，学生做测试反馈，part1正常，part2没有声音，就卡在这里了",
+      "desc": "雅思入学模考口语部分没有声音",
+      "answer": "未使用谷歌浏览器",
+      "attachment": "50497babba0aa3c32c46f3d51bf2c9bf.mp4",
+      "bucket": "kb_candidate",
+      "categories": [
+        "作业/布置/批改/反馈",
+        "音频/录音/听力",
+        "浏览器/网络/缓存",
+        "题库/录题/单词书/模考"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "操作疑问",
+      "question": "你好， 我有一些阅读的专项题型的word文档， 可以自己录入系统， 计时练习吗？因为我看系统里面的tpo专项题型， 判断是不太准确的。 选择的a题型， 出来的题目可能是b题型。 自己还没法删选中的题。",
+      "desc": "tpo题型分类不准确",
+      "answer": "老师可以对题目题型知识点进行自定义",
+      "attachment": "",
+      "bucket": "kb_candidate",
+      "categories": []
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "使用问题",
+      "question": "老师看看， 这种匹配题的答题界面不太好找答案呀",
+      "desc": "雅思答题界面匹配题题目无法选择",
+      "answer": "建议使用谷歌浏览器",
+      "attachment": "2a429238362952fea0c71846071131c.jpg",
+      "bucket": "kb_candidate",
+      "categories": [
+        "浏览器/网络/缓存"
+      ]
+    },
+    {
+      "audience": "academic",
+      "port": "教务",
+      "type": "操作疑问",
+      "question": "麻烦给一个学员开通账号的步骤说明，今天其他老师休息，我需要给一个学员开通账号，谢谢",
+      "desc": "教务如何新增学生账号",
+      "answer": "教务身份 点击“学员”点击“新增”",
+      "attachment": "",
+      "bucket": "kb_candidate",
+      "categories": [
+        "账号登录/密码/手机号",
+        "权限/角色/公池"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "操作疑问",
+      "question": "你好，请问下，我们有没有可能从教师端把学生的听写错词重新布置给他们啊？或者从教师端，导出某个学生的听写错词啊",
+      "desc": "教师端如何布置学生听写错词",
+      "answer": "老师端在学员管理-练习情况-错题分析可以查看错词，再次布置和导出",
+      "attachment": "",
+      "bucket": "kb_candidate",
+      "categories": [
+        "作业/布置/批改/反馈"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "操作疑问",
+      "question": "请问过期学员如何续期",
+      "desc": "学生账号如何续期",
+      "answer": "续期操作流程： 1、教务/校长账号进入，点击学生管理 2、找到学生账号，点击学生列表中，学生姓名旁边的红色小圆点 3、点击“续期”即可。",
+      "attachment": "",
+      "bucket": "kb_candidate",
+      "categories": [
+        "账号登录/密码/手机号"
+      ]
+    },
+    {
+      "audience": "academic",
+      "port": "教务",
+      "type": "操作疑问",
+      "question": "你好 请问 学生的模考测试结果，我在哪里可以看到啊？教务端可以看到吗，我这边有公池",
+      "desc": "教务如何查看潜客入学模考",
+      "answer": "教务需要再给销售身份，和查看入学模考的权限",
+      "attachment": "",
+      "bucket": "kb_candidate",
+      "categories": [
+        "权限/角色/公池",
+        "题库/录题/单词书/模考"
+      ]
+    },
+    {
+      "audience": "sales",
+      "port": "市场",
+      "type": "使用问题",
+      "question": "渠道二级菜单为什么只能设置2个呀，不能新增",
+      "desc": "潜客编辑页面，渠道点击新增没有显示",
+      "answer": "需要先选择渠道类型，才能选择渠道",
+      "attachment": "aef56121de44766c6f6b4defa32f94b.png",
+      "bucket": "kb_candidate",
+      "categories": []
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "使用问题",
+      "question": "有的同学发现阅读结束后不会自动跳到听力，需要自己点，如果不点就可以一直在阅读界面，这个bug让限时无意义了",
+      "desc": "学生反馈托福阅读结束后不会自动跳到听力",
+      "answer": "老师布置作业未设置倒计时结束禁止答题",
+      "attachment": "",
+      "bucket": "kb_candidate",
+      "categories": [
+        "作业/布置/批改/反馈",
+        "音频/录音/听力"
+      ]
+    },
+    {
+      "audience": "sales",
+      "port": "销售",
+      "type": "使用问题",
+      "question": "你好 麻烦问下 校校系统怎么申请排课？我这显示不出",
+      "desc": "销售端申请排课显示无数据",
+      "answer": "学员未转正，没有班级",
+      "attachment": "ebf127988892748078a2733697e857c.jpg",
+      "bucket": "kb_candidate",
+      "categories": [
+        "班级/排课/课时/考勤"
+      ]
+    },
+    {
+      "audience": "student",
+      "port": "学生",
+      "type": "使用问题",
+      "question": "这个点不了，麻烦看一下",
+      "desc": "学生答题点击无反应",
+      "answer": "未使用谷歌浏览器",
+      "attachment": "5f0f7e7270ccb1a2da9489c6eb8fa714.mp4",
+      "bucket": "kb_candidate",
+      "categories": [
+        "浏览器/网络/缓存"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "操作疑问",
+      "question": "老师们，要给家长开通账号，才能同步收到学生完成作业的提醒吗？还是家长自行绑定哪儿就行了",
+      "desc": "家长如何同步收到学生完成作业的提醒",
+      "answer": "教务端或者校长端，点击学员，找到这名学生后点击编辑，拉到最下面会有家长账号的设置，设置好后家长可以草公账号",
+      "attachment": "",
+      "bucket": "kb_candidate",
+      "categories": [
+        "账号登录/密码/手机号",
+        "作业/布置/批改/反馈"
+      ]
+    },
+    {
+      "audience": "academic",
+      "port": "教务",
+      "type": "操作疑问",
+      "question": "请问如果续非VIP，要到期了才能操作是不？",
+      "desc": "学生账号如何续期",
+      "answer": "账号续费在学员管理这里学生姓名点小圆点",
+      "attachment": "",
+      "bucket": "kb_candidate",
+      "categories": [
+        "账号登录/密码/手机号"
+      ]
+    },
+    {
+      "audience": "academic",
+      "port": "教务",
+      "type": "操作疑问",
+      "question": "我给老师的账户添加了公池的功能，但是她们界面看不到入学模测吗，这个要怎么操作呢？可以让老师看到学生的入学模考成绩",
+      "desc": "如何操作教务可以看到入学模考情况",
+      "answer": "教务需要查看的话，还需要给一个销售身份，再勾选入学模考",
+      "attachment": "",
+      "bucket": "kb_candidate",
+      "categories": [
+        "权限/角色/公池",
+        "题库/录题/单词书/模考"
+      ]
+    }
+  ],
+  "rewrite_samples": [
+    {
+      "audience": "student",
+      "port": "学生",
+      "type": "其他",
+      "question": "老师你好，我想问一下学生用了谷歌浏览器模考，试了两次听听力的时候都显示这个，没有声音，请问这是怎么回事呀",
+      "desc": "学生答题出现听力音频播放器初始化失败",
+      "answer": "网络问题",
+      "attachment": "ecced761e3cae78acfaa3355f860565.jpg",
+      "bucket": "review_rewrite_needed",
+      "categories": [
+        "音频/录音/听力",
+        "浏览器/网络/缓存",
+        "题库/录题/单词书/模考"
+      ]
+    },
+    {
+      "audience": "student",
+      "port": "学生",
+      "type": "使用问题",
+      "question": "麻烦老师帮忙看一下，学生连着做了4次了，这个雅思模考，这个是什么原因呀？都是做一半就卡住",
+      "desc": "学生完成雅思入学模考测试，答题卡住",
+      "answer": "学生未使用谷歌浏览器答题",
+      "attachment": "",
+      "bucket": "review_rewrite_needed",
+      "categories": [
+        "浏览器/网络/缓存",
+        "题库/录题/单词书/模考"
+      ]
+    },
+    {
+      "audience": "academic",
+      "port": "教务",
+      "type": "其他",
+      "question": "为什么我在学员管理里面查到有学生是还没有，财务审批确认订单，就已经在了呢",
+      "desc": "学生转正的条件",
+      "answer": "学员从潜客转为正式学员 1: 需要确认订单 2:需要在公池操作转正",
+      "attachment": "",
+      "bucket": "review_rewrite_needed",
+      "categories": [
+        "订单/合同/报课/收费",
+        "权限/角色/公池"
+      ]
+    },
+    {
+      "audience": "sales",
+      "port": "销售",
+      "type": "其他",
+      "question": "老师 你好 想请教你一下 就是我有一个已经结课的雅思学生 在咱们校校系统做了一份托福测试题 但是不管是顾问还是她之前的老师 都查看不到学生的做题记录 这个是需要在哪里查看呢",
+      "desc": "销售查不到学生入学模考",
+      "answer": "学生没有负责销售，销售管理员/校长可以看到",
+      "attachment": "",
+      "bucket": "review_rewrite_needed",
+      "categories": [
+        "权限/角色/公池",
+        "题库/录题/单词书/模考"
+      ]
+    },
+    {
+      "audience": "sales",
+      "port": "销售",
+      "type": "其他",
+      "question": "后面做的怎么没有统计，可以看到做题的答卷吗，针对这一次模考，我怎么启用AI批改呢",
+      "desc": "学生入学模考没有分数",
+      "answer": "未开启AI批改",
+      "attachment": "",
+      "bucket": "review_rewrite_needed",
+      "categories": [
+        "作业/布置/批改/反馈",
+        "题库/录题/单词书/模考"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "其他",
+      "question": "请问一下，学生已经做完卷子了，为什么显示是正在做、未提交，学生已经点了finish section了",
+      "desc": "学生已经交卷，但是老师看不到",
+      "answer": "学生未完成交卷",
+      "attachment": "d3eb586c875c173872cc988361b07c0.jpg",
+      "bucket": "review_rewrite_needed",
+      "categories": [
+        "权限/角色/公池"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "使用问题",
+      "question": "给这位老师能开一个传题的权限吗，他有账号，但是上传不上去题目，这是怎么回事啊",
+      "desc": "上传单词书没有显示单词数据",
+      "answer": "未按照模板上传",
+      "attachment": "ad416d9d491a02c0333373a9bac0401.jpg",
+      "bucket": "review_rewrite_needed",
+      "categories": [
+        "账号登录/密码/手机号",
+        "权限/角色/公池",
+        "题库/录题/单词书/模考"
+      ]
+    },
+    {
+      "audience": "sales",
+      "port": "销售",
+      "type": "其他",
+      "question": "想问一下，为什么将链接发过去给孩子，孩子填的推荐人也是我，但是我系统内经常看不到学生的测试卷？",
+      "desc": "学生答完入学模考，销售查看不到",
+      "answer": "学生在填手机号的时候分两种情况： 1、是系统内已有线索；2、是新线索 如果是系统内已有线索且目前有其他销售在跟进，需要由销售总监或校长账号重新将这条线索分配给到您 如果是新线索，会自动分配到您的潜客里",
+      "attachment": "",
+      "bucket": "review_rewrite_needed",
+      "categories": [
+        "账号登录/密码/手机号",
+        "权限/角色/公池",
+        "题库/录题/单词书/模考"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "其他",
+      "question": "这份单词有200个，为啥我上传系统只有199个",
+      "desc": "上传单词书，单词少一个",
+      "answer": "这个词表里面有重复的单词，上传系统会自动剔除一个",
+      "attachment": "924b49393e4157596b82dd811325ba7.png",
+      "bucket": "review_rewrite_needed",
+      "categories": [
+        "题库/录题/单词书/模考"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "使用问题",
+      "question": "请问标红的刘同学上完课了，反馈没有自动弹出来，后台帮忙看下啥情况呢",
+      "desc": "学生上完课后，首页没有课堂反馈的提醒",
+      "answer": "学生不在班级",
+      "attachment": "",
+      "bucket": "review_rewrite_needed",
+      "categories": [
+        "作业/布置/批改/反馈",
+        "班级/排课/课时/考勤"
+      ]
+    },
+    {
+      "audience": "academic",
+      "port": "教务",
+      "type": "其他",
+      "question": "你好，我这边创建不了学生账号，手机号一直输不进去",
+      "desc": "教务创建学生账号，不能填写学生手机号",
+      "answer": "没有学生联系方式查看的权限",
+      "attachment": "dcde82d8a26cbab3fc21956de3a2c2b.png",
+      "bucket": "review_rewrite_needed",
+      "categories": [
+        "账号登录/密码/手机号",
+        "权限/角色/公池"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "操作疑问",
+      "question": "你好，我想问一下，如何实现给一个学生批量布置任务啊，我们系统里给一个学生已经布置好了很多阅读任务，现在另外一个学生也需要这么进行布置，可以一键批量布置吗？就是这个学生的任务批量布置给其它学生",
+      "desc": "如何将学生的作业一键批量布置给其他学生",
+      "answer": "班级-点击常用作业-点击班级作业，找到已经布置过的班级，可以多选作业一键布置",
+      "attachment": "7d251a5773c19989f1b79bc62fd7656.png",
+      "bucket": "review_rewrite_needed",
+      "categories": [
+        "作业/布置/批改/反馈",
+        "班级/排课/课时/考勤"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "使用问题",
+      "question": "我这里排有课，已经上完课，但是没有入口可以进入写反馈。",
+      "desc": "老师上完课无法填写反馈",
+      "answer": "班级内没有学生",
+      "attachment": "7245a05faf25e2aefdb9af13489f8c8.png",
+      "bucket": "review_rewrite_needed",
+      "categories": [
+        "作业/布置/批改/反馈",
+        "班级/排课/课时/考勤"
+      ]
+    },
+    {
+      "audience": "principal",
+      "port": "校长",
+      "type": "其他",
+      "question": "我也有个疑问，为啥同是“校长”界面，我们的公众号提醒不同",
+      "desc": "都是校长界面，公众号提醒内容不一致",
+      "answer": "账号身份权限不同",
+      "attachment": "478437aa35d3cf755a8ae480ec86c12.jpg",
+      "bucket": "review_rewrite_needed",
+      "categories": [
+        "账号登录/密码/手机号",
+        "权限/角色/公池",
+        "小程序/公众号/二维码"
+      ]
+    },
+    {
+      "audience": "student",
+      "port": "学生",
+      "type": "其他",
+      "question": "老师您好， 我们学员背诵词汇遇到这个问题， 请问可以怎么解决啊",
+      "desc": "ipad单词答题，学习模式没有办法录音",
+      "answer": "未复现",
+      "attachment": "5c2dc0c2ca5b7e1561dd3879c1d21272.mp4",
+      "bucket": "review_rewrite_needed",
+      "categories": [
+        "音频/录音/听力"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "其他",
+      "question": "请问学生这个0s显示是为啥",
+      "desc": "学生SAT作业，结果页答题时间部分题目显示0秒",
+      "answer": "从最后一道题开始答，答完一道就点Back到前一道题继续答题，切换的时候就没有调接口记录单道题时长",
+      "attachment": "fb1fa9a439598362674f657ef77109a.jpg",
+      "bucket": "review_rewrite_needed",
+      "categories": [
+        "作业/布置/批改/反馈"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "使用问题",
+      "question": "你好，这堂课上完以后没有显示在待反馈课程里，无法写反馈，请问这是什么原因？",
+      "desc": "老师端上完课后没有出现待反馈",
+      "answer": "班级内没有学生",
+      "attachment": "a62c687d2f3b8fc3b59e3703576553d.png",
+      "bucket": "review_rewrite_needed",
+      "categories": [
+        "作业/布置/批改/反馈",
+        "班级/排课/课时/考勤"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "其他",
+      "question": "为什么查看详情后题目数量不对",
+      "desc": "作业列表和结果页题目数量不对应",
+      "answer": "客户反馈题目数太多了重新分组了，所以分组前的作业那个数目会对不上",
+      "attachment": "0f746753a475233e8710978aa59fcc3.png,f25e3557a0e7e8b9cb29784d6c37747.png",
+      "bucket": "review_rewrite_needed",
+      "categories": [
+        "作业/布置/批改/反馈"
+      ]
+    },
+    {
+      "audience": "academic",
+      "port": "教务",
+      "type": "其他",
+      "question": "Doreen 老师们，辛苦查看这两个端口 数据不一样，是什么问题？先是给学生建立赠送课计算机0.5小时，已经消掉了 今天给学生建立订单 计算机20小时，我留意到剩余课时-0.5小时，所以我建立续课订单的时候，选的是购买课时20小时+赠送课0.5小时",
+      "desc": "学生班级排课课时和学生订单剩余课时不一致",
+      "answer": "订单里面的赠送课时 只有记录的作用，不参与课消结转的计算，订单的剩余课时，是指购买课时的剩余",
+      "attachment": "6afff6f09baec9c07b40f9925f66cd6.png,f5d8d2f158fdb9758df0a394cb1a6a0.png",
+      "bucket": "review_rewrite_needed",
+      "categories": [
+        "班级/排课/课时/考勤",
+        "订单/合同/报课/收费"
+      ]
+    },
+    {
+      "audience": "sales",
+      "port": "销售",
+      "type": "其他",
+      "question": "表格按照这个模版来的，所以不知道哪里出现了问题",
+      "desc": "潜客名单导入提示参数缺失:潜客列表JSON转换后为空",
+      "answer": "未按照导入模板选择年级",
+      "attachment": "3715a80e7591dafa492bc6ded85ff99.jpg",
+      "bucket": "review_rewrite_needed",
+      "categories": []
+    }
+  ],
+  "ticket_samples": [
+    {
+      "audience": "student",
+      "port": "学生",
+      "type": "bug",
+      "question": "学生反映听力做完出来阅读就自动complete 了，进不去了 用谷歌答题的",
+      "desc": "听力时间做完了出来，阅读部分直接显示完成了",
+      "answer": "",
+      "attachment": "4a9cc79743bb1f7cf8b597f3e14ccca.jpg,11d944bf91d1b2c4bd777518cca87ef.jpg,0ca4bf032d0e03d8e37e1c9b838ef84.jpg",
+      "bucket": "ticket_or_handoff",
+      "categories": [
+        "音频/录音/听力",
+        "浏览器/网络/缓存"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "bug",
+      "question": "我看现在说的是ai不能给我写反馈",
+      "desc": "反馈这里点击ai生成会报数据获取失败",
+      "answer": "",
+      "attachment": "",
+      "bucket": "ticket_or_handoff",
+      "categories": [
+        "作业/布置/批改/反馈"
+      ]
+    },
+    {
+      "audience": "student",
+      "port": "学生",
+      "type": "优化",
+      "question": "请问什么才算是特殊操作，因为对学生来说，都是正常操作，正常高亮，结果高亮的内容消失了",
+      "desc": "学生操作高亮时，由于选择了带框文本，导致高亮、笔记后答题框不见了",
+      "answer": "",
+      "attachment": "image.png,image.png",
+      "bucket": "ticket_or_handoff",
+      "categories": []
+    },
+    {
+      "audience": "student",
+      "port": "学生",
+      "type": "数据恢复需求",
+      "question": "Gloria林老师: 小助手好，请问这个学生刚刚误删了一项单词作业，技术可以帮忙恢复吗 Gloria林老师:",
+      "desc": "学生误删作业，需要恢复作业数据",
+      "answer": "",
+      "attachment": "",
+      "bucket": "ticket_or_handoff",
+      "categories": [
+        "作业/布置/批改/反馈"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "入学模考配置",
+      "question": "老师，想跟你申请配置一个雅思开班模考，模考内容是：雅思的C18-4",
+      "desc": "新增雅思入学模考",
+      "answer": "",
+      "attachment": "",
+      "bucket": "ticket_or_handoff",
+      "categories": [
+        "题库/录题/单词书/模考"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "bug",
+      "question": "老师，我改完作业之后，这边首页为什么还是显示「待批改」，是有哪个地方是必须操作的吗？",
+      "desc": "老师批改完成作业后，首页待批改通知还显示",
+      "answer": "问题出在修改分项评分， 如果批改作业的时候先修改了分项评分，那个待批改就不会消了",
+      "attachment": "0625069fae1941090f7d80b01466cc9.png,8721b8ccae8c89ae4ca0e4010e6944e.png",
+      "bucket": "ticket_or_handoff",
+      "categories": [
+        "作业/布置/批改/反馈"
+      ]
+    },
+    {
+      "audience": "student",
+      "port": "学生",
+      "type": "需求",
+      "question": "老师晚上好 想问一下做完练习后可以加一个调 倍速的功能吗",
+      "desc": "在完成练习后 订正重听这里新增一个倍速播放的功能",
+      "answer": "",
+      "attachment": "d68796b15c5218f13f7ba078d4b5244.jpg",
+      "bucket": "ticket_or_handoff",
+      "categories": []
+    },
+    {
+      "audience": "academic",
+      "port": "教务",
+      "type": "需求",
+      "question": "老师，这里的总课时，能否再添加一栏赠送课时或者模考课时？",
+      "desc": "教务-班级页面的增加一项数据维度",
+      "answer": "",
+      "attachment": "e4d0f225dee7ffedfa8455e4e550901.jpg",
+      "bucket": "ticket_or_handoff",
+      "categories": [
+        "班级/排课/课时/考勤",
+        "题库/录题/单词书/模考"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "题目问题",
+      "question": "这道题不对，应该选B",
+      "desc": "托福题目答案有误",
+      "answer": "",
+      "attachment": "2e05c8d91cfc539ed42332d6b101d8e.png",
+      "bucket": "ticket_or_handoff",
+      "categories": []
+    },
+    {
+      "audience": "student",
+      "port": "学生",
+      "type": "bug",
+      "question": "老师，这是学生在系统自己刷的题目，她点开答题解析看不到自己的答案，学员以前自己刷的题，现在错题也看不到了",
+      "desc": "开放题库学生完成答题后，答案未显示，无分数",
+      "answer": "",
+      "attachment": "dc01de1d0a73c1cc9a700ddf4fd243e.png",
+      "bucket": "ticket_or_handoff",
+      "categories": [
+        "权限/角色/公池",
+        "题库/录题/单词书/模考"
+      ]
+    },
+    {
+      "audience": "sales",
+      "port": "销售",
+      "type": "优化",
+      "question": "老师好 请问这是什么情况",
+      "desc": "导入潜客提示参数缺失:潜客列表JSON转换后为空，无法确认具体信息",
+      "answer": "年级为按照模板录入",
+      "attachment": "bbdaea4c358d909946145e5f6ebf68b.png",
+      "bucket": "ticket_or_handoff",
+      "categories": []
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "入学模考配置",
+      "question": "辛苦老师帮我们把雅思测试，更新下新的内容呗，系统现在最新的是14的题目。",
+      "desc": "新增雅思入学模考",
+      "answer": "",
+      "attachment": "",
+      "bucket": "ticket_or_handoff",
+      "categories": [
+        "题库/录题/单词书/模考"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "题目问题",
+      "question": "tpo75p2的最后一段应该是highlight的这一部分",
+      "desc": "tpo75p2 第8题材料有误",
+      "answer": "",
+      "attachment": "46da04f95893610d54d234026a8acde.png",
+      "bucket": "ticket_or_handoff",
+      "categories": []
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "入学模考配置",
+      "question": "麻烦问下，可以直接用系统上的题库传成入学模考测试的题吗？雅思C17T3",
+      "desc": "新增雅思入学模考",
+      "answer": "",
+      "attachment": "",
+      "bucket": "ticket_or_handoff",
+      "categories": [
+        "题库/录题/单词书/模考"
+      ]
+    },
+    {
+      "audience": "student",
+      "port": "学生",
+      "type": "bug",
+      "question": "您好 现在作业模考都不计时了嘛？好多学生反映这个问题我们开启倒计时了，但是学生开始作业之后那个32分钟一直不动",
+      "desc": "SAT模考倒计时失效",
+      "answer": "修改新功能的时候关闭了倒计时，后面忘记打开的原因",
+      "attachment": "e6f0a2c4ec3614b3a19d764040cd7a82.mp4",
+      "bucket": "ticket_or_handoff",
+      "categories": [
+        "作业/布置/批改/反馈",
+        "题库/录题/单词书/模考"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "入学模考配置",
+      "question": "明天麻烦帮我设置一套sat模考：读写机考sat机考套卷practice1 routing+practice1 harder，数学也是sat机考套卷practice1 routing+practice1 harder，谢谢",
+      "desc": "新增sat入学模考",
+      "answer": "",
+      "attachment": "",
+      "bucket": "ticket_or_handoff",
+      "categories": [
+        "题库/录题/单词书/模考"
+      ]
+    },
+    {
+      "audience": "academic",
+      "port": "教务",
+      "type": "bug",
+      "question": "系统里为什么会出现美诺的老师账号，恨多不是新航道的员工",
+      "desc": "运营-老师布置作业数据出现了很多不是机构员工的账号",
+      "answer": "",
+      "attachment": "c88869e855f412e7d9f2929162d9b62.jpg,b223b1f7e75a81d5e8cdf055b1cee56.jpg",
+      "bucket": "ticket_or_handoff",
+      "categories": [
+        "账号登录/密码/手机号",
+        "作业/布置/批改/反馈"
+      ]
+    },
+    {
+      "audience": "principal",
+      "port": "校长",
+      "type": "优化",
+      "question": "比如这一单，业绩统计应该是要统计到2月，支付时间也改了",
+      "desc": "订单支付时间修改到了2月，但是业绩计算没有到2月",
+      "answer": "",
+      "attachment": "aa832b459f8d1166f0070b127a70d98.png",
+      "bucket": "ticket_or_handoff",
+      "categories": [
+        "订单/合同/报课/收费"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "需求",
+      "question": "答案是BC，判学生两个题都错了，那得显示对一个啊，学生看见接受不了",
+      "desc": "雅思多选题学生答对了一半，显示全错，应该分开显示",
+      "answer": "",
+      "attachment": "1a06c6217951adfc8e669b20220f3f9.png",
+      "bucket": "ticket_or_handoff",
+      "categories": []
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "需求",
+      "question": "如果学生3天才听完一篇 不能实时知道自己的问题 学习效果会不太理想 可以设置一个功能，比如播放5遍之后，才可以查看该句的文本吗？",
+      "desc": "逐句精听可以让学生在答题时看到答案",
+      "answer": "",
+      "attachment": "",
+      "bucket": "ticket_or_handoff",
+      "categories": []
+    }
+  ],
+  "risk_samples": [
+    {
+      "audience": "sales",
+      "port": "销售",
+      "type": "其他",
+      "question": "老师系统生成的协议打开只有一半 我让学生换就浏览器也一样",
+      "desc": "销售生成的合同链接，学生查看内容显示不全",
+      "answer": "未复现，老师使用的是手机，建议使用电脑谷歌浏览器",
+      "attachment": "60f02d4927ff03929fd890d4fe15556.jpg",
+      "bucket": "risk_review",
+      "categories": [
+        "浏览器/网络/缓存",
+        "订单/合同/报课/收费"
+      ]
+    },
+    {
+      "audience": "academic",
+      "port": "教务",
+      "type": "使用问题",
+      "question": "请问4课时都排在3.2号上过了 为什么已消课是2课时？学生这4小时都没上课 我怎么能把这4小时的费用都操作退费呀",
+      "desc": "学生已上课时和已消课时对不上",
+      "answer": "学生有两个课时修改了考勤为已请假，所以不计算这两个课时的课消",
+      "attachment": "5269d51283eb78d5e30dff76c54e259.png",
+      "bucket": "risk_review",
+      "categories": [
+        "班级/排课/课时/考勤",
+        "订单/合同/报课/收费"
+      ]
+    },
+    {
+      "audience": "sales",
+      "port": "销售",
+      "type": "操作疑问",
+      "question": "校区在创建订单的时候选错了，请问能修改吗",
+      "desc": "已确认的订单如何修改",
+      "answer": "已确认订单退费后可操作修改订单或取消订单重新创建",
+      "attachment": "",
+      "bucket": "risk_review",
+      "categories": [
+        "订单/合同/报课/收费"
+      ]
+    },
+    {
+      "audience": "sales",
+      "port": "销售",
+      "type": "操作疑问",
+      "question": "老师，这个金额我在哪里修改～删除了订单在哪里重建",
+      "desc": "订单金额如何修改，删除订单后如何重建订单",
+      "answer": "如果是正式学员，在学员管理点击续费，报课。潜客在跟进进度，选择已签约，进行报课",
+      "attachment": "",
+      "bucket": "risk_review",
+      "categories": [
+        "订单/合同/报课/收费"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "数据导出",
+      "question": "澜大这次需要导一下最近开通的200个账号数据名单，要求和上次一样",
+      "desc": "导出账号开通数据",
+      "answer": "",
+      "attachment": "",
+      "bucket": "risk_review",
+      "categories": [
+        "账号登录/密码/手机号"
+      ]
+    },
+    {
+      "audience": "academic",
+      "port": "教务",
+      "type": "操作疑问",
+      "question": "然后请问我们销售收费后，能设置学生的一些基本信息给后端看么",
+      "desc": "销售如何设置学生的基本信息让老师看到",
+      "answer": "可以在学员管理填写回访记录",
+      "attachment": "",
+      "bucket": "risk_review",
+      "categories": [
+        "订单/合同/报课/收费"
+      ]
+    },
+    {
+      "audience": "sales",
+      "port": "销售",
+      "type": "其他",
+      "question": "这个我删除了，但是在系统里选择的时候 还是可以看到",
+      "desc": "删除了渠道类型，但是筛选渠道类型还是有显示",
+      "answer": "删除的是渠道，渠道类型需要按照图中步骤删除",
+      "attachment": "f6ff15995834dd1104c65a2e368f9fb.png,982af89ed8608fd031dfb3d8b2b6efa.png",
+      "bucket": "risk_review",
+      "categories": []
+    },
+    {
+      "audience": "principal",
+      "port": "校长",
+      "type": "操作疑问",
+      "question": "比如我今天来不及输入昨天的收款，但是我想统计的是自然月的收入",
+      "desc": "如何修改订单支付时间",
+      "answer": "没开通销售系统的：1，管理员端也有有订单管理的功能tab，可以在订单详情里面修改支付时间。2，学员管理那里，还是有“合同”那个功能tab，能看到合同详情。",
+      "attachment": "c200162d38a902cbdffd55411662d9c0_.jpg",
+      "bucket": "risk_review",
+      "categories": [
+        "订单/合同/报课/收费"
+      ]
+    },
+    {
+      "audience": "sales",
+      "port": "销售",
+      "type": "操作疑问",
+      "question": "已签约的潜客怎么删除",
+      "desc": "如何删除已签约的潜客",
+      "answer": "需要先删除订单，潜客订单才能回到跟进中，才能删除",
+      "attachment": "",
+      "bucket": "risk_review",
+      "categories": [
+        "订单/合同/报课/收费"
+      ]
+    },
+    {
+      "audience": "sales",
+      "port": "销售",
+      "type": "其他",
+      "question": "老师麻烦看一下这个合同，家长已经签字了，但是电脑打开合同是未签字，而且合同是空白的，不知道是哪里出现问题",
+      "desc": "合同，家长已经签字了，但是电脑打开合同是未签字，而且合同是空白的",
+      "answer": "",
+      "attachment": "",
+      "bucket": "risk_review",
+      "categories": [
+        "订单/合同/报课/收费"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "其他",
+      "question": "麻烦问下为什么校对单词删不了错误的意思？页面显示操作成功，但是再看还是有错误意思",
+      "desc": "单词书删除了单词的英文意思，显示操作成功，但是意思还是在",
+      "answer": "后台会自动匹配英文解释，所以如果删除为空的话，还是会自动匹配，可以进行修改，但不能为空",
+      "attachment": "c9c78fd18e4a29b057dee9fc0493126.png",
+      "bucket": "risk_review",
+      "categories": [
+        "题库/录题/单词书/模考"
+      ]
+    },
+    {
+      "audience": "academic",
+      "port": "教务",
+      "type": "操作疑问",
+      "question": "教务给学生创建了4个班，但是销售选的时候，没有选择班班级，就生成了一个单独的1对1班级，如何操作将课时数和班级对应上",
+      "desc": "教务给学生创建了4个班，但是销售选的时候，没有选择班级，就生成了一个单独的1对1班级，如何操作将课时数和教务创建的班级对应上",
+      "answer": "只能删除那个1对1的订单，然后重新报，选择对应的那四个班级",
+      "attachment": "d56b659aa4c82e4e7917b7f46155324.png",
+      "bucket": "risk_review",
+      "categories": [
+        "班级/排课/课时/考勤",
+        "订单/合同/报课/收费"
+      ]
+    },
+    {
+      "audience": "academic",
+      "port": "教务",
+      "type": "操作疑问",
+      "question": "老师，之前说的老学员新报名，那个合同怎么另起一个呢",
+      "desc": "老学员如何报名",
+      "answer": "",
+      "attachment": "",
+      "bucket": "risk_review",
+      "categories": [
+        "订单/合同/报课/收费"
+      ]
+    },
+    {
+      "audience": "sales",
+      "port": "销售",
+      "type": "其他",
+      "question": "老师又出现编辑好，改完账合同信息就没了",
+      "desc": "编辑好了合同信息，预览没有显示",
+      "answer": "未复现，做了处理",
+      "attachment": "5727dc6b8955c31a74f06c50e140306a.mp4",
+      "bucket": "risk_review",
+      "categories": [
+        "订单/合同/报课/收费"
+      ]
+    },
+    {
+      "audience": "sales",
+      "port": "销售",
+      "type": "其他",
+      "question": "这个合同章子不见了,我记得昨天是调整好才发的学生",
+      "desc": "合同学生签字没有公章",
+      "answer": "未复现，已处理",
+      "attachment": "72195e5fec575b10ec693a580c0d676.jpg",
+      "bucket": "risk_review",
+      "categories": [
+        "订单/合同/报课/收费"
+      ]
+    },
+    {
+      "audience": "principal",
+      "port": "校长",
+      "type": "操作疑问",
+      "question": "老师早上好！请问系统中的潜客，可以给到客户电子合同吗？还是要转为正式学员，才能有电子合同？谢谢老师！",
+      "desc": "潜客如何给电子合同",
+      "answer": "可以给到电子合同，需要把状态调整为已签约就可以了，不需要转为正式学员。",
+      "attachment": "",
+      "bucket": "risk_review",
+      "categories": [
+        "订单/合同/报课/收费"
+      ]
+    },
+    {
+      "audience": "academic",
+      "port": "教务",
+      "type": "其他",
+      "question": "老师，今天有学生做了测试，提交的时候显示未成功，之后就找不到做题记录了，麻烦咱们技术人员帮忙看下呀，学生电话15070245545",
+      "desc": "学生做了入学模考，无法提交，公池有学生信息，但没有入学模考记录",
+      "answer": "学生在答题过程中，账号被老师账号删除了，导致学生答完题后无法提交",
+      "attachment": "image.png",
+      "bucket": "risk_review",
+      "categories": [
+        "账号登录/密码/手机号",
+        "权限/角色/公池",
+        "题库/录题/单词书/模考"
+      ]
+    },
+    {
+      "audience": "sales",
+      "port": "销售",
+      "type": "使用问题",
+      "question": "合同中看不到备注栏",
+      "desc": "合同模版编辑格式问题，看不到备注栏",
+      "answer": "这个问题是指合同模版编辑的时候复制带有特殊符号导致的问题，后续负责创建合同模版的老师编辑完后预览一下，就可以避免这个问题",
+      "attachment": "image.png",
+      "bucket": "risk_review",
+      "categories": [
+        "订单/合同/报课/收费",
+        "权限/角色/公池"
+      ]
+    },
+    {
+      "audience": "sales",
+      "port": "销售",
+      "type": "其他",
+      "question": "老师我填好了学生信息，发给家长就是空白的,现在打开也是空白的",
+      "desc": "合同填写了信息，发给家长之后是空白的",
+      "answer": "优化重构",
+      "attachment": "0f8fbc5380dc8e0ae89ef3d1912efedd_raw.mp4",
+      "bucket": "risk_review",
+      "categories": [
+        "订单/合同/报课/收费"
+      ]
+    },
+    {
+      "audience": "teacher",
+      "port": "老师",
+      "type": "使用问题",
+      "question": "我只是想先做个测试 这里这么智能的吗 能识别什么是公章？不上传公章就不能保存啦，这个先解决一下吧 我在测试电子合同",
+      "desc": "上传了公章图片但是提示没有公章",
+      "answer": "没有选中公章",
+      "attachment": "4240152a6ca2c43dd4a7f26b698b1a4.png",
+      "bucket": "risk_review",
+      "categories": [
+        "订单/合同/报课/收费"
+      ]
+    }
+  ],
+  "faq_samples": [
+    {
+      "sheet": "常见问答",
+      "question": "学生登录不上账号",
+      "answer": "多次出现学生登录不了账号但是后台登录没有问题 回答：老师您好，这个账号我们这边登录是没有问题的，尝试解决： 1.ipad用safari，电脑用谷歌 2.更换网络尝试 3.清理浏览器缓存",
+      "audience": "",
+      "quality_bucket": "kb_candidate"
+    },
+    {
+      "sheet": "常见问答",
+      "question": "学生写了作业，但老师看不到，系统没显示",
+      "answer": "1、确认学生是否有完成作业，看录屏，没有录屏就是未完成作业； 2、有录屏，作业状态的问题 3、提供账号和学生账号、作业链接",
+      "audience": "",
+      "quality_bucket": "kb_candidate"
+    },
+    {
+      "sheet": "常见问答",
+      "question": "扫了这个二维码关注公众号，是这个界面",
+      "answer": "",
+      "audience": "",
+      "quality_bucket": "no_answer_or_low_value"
+    },
+    {
+      "sheet": "常见问答",
+      "question": "切屏次数太多",
+      "answer": "1：点击电脑最下方的任务栏 2：点击浏览器其他网页或功能项 3：其他程序的自动置顶（如：微信弹出信息）其他程序的自动获焦(比如广告)",
+      "audience": "",
+      "quality_bucket": "kb_candidate"
+    },
+    {
+      "sheet": "常见问答",
+      "question": "学生账号到期怎么续期",
+      "answer": "老师您好，学生账号到期时，您可以通过以下操作流程完成续期： 1、登录教务/校长账号，点击【学生管理】 2、找到对应要续期的学生账号，点击学生列表中，学生姓名旁边的红色小圆点 3、点击“续期”即可。 续期一次即消耗一个学生账号，点击续期后，账号服务期从当日起计时",
+      "audience": "",
+      "quality_bucket": "kb_candidate"
+    },
+    {
+      "sheet": "常见问答",
+      "question": "学生反映，小程序和电脑端上要做题，都出现 功能暂未开通",
+      "answer": "老师您好，1：需要给学生开通vip账号，在学生管理中编辑学员，点击vip。 2：如果已经开通vip了还出现该情况的话，学生可以手动退出账号重新登录",
+      "audience": "",
+      "quality_bucket": "kb_candidate"
+    },
+    {
+      "sheet": "常见问答",
+      "question": "老师问sat机考评分标准",
+      "answer": "老师您好，SAT机考目前官方没有准确评分，目前系统是按照学生作答百分比进行记分， 仅做参考，老师可以根据具体的教学任务，在学生结果页手动调整分数",
+      "audience": "",
+      "quality_bucket": "kb_candidate"
+    },
+    {
+      "sheet": "常见问答",
+      "question": "一个账号可以多个学生登录吗",
+      "answer": "老师您好，一个账号是不建议多个学生登陆的，学习数据会变乱，学生也不好查看自己的作业和课程 入学模考不能两个学生用一个账号，做题数据会被覆盖",
+      "audience": "",
+      "quality_bucket": "kb_candidate"
+    },
+    {
+      "sheet": "常见问答",
+      "question": "我想把a的账号修改成b 但是b的手机号在用户池被占用了",
+      "answer": "",
+      "audience": "",
+      "quality_bucket": "no_answer_or_low_value"
+    },
+    {
+      "sheet": "常见问答",
+      "question": "学生界面显示“此功能暂未开通‘应该怎么操作",
+      "answer": "",
+      "audience": "",
+      "quality_bucket": "no_answer_or_low_value"
+    }
+  ]
+}

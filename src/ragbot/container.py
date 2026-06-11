@@ -1,0 +1,68 @@
+from __future__ import annotations
+
+from ragbot.answering import AnswerService
+from ragbot.adapters.wechat import HttpWechatBotAdapter
+from ragbot.audience import AudienceAssigner
+from ragbot.config import get_settings
+from ragbot.ingestion import IngestionService
+from ragbot.providers import HashEmbeddingProvider, HttpEmbeddingProvider, HttpLLMProvider, MockLLMProvider
+from ragbot.repositories import InMemoryKnowledgeRepository, PostgresKnowledgeRepository
+from ragbot.retrieval import RetrievalService
+from ragbot.review import ReviewService
+from ragbot.workflow import CapturingWechatBotAdapter, MessagePreprocessor, WechatRagWorkflow
+
+
+class AppContainer:
+    def __init__(self) -> None:
+        self.settings = get_settings()
+        if self.settings.repository_provider == "postgres":
+            self.repository = PostgresKnowledgeRepository(self.settings.postgres_dsn)
+        else:
+            self.repository = InMemoryKnowledgeRepository()
+
+        if self.settings.embedding_provider == "http":
+            self.embedding_provider = HttpEmbeddingProvider(
+                self.settings.embedding_api_base or self.settings.llm_api_base,
+                self.settings.embedding_api_key or self.settings.llm_api_key,
+                self.settings.embedding_model,
+                self.settings.embedding_dimensions,
+                self.settings.embedding_encoding_format,
+            )
+        else:
+            self.embedding_provider = HashEmbeddingProvider(self.settings.embedding_dimensions)
+        if self.settings.llm_provider == "mock":
+            self.llm_provider = MockLLMProvider()
+        else:
+            self.llm_provider = HttpLLMProvider(
+                self.settings.llm_api_base,
+                self.settings.llm_api_key,
+                self.settings.llm_model,
+                self.settings.llm_max_tokens,
+            )
+        self.ingestion_service = IngestionService(self.embedding_provider)
+        self.retrieval_service = RetrievalService(self.repository, self.embedding_provider, self.settings)
+        self.answer_service = AnswerService(self.llm_provider, self.settings.max_llm_context_chars)
+        if self.settings.worktool_robot_id:
+            self.wechat_adapter = HttpWechatBotAdapter(
+                self.settings.worktool_api_base,
+                self.settings.worktool_robot_id,
+                self.settings.worktool_send_api_token,
+            )
+        else:
+            self.wechat_adapter = CapturingWechatBotAdapter()
+        self.workflow = WechatRagWorkflow(
+            self.repository,
+            self.retrieval_service,
+            self.answer_service,
+            self.wechat_adapter,
+            MessagePreprocessor(rules_path=self.settings.handoff_rules_path),
+        )
+        self.review_service = ReviewService(
+            self.repository,
+            self.ingestion_service,
+            AudienceAssigner(self.settings.audience_routing_path),
+            self.settings.audience_routing_enabled,
+        )
+
+
+container = AppContainer()
