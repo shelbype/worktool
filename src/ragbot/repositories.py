@@ -143,9 +143,38 @@ class InMemoryKnowledgeRepository:
 
 
 class PostgresKnowledgeRepository:
-    def __init__(self, dsn: str, candidate_limit: int = 200) -> None:
+    def __init__(
+        self,
+        dsn: str,
+        candidate_limit: int = 200,
+        vector_index_type: str = "hnsw",
+        vector_index_m: int = 8,
+        vector_index_ef_construction: int = 200,
+        vector_index_ef_search: int = 50,
+        vector_index_lists: int = 100,
+    ) -> None:
         self.dsn = dsn
         self.candidate_limit = candidate_limit
+        self.vector_index_type = vector_index_type
+        self.vector_index_m = vector_index_m
+        self.vector_index_ef_construction = vector_index_ef_construction
+        self.vector_index_ef_search = vector_index_ef_search
+        self.vector_index_lists = vector_index_lists
+
+    def _vector_index_sql(self, table: str) -> str:
+        """Generate CREATE INDEX SQL for the configured vector index type."""
+        idx_name = f"idx_{table}_embedding"
+        if self.vector_index_type == "hnsw":
+            return (
+                f"CREATE INDEX IF NOT EXISTS {idx_name}"
+                f" ON {table} USING hnsw (embedding vector_cosine_ops)"
+                f" WITH (m = {self.vector_index_m}, ef_construction = {self.vector_index_ef_construction})"
+            )
+        return (
+            f"CREATE INDEX IF NOT EXISTS {idx_name}"
+            f" ON {table} USING ivfflat (embedding vector_cosine_ops)"
+            f" WITH (lists = {self.vector_index_lists})"
+        )
 
     def init_schema(self, schema_sql: str) -> None:
         with self._connect() as conn:
@@ -169,12 +198,17 @@ class PostgresKnowledgeRepository:
                         ON {table} USING gin(to_tsvector('simple', content))
                     """
                 )
-                conn.execute(
-                    f"""
-                    CREATE INDEX IF NOT EXISTS idx_{table}_embedding
-                        ON {table} USING ivfflat (embedding vector_cosine_ops) WITH (lists = 100)
-                    """
-                )
+                conn.execute(self._vector_index_sql(table))
+
+    def migrate_index_type(self) -> None:
+        """Switch the vector index type (e.g. IVFFlat → HNSW) by dropping old
+        indexes and recreating them. Safe to run repeatedly — each DROP uses
+        IF EXISTS so it is a no-op when the index has already been rebuilt."""
+        with self._connect() as conn:
+            conn.execute("CREATE EXTENSION IF NOT EXISTS vector")
+            for table in ["knowledge_chunks"] + list(AUDIENCE_TABLES.values()):
+                conn.execute(f"DROP INDEX IF EXISTS idx_{table}_embedding")
+                conn.execute(self._vector_index_sql(table))
 
     def migrate_embedding_dimension(self, dimensions: int) -> None:
         if dimensions < 1 or dimensions > 4096:
@@ -188,12 +222,7 @@ class PostgresKnowledgeRepository:
                 ALTER COLUMN embedding TYPE vector({dimensions}) USING NULL
                 """
             )
-            conn.execute(
-                """
-                CREATE INDEX IF NOT EXISTS idx_knowledge_chunks_embedding
-                    ON knowledge_chunks USING ivfflat (embedding vector_cosine_ops) WITH (lists = 100)
-                """
-            )
+            conn.execute(self._vector_index_sql("knowledge_chunks"))
             for table in AUDIENCE_TABLES.values():
                 conn.execute(f"DROP INDEX IF EXISTS idx_{table}_embedding")
                 conn.execute(
@@ -202,12 +231,7 @@ class PostgresKnowledgeRepository:
                     ALTER COLUMN embedding TYPE vector({dimensions}) USING NULL
                     """
                 )
-                conn.execute(
-                    f"""
-                    CREATE INDEX IF NOT EXISTS idx_{table}_embedding
-                        ON {table} USING ivfflat (embedding vector_cosine_ops) WITH (lists = 100)
-                    """
-                )
+                conn.execute(self._vector_index_sql(table))
 
     def clear_knowledge(self) -> None:
         with self._connect() as conn:
@@ -287,6 +311,10 @@ class PostgresKnowledgeRepository:
     ) -> list[KnowledgeChunk]:
         vector = self._vector_literal(query_embedding)
         with self._connect() as conn:
+            if self.vector_index_type == "hnsw":
+                conn.execute(f"SET LOCAL hnsw.ef_search = {self.vector_index_ef_search}")
+            else:
+                conn.execute(f"SET LOCAL ivfflat.probes = {self.vector_index_lists}")
             rows = conn.execute(
                 f"""
                 SELECT id, document_id, title, content, search_text, answer_content,

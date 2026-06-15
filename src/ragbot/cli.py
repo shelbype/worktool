@@ -47,6 +47,8 @@ def main() -> None:
     migrate_vector_dim = subparsers.add_parser("migrate-vector-dim")
     migrate_vector_dim.add_argument("--dimensions", type=int, default=None)
 
+    migrate_index_type = subparsers.add_parser("migrate-index-type")
+
     eval_retrieval = subparsers.add_parser("eval-retrieval")
     eval_retrieval.add_argument("--cases", default="eval/questions.json")
     eval_retrieval.add_argument("--source", default="db/init")
@@ -139,6 +141,13 @@ def main() -> None:
         print(json.dumps({"migrated": True, "dimensions": dimensions}, ensure_ascii=False))
         return
 
+    if args.command == "migrate-index-type":
+        if not isinstance(repository, PostgresKnowledgeRepository):
+            raise SystemExit("migrate-index-type requires REPOSITORY_PROVIDER=postgres")
+        repository.migrate_index_type()
+        print(json.dumps({"migrated": True, "index_type": settings.vector_index_type}, ensure_ascii=False))
+        return
+
     if args.command == "eval-retrieval":
         if isinstance(repository, InMemoryKnowledgeRepository) or args.load_source:
             if settings.audience_routing_enabled:
@@ -191,7 +200,14 @@ def main() -> None:
 
 def build_repository(settings: Settings):
     if settings.repository_provider == "postgres":
-        return PostgresKnowledgeRepository(settings.postgres_dsn)
+        return PostgresKnowledgeRepository(
+            settings.postgres_dsn,
+            vector_index_type=settings.vector_index_type,
+            vector_index_m=settings.vector_index_m,
+            vector_index_ef_construction=settings.vector_index_ef_construction,
+            vector_index_ef_search=settings.vector_index_ef_search,
+            vector_index_lists=settings.vector_index_lists,
+        )
     return InMemoryKnowledgeRepository()
 
 

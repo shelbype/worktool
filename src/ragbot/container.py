@@ -16,7 +16,14 @@ class AppContainer:
     def __init__(self) -> None:
         self.settings = get_settings()
         if self.settings.repository_provider == "postgres":
-            self.repository = PostgresKnowledgeRepository(self.settings.postgres_dsn)
+            self.repository = PostgresKnowledgeRepository(
+                self.settings.postgres_dsn,
+                vector_index_type=self.settings.vector_index_type,
+                vector_index_m=self.settings.vector_index_m,
+                vector_index_ef_construction=self.settings.vector_index_ef_construction,
+                vector_index_ef_search=self.settings.vector_index_ef_search,
+                vector_index_lists=self.settings.vector_index_lists,
+            )
         else:
             self.repository = InMemoryKnowledgeRepository()
 
