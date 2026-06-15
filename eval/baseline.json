@@ -2,10 +2,10 @@
   "description": "Baseline metrics for regression comparison.",
   "tolerance": 0.05,
   "metrics": {
-    "top1_hit_rate": 0.931,
-    "top3_hit_rate": 0.9828,
-    "auto_reply_accuracy": 0.935,
-    "handoff_accuracy": 0.935,
+    "top1_hit_rate": 0.9569,
+    "top3_hit_rate": 1.0,
+    "auto_reply_accuracy": 0.9837,
+    "handoff_accuracy": 0.9837,
     "false_auto_reply_count": 0,
     "routing_top1_accuracy": 0.9278,
     "routing_covered_accuracy": 1.0
