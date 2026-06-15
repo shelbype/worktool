@@ -26,6 +26,12 @@ class Settings(BaseSettings):
     embedding_api_key: str = ""
     embedding_encoding_format: str = "float"
 
+    vector_index_type: str = "hnsw"
+    vector_index_m: int = Field(default=8, ge=2, le=100)
+    vector_index_ef_construction: int = Field(default=200, ge=10, le=2000)
+    vector_index_ef_search: int = Field(default=50, ge=1, le=1000)
+    vector_index_lists: int = Field(default=100, ge=10, le=10000)
+
     auto_reply_threshold: float = Field(default=0.72, ge=0, le=1)
     draft_only_threshold: float = Field(default=0.50, ge=0, le=1)
     top_k: int = Field(default=5, ge=1, le=20)
