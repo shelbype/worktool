@@ -22,7 +22,7 @@
 | P0-5 | 2026-06-11 | Prompt 优化 + few-shot | ✅ |
 | P0-6 | 2026-06-11 | Eval baseline 体系 | ✅ |
 | P1-7 | 2026-06-15 | LLM 查询改写 (`feat/llm-rewrite`) | ✅ |
-| P1-8 | 2026-06-15 | Jieba 分词 + BM25 (`feat/pg-bm25`) | 🔄 用户开发中 |
+| P1-8 | 2026-06-15 | Jieba 分词 + BM25 (`feat/pg-bm25`) | ✅ |
 | P1-12 | 2026-06-15 | HNSW 索引 (`feat/hnsw-index`) | ✅ |
 | P1-9 | - | LLM 点对点重排序 (`feat/llm-rerank`) | ⬜ |
 | P1-10 | - | MMR 多样性 (`feat/mmr-diversity`) | ⬜ |
@@ -176,6 +176,24 @@ P0 (已部署):
 
 **HNSW 参数** (当前规模 ~170 chunks):
 - m = 8, ef_construction = 200, ef_search = 50
+
+---
+
+### 2026-06-15 — Jieba 分词 + BM25 评分
+
+**目标**: Jieba 中文分词替代正则 bigram，PostgreSQL `ts_rank` 替代 0/1 FTS 匹配
+
+**变更**:
+- `pyproject.toml`: 新增 `jieba` 依赖
+- `repositories.py`:
+  - `_find_candidate_chunks_in_table()`: 使用 `ts_rank(..., 2)` 替代 `CASE WHEN ... THEN 0.25 ELSE 0`
+  - 查询使用 `coalesce(search_text, content)` 优先检索文本
+- `retrieval.py`: `_tokens()` 使用 Jieba 分词 + bigram fallback
+- `fast_answer.py`: `_tokens()` 同步使用 Jieba 分词
+
+**效果**:
+- Top-1 命中率: 95.69% (vs Hash 93.10%)
+- 自动回复准确率: 98.37% (vs Hash 93.50%, 提升 4.87%)
 
 ---
 
