@@ -166,7 +166,7 @@ class HttpLLMProvider:
                 "temperature": 0.1,
                 "max_tokens": 80,
             },
-            timeout=5,
+            timeout=15,
         )
         response.raise_for_status()
         data = response.json()
@@ -235,6 +235,55 @@ class HttpRerankProvider:
         }
         if top_n is not None:
             body["top_n"] = top_n
+        response = httpx.post(
+            f"{self.api_base}/compatible-api/v1/reranks",
+            headers={
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json",
+            },
+            json=body,
+            timeout=10,
+        )
+        response.raise_for_status()
+        data = response.json()
+        return {r["index"]: r["relevance_score"] for r in data["results"]}
+
+
+class HttpRerankProvider:
+    """qwen3-rerank via DashScope OpenAI-compatible rerank API.
+
+    API reference:
+      POST {api_base}/compatible-api/v1/reranks
+      Body: {"model": "...", "documents": [...], "query": "...", "top_n": N, "instruct": "..."}
+      Response: {"results": [{"index": 0, "relevance_score": 0.93}, ...]}
+    """
+
+    def __init__(self, api_base: str, api_key: str, model: str) -> None:
+        self.api_base = api_base.rstrip("/")
+        self.api_key = api_key
+        self.model = model
+
+    def rerank(self, query: str, documents: list[str], top_n: int | None = None) -> dict[int, float]:
+        """Score candidate documents against the query.
+
+        Args:
+            query: The search query.
+            documents: Candidate document texts (up to 500).
+            top_n: Optional limit on returned results.
+
+        Returns:
+            Dict mapping original document index to relevance_score (0–1,
+            relative within the request).
+        """
+        body: dict[str, object] = {
+            "model": self.model,
+            "documents": documents,
+            "query": query,
+            "instruct": "Given a web search query, retrieve relevant passages that answer the query.",
+        }
+        if top_n is not None:
+            body["top_n"] = top_n
+
         response = httpx.post(
             f"{self.api_base}/compatible-api/v1/reranks",
             headers={

@@ -92,6 +92,50 @@ class RetrievalService:
         except Exception:
             return query
 
+    def _llm_rerank(self, query: str, hits: list[RetrievalHit]) -> list[RetrievalHit]:
+        """LLM Rerank with tiebreak fusion. Falls back to rule scores on failure.
+
+        Strategy: sort by LLM relevance_score descending; within tie zones
+        (adjacent LLM scores differ < 0.01), re-sort by rule ``rerank_score``.
+        """
+        if not self.settings.llm_rerank_enabled:
+            return hits
+        if self.rerank_provider is None:
+            return hits
+        if len(hits) <= 1:
+            return hits
+
+        documents = [hit.chunk.effective_answer_content for hit in hits]
+        try:
+            scores = self.rerank_provider.rerank(query, documents)
+        except Exception:
+            return hits
+
+        for i, hit in enumerate(hits):
+            hit.llm_score = scores.get(i, 0.0)
+
+        # Primary sort: LLM score descending
+        hits.sort(key=lambda h: h.llm_score, reverse=True)
+
+        # Tiebreak: adjacent delta < threshold → rule_score decides
+        threshold = 0.01
+        i = 0
+        while i < len(hits):
+            j = i
+            while j + 1 < len(hits) and abs(hits[j].llm_score - hits[j + 1].llm_score) < threshold:
+                j += 1
+            if j > i:
+                hits[i : j + 1] = sorted(
+                    hits[i : j + 1], key=lambda h: h.rerank_score, reverse=True
+                )
+            i = j + 1
+
+        # Overwrite rerank_score for downstream confidence calculation
+        for hit in hits:
+            hit.rerank_score = hit.llm_score
+
+        return hits
+
     def retrieve(
         self,
         query: str,
@@ -104,7 +148,6 @@ class RetrievalService:
             audiences = route.audiences if route else None
         elif audiences:
             audiences = [audience for audience in audiences if audience in AUDIENCES]
-
         # ---- Intent classification + multi-intent decomposition (P1-11) ----
         intent_result = self._classify_intent(query)
         sub_queries = intent_result.sub_queries if intent_result.sub_queries else [query]
