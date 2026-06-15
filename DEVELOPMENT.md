@@ -23,7 +23,7 @@
 | P0-6 | 2026-06-11 | Eval baseline 体系 | ✅ |
 | P1-7 | 2026-06-15 | LLM 查询改写 (`feat/llm-rewrite`) | ✅ |
 | P1-8 | - | Jieba 分词 + BM25 (`feat/pg-bm25`) | ⬜ |
-| P1-12 | - | HNSW 索引 (`feat/hnsw-index`) | 🔄 |
+| P1-12 | 2026-06-15 | HNSW 索引 (`feat/hnsw-index`) | ✅ |
 | P1-9 | - | LLM 点对点重排序 (`feat/llm-rerank`) | ⬜ |
 | P1-10 | - | MMR 多样性 (`feat/mmr-diversity`) | ⬜ |
 | P1-11 | - | 意图分类 (`feat/intent-classify`) | ⬜ |
@@ -154,6 +154,28 @@ P0 (已部署):
   src/ragbot/repositories.py ← HNSW 索引替代 IVFFlat
   src/ragbot/config.py       ← VECTOR_INDEX_TYPE 配置
 ```
+
+---
+
+### 2026-06-15 — HNSW 索引
+
+**目标**: pgvector HNSW 索引替代 IVFFlat (100 lists)
+
+**变更**:
+- `config.py`: 新增 `VECTOR_INDEX_TYPE` (hnsw/ivfflat), `VECTOR_INDEX_M` (8), `VECTOR_INDEX_EF_CONSTRUCTION` (200), `VECTOR_INDEX_EF_SEARCH` (50), `VECTOR_INDEX_LISTS` (100)
+- `repositories.py`:
+  - 构造函数接收向量索引参数
+  - 新增 `_vector_index_sql()` 生成适配的 CREATE INDEX SQL
+  - 新增 `migrate_index_type()` 方法 (DROP + CREATE)
+  - `migrate_embedding_dimension()` 使用动态索引类型
+  - `_find_candidate_chunks_in_table()` 查询前 SET LOCAL ef_search/probes
+- `container.py` / `cli.py`: 传递向量索引参数
+- `cli.py`: 新增 `migrate-index-type` 子命令
+
+**服务器迁移**: `python -m ragbot.cli migrate-index-type` (IVFFlat → HNSW)
+
+**HNSW 参数** (当前规模 ~170 chunks):
+- m = 8, ef_construction = 200, ef_search = 50
 
 ---
 
