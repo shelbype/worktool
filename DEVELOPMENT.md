@@ -22,7 +22,7 @@
 | P0-5 | 2026-06-11 | Prompt 优化 + few-shot | ✅ |
 | P0-6 | 2026-06-11 | Eval baseline 体系 | ✅ |
 | P1-7 | 2026-06-15 | LLM 查询改写 (`feat/llm-rewrite`) | ✅ |
-| P1-8 | - | Jieba 分词 + BM25 (`feat/pg-bm25`) | ⬜ |
+| P1-8 | 2026-06-15 | Jieba 分词 + BM25 (`feat/pg-bm25`) | 🔄 用户开发中 |
 | P1-12 | 2026-06-15 | HNSW 索引 (`feat/hnsw-index`) | ✅ |
 | P1-9 | - | LLM 点对点重排序 (`feat/llm-rerank`) | ⬜ |
 | P1-10 | - | MMR 多样性 (`feat/mmr-diversity`) | ⬜ |
