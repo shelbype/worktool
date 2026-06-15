@@ -32,6 +32,11 @@ class Settings(BaseSettings):
     intent_classify_api_base: str = ""
     intent_classify_api_key: str = ""
     multi_intent_decompose_enabled: bool = True
+    llm_rerank_provider: str = "mock"
+    llm_rerank_enabled: bool = False
+    llm_rerank_model: str = "qwen3-rerank"
+    llm_rerank_api_base: str = ""
+    llm_rerank_api_key: str = ""
     embedding_model: str = "text-embedding-v4"
     embedding_api_base: str = ""
     embedding_api_key: str = ""

@@ -203,6 +203,52 @@ class HttpLLMProvider:
         return data["choices"][0]["message"]["content"].strip()
 
 
+class HttpRerankProvider:
+    """DashScope qwen3-rerank via OpenAI-compatible rerank API.
+
+    API reference:
+      POST {api_base}/compatible-api/v1/reranks
+      Body: {"model": "...", "documents": [...], "query": "...", "top_n": N}
+      Response: {"results": [{"index": 0, "relevance_score": 0.93}, ...]}
+    """
+
+    def __init__(self, api_base: str, api_key: str, model: str) -> None:
+        self.api_base = api_base.rstrip("/")
+        self.api_key = api_key
+        self.model = model
+
+    def rerank(self, query: str, documents: list[str], top_n: int | None = None) -> dict[int, float]:
+        """Score candidate documents against the query.
+
+        Args:
+            query: The search query.
+            documents: Candidate document texts (up to 500).
+            top_n: Optional limit on returned results.
+
+        Returns:
+            Dict mapping original document index to relevance_score (0–1).
+        """
+        body: dict[str, object] = {
+            "model": self.model,
+            "documents": documents,
+            "query": query,
+        }
+        if top_n is not None:
+            body["top_n"] = top_n
+        response = httpx.post(
+            f"{self.api_base}/compatible-api/v1/reranks",
+            headers={
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json",
+            },
+            json=body,
+            timeout=10,
+        )
+        response.raise_for_status()
+        data = response.json()
+        return {r["index"]: r["relevance_score"] for r in data["results"]}
+
+
 def cosine_similarity(left: list[float], right: list[float]) -> float:
     if not left or not right or len(left) != len(right):
         return 0.0

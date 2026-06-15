@@ -8,7 +8,7 @@ from ragbot.audience import AudienceRoute, AudienceRouter, AUDIENCES
 from ragbot.config import Settings
 from ragbot.domain import ConfidenceLevel, RetrievalHit, RetrievalResult
 from ragbot.intent import IntentClassifier
-from ragbot.providers import EmbeddingProvider, HttpLLMProvider, cosine_similarity
+from ragbot.providers import EmbeddingProvider, HttpLLMProvider, HttpRerankProvider, cosine_similarity
 from ragbot.quality_config import load_json_config
 from ragbot.repositories import KnowledgeRepository
 
@@ -61,12 +61,14 @@ class RetrievalService:
         settings: Settings,
         llm_provider: "HttpLLMProvider | None" = None,
         intent_classifier: "IntentClassifier | None" = None,
+        rerank_provider: "HttpRerankProvider | None" = None,
     ) -> None:
         self.repository = repository
         self.embedding_provider = embedding_provider
         self.settings = settings
         self.llm_provider = llm_provider
         self.intent_classifier = intent_classifier
+        self.rerank_provider = rerank_provider
         configured_aliases = load_json_config(settings.query_aliases_path, DEFAULT_QUERY_ALIASES)
         self.query_aliases = {str(key): str(value) for key, value in configured_aliases.items()}
         self.audience_router = AudienceRouter(settings.audience_routing_path, settings.max_route_audiences)
@@ -111,9 +113,14 @@ class RetrievalService:
         all_hits: list[RetrievalHit] = []
         for sq in sub_queries:
             all_hits.extend(self._retrieve_hits(sq, query, product_module, audiences))
-        hits = self._merge_multi_hits(all_hits, top_k=self.settings.top_k)
+        # Keep a wider pool for LLM rerank to select from.
+        rerank_pool_size = max(self.settings.top_k, 15)
+        merged = self._merge_multi_hits(all_hits, top_k=rerank_pool_size)
 
-        top_hits = hits[: self.settings.top_k]
+        # ---- LLM Rerank (P1-9) ----
+        merged = self._llm_rerank(query, merged)
+
+        top_hits = merged[: self.settings.top_k]
         score = top_hits[0].rerank_score if top_hits else 0.0
         confidence = self._confidence(score, len(top_hits))
         if confidence == ConfidenceLevel.MEDIUM and top_hits and self._has_strong_title_match(query, top_hits[0], score):
@@ -136,6 +143,54 @@ class RetrievalService:
             intent_sub_queries=intent_result.sub_queries if intent_result else [],
             intent_reasoning=intent_result.reasoning if intent_result else None,
         )
+
+    # ------------------------------------------------------------------
+    # LLM Rerank (P1-9)
+    # ------------------------------------------------------------------
+
+    def _llm_rerank(self, query: str, hits: list[RetrievalHit]) -> list[RetrievalHit]:
+        """LLM Rerank with tiebreak fusion. Falls back to rule scores on failure.
+
+        Strategy: sort by LLM relevance_score descending; within tie zones
+        (adjacent LLM scores differ < 0.01), re-sort by rule ``rerank_score``.
+        """
+        if not self.settings.llm_rerank_enabled:
+            return hits
+        if self.rerank_provider is None:
+            return hits
+        if len(hits) <= 1:
+            return hits
+
+        documents = [hit.chunk.effective_answer_content for hit in hits]
+        try:
+            scores = self.rerank_provider.rerank(query, documents)
+        except Exception:
+            return hits
+
+        for i, hit in enumerate(hits):
+            hit.llm_score = scores.get(i, 0.0)
+
+        # Primary sort: LLM score descending
+        hits.sort(key=lambda h: h.llm_score, reverse=True)
+
+        # Tiebreak: adjacent delta < threshold → rule_score decides
+        threshold = 0.01
+        i = 0
+        while i < len(hits):
+            j = i
+            while j + 1 < len(hits) and abs(hits[j].llm_score - hits[j + 1].llm_score) < threshold:
+                j += 1
+            if j > i:
+                hits[i : j + 1] = sorted(
+                    hits[i : j + 1], key=lambda h: h.rerank_score, reverse=True
+                )
+            i = j + 1
+
+        # Overwrite rerank_score for downstream confidence calculation
+        for hit in hits:
+            hit.rerank_score = hit.llm_score
+
+        return hits
 
     # ------------------------------------------------------------------
     # Intent classifier

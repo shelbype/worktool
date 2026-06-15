@@ -86,6 +86,7 @@ class RetrievalHit:
     vector_score: float
     rerank_score: float
     audience: str | None = None
+    llm_score: float = 0.0
 
     @property
     def chunk_reference(self) -> str:
