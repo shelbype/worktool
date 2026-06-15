@@ -24,7 +24,7 @@
 | P1-7 | 2026-06-15 | LLM 查询改写 (`feat/llm-rewrite`) | ✅ |
 | P1-8 | 2026-06-15 | Jieba 分词 + BM25 (`feat/pg-bm25`) | ✅ |
 | P1-12 | 2026-06-15 | HNSW 索引 (`feat/hnsw-index`) | ✅ |
-| P1-9 | - | LLM 点对点重排序 (`feat/llm-rerank`) | ⬜ |
+| P1-9 | 2026-06-15 | LLM 点对点重排序 (`feat/llm-rerank`) | ✅ |
 | P1-10 | - | MMR 多样性 (`feat/mmr-diversity`) | ⬜ |
 | P1-11 | 2026-06-15 | 意图分类 + 多意图分解 (`feat/intent-classify`) | ✅ |
 | P1-13 | - | 上下文窗口智能组装 (`feat/context-window`) | ⬜ |
@@ -154,6 +154,57 @@ P0 (已部署):
   src/ragbot/repositories.py ← HNSW 索引替代 IVFFlat
   src/ragbot/config.py       ← VECTOR_INDEX_TYPE 配置
 ```
+
+---
+
+### 2026-06-15 — Fast Answer 去重修复增强
+
+**问题**: `feat/intent-classify` 合并到 master 时，DEVELOPMENT.md 冲突导致去重修复(`fd7abd0`)被回退。
+同时正则未覆盖全角括号`（1）`、半角括号`(1)`、圈号`①`、字母序号`a.`等。
+
+**修复**:
+- 恢复并增强 `_select_relevant_snippets()` 的去重正则：
+  `r"^(?:[(（]?\d+[)）.]?\s*|[①②③④⑤⑥⑦⑧⑨⑩]+\s*|[a-z][.)]\s*)+"`
+- 覆盖：`1）`, `4. 1）`, `（1）`, `(1)`, `①`, `a.`, `1.` 等序号格式
+- 合并回退修复：commit `867c493`
+
+**涉及文件**: `src/ragbot/fast_answer.py`
+
+---
+
+### 2026-06-15 — LLM 点对点重排序 (P1-9, ColdAir-Hao)
+
+**目标**: 使用 qwen3-rerank API 对检索候选做点对点语义重排序，提升 top-3 精度。
+
+**方案** (同学 ColdAir-Hao 提交):
+1. **`providers.py`**: `HttpRerankProvider` — 调用 DashScope `/compatible-api/v1/reranks`
+2. **`retrieval.py`**: `_llm_rerank()` tiebreak fusion 策略：
+   - 主排序：LLM relevance_score 降序
+   - 平局区（相邻分数差 < 0.01）：规则 `rerank_score` 重排
+   - 最终 `rerank_score` 覆盖为 LLM 分，影响下游置信度
+3. **`config.py`**: `llm_rerank_enabled` / `llm_rerank_provider` / `llm_rerank_model`
+4. **`container.py`**: 注入 `HttpRerankProvider`
+5. **`domain.py`**: `RetrievalHit` 新增 `llm_score` 字段
+
+**集成要点**:
+- 重排池扩大至 15 候选项（`rerank_pool_size`），多意图先合并再重排
+- 默认关闭 (`llm_rerank_provider=mock`)，失败静默回退
+
+**启用方式** (服务器 `.env`):
+```env
+LLM_RERANK_ENABLED=true
+LLM_RERANK_PROVIDER=http
+LLM_RERANK_MODEL=qwen3-rerank
+LLM_RERANK_API_BASE=https://dashscope.aliyuncs.com
+LLM_RERANK_API_KEY=<DashScope API Key>
+```
+
+**涉及文件**:
+- `src/ragbot/providers.py` — HttpRerankProvider
+- `src/ragbot/retrieval.py` — _llm_rerank()
+- `src/ragbot/config.py` — llm_rerank_* 配置
+- `src/ragbot/container.py` — 注入
+- `src/ragbot/domain.py` — RetrievalHit.llm_score
 
 ---
 
