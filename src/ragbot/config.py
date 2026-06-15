@@ -21,6 +21,11 @@ class Settings(BaseSettings):
     llm_api_base: str = ""
     llm_api_key: str = ""
     llm_model: str = "qwen-plus"
+    llm_query_rewrite_provider: str = "mock"
+    llm_query_rewrite_enabled: bool = False
+    llm_query_rewrite_model: str = "qwen3.6-flash"
+    llm_query_rewrite_api_base: str = ""
+    llm_query_rewrite_api_key: str = ""
     embedding_model: str = "text-embedding-v4"
     embedding_api_base: str = ""
     embedding_api_key: str = ""

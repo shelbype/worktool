@@ -5,7 +5,7 @@ import re
 from ragbot.audience import AudienceRoute, AudienceRouter, AUDIENCES
 from ragbot.config import Settings
 from ragbot.domain import ConfidenceLevel, RetrievalHit, RetrievalResult
-from ragbot.providers import EmbeddingProvider, cosine_similarity
+from ragbot.providers import EmbeddingProvider, HttpLLMProvider, cosine_similarity
 from ragbot.quality_config import load_json_config
 from ragbot.repositories import KnowledgeRepository
 
@@ -56,10 +56,12 @@ class RetrievalService:
         repository: KnowledgeRepository,
         embedding_provider: EmbeddingProvider,
         settings: Settings,
+        llm_provider: "HttpLLMProvider | None" = None,
     ) -> None:
         self.repository = repository
         self.embedding_provider = embedding_provider
         self.settings = settings
+        self.llm_provider = llm_provider
         configured_aliases = load_json_config(settings.query_aliases_path, DEFAULT_QUERY_ALIASES)
         self.query_aliases = {str(key): str(value) for key, value in configured_aliases.items()}
         self.audience_router = AudienceRouter(settings.audience_routing_path, settings.max_route_audiences)
@@ -68,6 +70,20 @@ class RetrievalService:
         if not self.settings.audience_routing_enabled:
             return None
         return self.audience_router.route(query)
+
+    def _rewrite_query(self, query: str) -> str:
+        """LLM Query Rewrite，失败时静默回退到原始 query。"""
+        if not self.settings.llm_query_rewrite_enabled:
+            return query
+        if self.llm_provider is None:
+            return query
+        try:
+            rewritten = self.llm_provider.rewrite_query(query)
+            if not rewritten or len(rewritten.strip()) < 2:
+                return query
+            return f"{query} {rewritten.strip()}"
+        except Exception:
+            return query
 
     def retrieve(
         self,
@@ -81,7 +97,7 @@ class RetrievalService:
             audiences = route.audiences if route else None
         elif audiences:
             audiences = [audience for audience in audiences if audience in AUDIENCES]
-        expanded_query = self._expand_query(query)
+        expanded_query = self._expand_query(self._rewrite_query(query))
         query_tokens = self._tokens(expanded_query)
         query_embedding = self.embedding_provider.embed(expanded_query)
         hits: list[RetrievalHit] = []

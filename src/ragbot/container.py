@@ -39,8 +39,19 @@ class AppContainer:
                 self.settings.llm_model,
                 self.settings.llm_max_tokens,
             )
+        if self.settings.llm_query_rewrite_provider == "mock":
+            self.query_rewrite_provider = None
+        else:
+            self.query_rewrite_provider = HttpLLMProvider(
+                self.settings.llm_query_rewrite_api_base or self.settings.llm_api_base,
+                self.settings.llm_query_rewrite_api_key or self.settings.llm_api_key,
+                self.settings.llm_query_rewrite_model,
+            )
         self.ingestion_service = IngestionService(self.embedding_provider)
-        self.retrieval_service = RetrievalService(self.repository, self.embedding_provider, self.settings)
+        self.retrieval_service = RetrievalService(
+            self.repository, self.embedding_provider, self.settings,
+            llm_provider=self.query_rewrite_provider,
+        )
         self.answer_service = AnswerService(self.llm_provider, self.settings.max_llm_context_chars)
         if self.settings.worktool_robot_id:
             self.wechat_adapter = HttpWechatBotAdapter(

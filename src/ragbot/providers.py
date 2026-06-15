@@ -135,6 +135,43 @@ class HttpLLMProvider:
         data = response.json()
         return data["choices"][0]["message"]["content"].strip()
 
+    def rewrite_query(self, question: str) -> str:
+        """将用户口语问题改写为检索优化的关键词短语。
+
+        Args:
+            question: 原始用户问题
+
+        Returns:
+            空格分隔的 2-3 个检索短语字符串；失败时向外抛异常，
+            调用方负责捕获并 fallback 到原始 query。
+        """
+        prompt = (
+            "你是教育SaaS系统的查询改写助手。将用户口语问题改写为2-3个标准检索关键词短语，"
+            "用空格分隔。\n"
+            "规则：纠正错别字和口语化表达、补全隐含的功能名/端口关键词、"
+            "不改写为不同意图。\n\n"
+            "示例：\n"
+            '用户："咋建班" → 改写：创建班级 新建班级 班级管理\n'
+            '用户："学生做不了作业" → 改写：作业无法加载 作业功能异常\n'
+            '用户："老师怎么绑学生" → 改写：绑定学生 家长端绑定 学员管理\n\n'
+            f'用户："{question}"\n'
+            "改写："
+        )
+        response = httpx.post(
+            f"{self.api_base}/chat/completions",
+            headers={"Authorization": f"Bearer {self.api_key}"},
+            json={
+                "model": self.model,
+                "messages": [{"role": "user", "content": prompt}],
+                "temperature": 0.1,
+                "max_tokens": 80,
+            },
+            timeout=5,
+        )
+        response.raise_for_status()
+        data = response.json()
+        return data["choices"][0]["message"]["content"].strip()
+
 
 def cosine_similarity(left: list[float], right: list[float]) -> float:
     if not left or not right or len(left) != len(right):
