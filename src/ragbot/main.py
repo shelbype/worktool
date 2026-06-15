@@ -54,6 +54,11 @@ def query(payload: QueryIn) -> dict[str, object]:
         "routed_audiences": retrieval.routed_audiences,
         "routing_confidence": retrieval.routing_confidence,
         "routing_reason": retrieval.routing_reason,
+        # Intent classification (P1-11)
+        "intent": retrieval.intent,
+        "is_multi_intent": retrieval.is_multi_intent,
+        "intent_sub_queries": retrieval.intent_sub_queries,
+        "intent_reasoning": retrieval.intent_reasoning,
     }
 
 
