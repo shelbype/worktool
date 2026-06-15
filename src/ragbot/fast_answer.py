@@ -4,6 +4,8 @@ import re
 from functools import lru_cache
 from typing import Any
 
+import jieba
+
 from ragbot.domain import RetrievalResult
 from ragbot.quality_config import load_json_config, string_list
 from ragbot.text_utils import normalize_customer_text
@@ -133,9 +135,14 @@ def _line_score(query_tokens: set[str], line: str) -> float:
 
 def _tokens(text: str) -> set[str]:
     latin = re.findall(r"[a-zA-Z0-9_./-]+", text.lower())
-    chinese = re.findall(r"[\u4e00-\u9fff]{2,}", text)
-    chinese_terms: list[str] = []
-    for word in chinese:
-        chinese_terms.append(word)
-        chinese_terms.extend(word[index : index + 2] for index in range(max(1, len(word) - 1)))
-    return set(latin + chinese_terms)
+    chinese = re.findall(r"[\u4e00-\u9fff]+", text)
+    chinese_tokens: set[str] = set()
+    for segment in chinese:
+        for word in jieba.cut(segment):
+            word = word.strip()
+            if word:
+                chinese_tokens.add(word)
+        # Keep bigram fallback for substring / fuzzy matching
+        for i in range(len(segment) - 1):
+            chinese_tokens.add(segment[i:i + 2])
+    return set(latin) | chinese_tokens

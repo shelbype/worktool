@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import re
 
+import jieba
+
 from ragbot.audience import AudienceRoute, AudienceRouter, AUDIENCES
 from ragbot.config import Settings
 from ragbot.domain import ConfidenceLevel, RetrievalHit, RetrievalResult
@@ -242,8 +244,14 @@ class RetrievalService:
 
     def _tokens(self, text: str) -> set[str]:
         latin = re.findall(r"[a-zA-Z0-9_./-]+", text.lower())
-        chinese = re.findall(r"[\u4e00-\u9fff]{2,}", text)
-        chinese_bigrams: list[str] = []
-        for word in chinese:
-            chinese_bigrams.extend(word[index : index + 2] for index in range(max(1, len(word) - 1)))
-        return set(latin + chinese + chinese_bigrams)
+        chinese = re.findall(r"[\u4e00-\u9fff]+", text)
+        chinese_tokens: set[str] = set()
+        for segment in chinese:
+            for word in jieba.cut(segment):
+                word = word.strip()
+                if word:
+                    chinese_tokens.add(word)
+            # Keep bigram fallback for substring / fuzzy matching
+            for i in range(len(segment) - 1):
+                chinese_tokens.add(segment[i:i + 2])
+        return set(latin) | chinese_tokens

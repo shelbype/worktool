@@ -324,12 +324,14 @@ class PostgresKnowledgeRepository:
                   AND (%(product_module)s::text IS NULL OR metadata->>'product_module' = %(product_module)s::text)
                 ORDER BY
                   (
-                    CASE
-                      WHEN to_tsvector('simple', coalesce(title, '') || ' ' || coalesce(content, ''))
-                           @@ plainto_tsquery('simple', %(query)s)
-                      THEN 0.25
-                      ELSE 0
-                    END
+                    ts_rank(
+                      to_tsvector(
+                        'simple',
+                        coalesce(title, '') || ' ' || coalesce(search_text, content)
+                      ),
+                      plainto_tsquery('simple', %(query)s),
+                      2
+                    ) * 0.25
                     + coalesce(1 - (embedding <=> %(embedding)s::vector), 0) * 0.75
                   ) DESC
                 LIMIT %(limit)s
