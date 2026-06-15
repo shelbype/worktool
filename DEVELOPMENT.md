@@ -26,7 +26,7 @@
 | P1-12 | 2026-06-15 | HNSW 索引 (`feat/hnsw-index`) | ✅ |
 | P1-9 | - | LLM 点对点重排序 (`feat/llm-rerank`) | ⬜ |
 | P1-10 | - | MMR 多样性 (`feat/mmr-diversity`) | ⬜ |
-| P1-11 | - | 意图分类 (`feat/intent-classify`) | ⬜ |
+| P1-11 | 2026-06-15 | 意图分类 + 多意图分解 (`feat/intent-classify`) | ✅ |
 | P1-13 | - | 上下文窗口智能组装 (`feat/context-window`) | ⬜ |
 | P1-14 | - | 图片发送意图感知 (`feat/image-intent`) | ⬜ |
 | P1-17 | - | 回答质量评估 (`feat/eval-judge`) | ⬜ |
@@ -157,53 +157,59 @@ P0 (已部署):
 
 ---
 
-### 2026-06-15 — HNSW 索引
+### 2026-06-15 — 意图分类 + 多意图分解
 
-**目标**: pgvector HNSW 索引替代 IVFFlat (100 lists)
+**目标**: 自动识别用户问题意图类型，检测复合多意图问题并分解为独立子查询分别检索，解决"同一个问题里问了多个不相关的事"导致召回分散的问题。
 
-**变更**:
-- `config.py`: 新增 `VECTOR_INDEX_TYPE` (hnsw/ivfflat), `VECTOR_INDEX_M` (8), `VECTOR_INDEX_EF_CONSTRUCTION` (200), `VECTOR_INDEX_EF_SEARCH` (50), `VECTOR_INDEX_LISTS` (100)
-- `repositories.py`:
-  - 构造函数接收向量索引参数
-  - 新增 `_vector_index_sql()` 生成适配的 CREATE INDEX SQL
-  - 新增 `migrate_index_type()` 方法 (DROP + CREATE)
-  - `migrate_embedding_dimension()` 使用动态索引类型
-  - `_find_candidate_chunks_in_table()` 查询前 SET LOCAL ef_search/probes
-- `container.py` / `cli.py`: 传递向量索引参数
-- `cli.py`: 新增 `migrate-index-type` 子命令
+**背景/动机**:
+- 真实用户问题 `"销售那边签了个新单，我想在教务系统里给这个学生排一对一的课，还要能看到这个学生的入学模考成绩"` 包含 3 个独立诉求，作为整体检索导致 recall 分散、回答模糊
+- 无意图分类，无法针对不同意图类型（操作指引 vs 故障排查 vs 闲聊）调整检索策略
 
-**服务器迁移**: `python -m ragbot.cli migrate-index-type` (IVFFlat → HNSW)
+**实现方案**:
+1. **新建 `src/ragbot/intent.py`** — `IntentClassifier` 类，单一 LLM 调用同时完成：
+   - 意图分类: `operational` / `definitional` / `troubleshooting` / `policy` / `chitchat`
+   - 多意图检测: `is_multi` 标志位
+   - 子查询分解: 每个子查询以检索关键词短语形式输出
+   - JSON 响应解析，处理 markdown 代码块包裹等格式问题
+2. **`providers.py`**: `HttpLLMProvider.classify_intent()` 方法（temperature=0, max_tokens=300, 5s timeout）
+3. **`config.py`**: 新增 `intent_classify_enabled` / `intent_classify_provider` / `intent_classify_model` / `multi_intent_decompose_enabled`
+4. **`domain.py`**: `RetrievalResult` 新增 `intent` / `is_multi_intent` / `intent_sub_queries` / `intent_reasoning` 字段
+5. **`retrieval.py`**: 重构检索流程
+   - `_classify_intent()`: 调用意图分类器，返回 `IntentResult`
+   - `_retrieve_hits()`: 提取"单次检索+打分"的纯函数，每个子查询独立检索
+   - `_merge_multi_hits()`: 跨子查询合并去重（按 chunk.id 去重，保留最高分）
+   - `retrieve()`: 编排分类→分解→检索→合并全流程
+6. **`container.py`**: 创建 `IntentClassifier` 并注入 `RetrievalService`
 
-**HNSW 参数** (当前规模 ~170 chunks):
-- m = 8, ef_construction = 200, ef_search = 50
+**降级策略**:
+- 默认关闭 (`intent_classify_enabled=False`)，不影响现有行为
+- 分类失败 → 静默 fallback 到单意图模式（`IntentResult.single(query)`）
+- 无 LLM provider → 同上 fallback
+- `multi_intent_decompose_enabled=False` → 仍做意图分类但不分解
 
----
+**涉及文件**:
+- `src/ragbot/intent.py` (新建) — IntentClassifier + IntentResult + 分类 Prompt
+- `src/ragbot/providers.py` — HttpLLMProvider.classify_intent()
+- `src/ragbot/config.py` — intent_classify_* 配置
+- `src/ragbot/domain.py` — RetrievalResult 新增意图字段
+- `src/ragbot/retrieval.py` — 重构 retrieve() + 新增 3 个方法
+- `src/ragbot/container.py` — 创建并注入 IntentClassifier
 
-### 2026-06-15 — Jieba 分词 + BM25 评分
-
-**目标**: Jieba 中文分词替代正则 bigram，PostgreSQL `ts_rank` 替代 0/1 FTS 匹配
-
-**变更**:
-- `pyproject.toml`: 新增 `jieba` 依赖
-- `repositories.py`:
-  - `_find_candidate_chunks_in_table()`: 使用 `ts_rank(..., 2)` 替代 `CASE WHEN ... THEN 0.25 ELSE 0`
-  - 查询使用 `coalesce(search_text, content)` 优先检索文本
-- `retrieval.py`: `_tokens()` 使用 Jieba 分词 + bigram fallback
-- `fast_answer.py`: `_tokens()` 同步使用 Jieba 分词
-
-**效果**:
-- Top-1 命中率: 95.69% (vs Hash 93.10%)
-- 自动回复准确率: 98.37% (vs Hash 93.50%, 提升 4.87%)
+**验收标准**:
+- 复合多意图问题能正确分解为独立子查询（如测试案例拆为 3 个子查询）
+- 子查询检索结果合并后去重，无重复 chunk
+- 分类失败不影响主流程
+- 现有 eval baseline 全部通过（关闭状态下零回归）
 
 ---
 
 ## 评估基线演进
 
-| 指标 | P0 (Hash 64dim) | P1 (HTTP 1024dim) |
-|------|-----------------|-------------------|
-| Top-1 命中率 | 93.10% | **96.55%** |
-| Top-3 命中率 | 98.28% | **100.00%** |
-| 自动回复准确率 | 93.50% | **97.56%** |
-| 转人工准确率 | 93.50% | **97.56%** |
-| 路由 Top-1 | 92.78% | 92.78% |
-| 路由覆盖 | 100.00% | 100.00% |
+| 指标 | P0 (Hash 64dim) | P1 语义 (1024dim) | P1 BM25 + HNSW |
+|------|-----------------|-------------------|----------------|
+| Top-1 命中率 | 93.10% | 96.55% | **95.69%** |
+| Top-3 命中率 | 98.28% | 100.00% | **100.00%** |
+| 自动回复准确率 | 93.50% | 97.56% | **98.37%** |
+| 转人工准确率 | 93.50% | 97.56% | **98.37%** |
+| 路由 Top-1 | 92.78% | 92.78% | **92.78%** |
+| 路由覆盖 | 100.00% | 100.00% | **100.00%** |

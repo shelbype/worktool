@@ -103,6 +103,11 @@ class RetrievalResult:
     routed_audiences: list[str] = field(default_factory=list)
     routing_confidence: str | None = None
     routing_reason: str | None = None
+    # Intent classification (P1-11)
+    intent: str | None = None
+    is_multi_intent: bool = False
+    intent_sub_queries: list[str] = field(default_factory=list)
+    intent_reasoning: str | None = None
 
 
 @dataclass(slots=True)

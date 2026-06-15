@@ -26,6 +26,12 @@ class Settings(BaseSettings):
     llm_query_rewrite_model: str = "qwen3.6-flash"
     llm_query_rewrite_api_base: str = ""
     llm_query_rewrite_api_key: str = ""
+    intent_classify_enabled: bool = False
+    intent_classify_provider: str = "mock"
+    intent_classify_model: str = "qwen3.6-flash"
+    intent_classify_api_base: str = ""
+    intent_classify_api_key: str = ""
+    multi_intent_decompose_enabled: bool = True
     embedding_model: str = "text-embedding-v4"
     embedding_api_base: str = ""
     embedding_api_key: str = ""

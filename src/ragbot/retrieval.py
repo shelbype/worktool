@@ -7,6 +7,7 @@ import jieba
 from ragbot.audience import AudienceRoute, AudienceRouter, AUDIENCES
 from ragbot.config import Settings
 from ragbot.domain import ConfidenceLevel, RetrievalHit, RetrievalResult
+from ragbot.intent import IntentClassifier
 from ragbot.providers import EmbeddingProvider, HttpLLMProvider, cosine_similarity
 from ragbot.quality_config import load_json_config
 from ragbot.repositories import KnowledgeRepository
@@ -59,11 +60,13 @@ class RetrievalService:
         embedding_provider: EmbeddingProvider,
         settings: Settings,
         llm_provider: "HttpLLMProvider | None" = None,
+        intent_classifier: "IntentClassifier | None" = None,
     ) -> None:
         self.repository = repository
         self.embedding_provider = embedding_provider
         self.settings = settings
         self.llm_provider = llm_provider
+        self.intent_classifier = intent_classifier
         configured_aliases = load_json_config(settings.query_aliases_path, DEFAULT_QUERY_ALIASES)
         self.query_aliases = {str(key): str(value) for key, value in configured_aliases.items()}
         self.audience_router = AudienceRouter(settings.audience_routing_path, settings.max_route_audiences)
@@ -99,34 +102,17 @@ class RetrievalService:
             audiences = route.audiences if route else None
         elif audiences:
             audiences = [audience for audience in audiences if audience in AUDIENCES]
-        expanded_query = self._expand_query(self._rewrite_query(query))
-        query_tokens = self._tokens(expanded_query)
-        query_embedding = self.embedding_provider.embed(expanded_query)
-        hits: list[RetrievalHit] = []
-        chunks = self.repository.find_candidate_chunks(
-            expanded_query,
-            query_embedding,
-            product_module,
-            max(self.settings.top_k * 30, 200),
-            audiences,
-        )
-        for chunk in chunks:
-            if product_module and chunk.metadata.get("product_module") != product_module:
-                continue
-            audience = chunk.metadata.get("audience")
-            audience = audience if isinstance(audience, str) and audience in AUDIENCES else None
-            title_tokens = self._tokens(chunk.title)
-            # Use search_text for keyword matching if available (optimized for retrieval)
-            search_content = chunk.effective_search_text
-            body_tokens = self._tokens(search_content)
-            keyword_score = self._keyword_score(query_tokens, body_tokens | title_tokens)
-            vector_score = cosine_similarity(query_embedding, chunk.embedding)
-            title_boost = self._title_boost(query_tokens, title_tokens, query, chunk.title)
-            operation_boost = self._operation_boost(query, chunk.title, search_content)
-            rerank_score = min(1.0, 0.45 * keyword_score + 0.45 * vector_score + title_boost + operation_boost)
-            if rerank_score > 0:
-                hits.append(RetrievalHit(chunk, keyword_score, vector_score, rerank_score, audience))
-        hits.sort(key=lambda hit: hit.rerank_score, reverse=True)
+
+        # ---- Intent classification + multi-intent decomposition (P1-11) ----
+        intent_result = self._classify_intent(query)
+        sub_queries = intent_result.sub_queries if intent_result.sub_queries else [query]
+
+        # Retrieve hits for each sub-query independently, then merge.
+        all_hits: list[RetrievalHit] = []
+        for sq in sub_queries:
+            all_hits.extend(self._retrieve_hits(sq, query, product_module, audiences))
+        hits = self._merge_multi_hits(all_hits, top_k=self.settings.top_k)
+
         top_hits = hits[: self.settings.top_k]
         score = top_hits[0].rerank_score if top_hits else 0.0
         confidence = self._confidence(score, len(top_hits))
@@ -145,7 +131,94 @@ class RetrievalService:
             routed_audiences=route.audiences if route else (audiences or []),
             routing_confidence=route.confidence if route else ("manual" if audiences else None),
             routing_reason=route.reason if route else None,
+            intent=str(intent_result.primary_intent) if intent_result else None,
+            is_multi_intent=intent_result.is_multi if intent_result else False,
+            intent_sub_queries=intent_result.sub_queries if intent_result else [],
+            intent_reasoning=intent_result.reasoning if intent_result else None,
         )
+
+    # ------------------------------------------------------------------
+    # Intent classifier
+    # ------------------------------------------------------------------
+
+    def _classify_intent(self, query: str):
+        """Classify query intent and detect multi-intent compound questions."""
+        from ragbot.intent import IntentResult
+
+        if self.intent_classifier is None:
+            return IntentResult.single(query)
+        return self.intent_classifier.classify(query)
+
+    # ------------------------------------------------------------------
+    # Per-sub-query retrieval + merge helpers
+    # ------------------------------------------------------------------
+
+    def _retrieve_hits(
+        self,
+        sub_query: str,
+        original_query: str,
+        product_module: str | None,
+        audiences: list[str] | None,
+    ) -> list[RetrievalHit]:
+        """Retrieve and score chunks for a single (sub-)query.
+
+        Perform the full pipeline for *sub_query*: rewrite → expand → embed →
+        DB candidate fetch → scoring.  *original_query* is kept for boost
+        scoring that benefits from the user's verbatim wording (e.g. title
+        substring matching and operation-word detection).
+        """
+        expanded = self._expand_query(self._rewrite_query(sub_query))
+        query_tokens = self._tokens(expanded)
+        query_embedding = self.embedding_provider.embed(expanded)
+
+        chunks = self.repository.find_candidate_chunks(
+            expanded,
+            query_embedding,
+            product_module,
+            max(self.settings.top_k * 30, 200),
+            audiences,
+        )
+
+        hits: list[RetrievalHit] = []
+        for chunk in chunks:
+            if product_module and chunk.metadata.get("product_module") != product_module:
+                continue
+            aud = chunk.metadata.get("audience")
+            aud = aud if isinstance(aud, str) and aud in AUDIENCES else None
+            title_tokens = self._tokens(chunk.title)
+            search_content = chunk.effective_search_text
+            body_tokens = self._tokens(search_content)
+
+            keyword_score = self._keyword_score(query_tokens, body_tokens | title_tokens)
+            vector_score = cosine_similarity(query_embedding, chunk.embedding)
+            # Boosts use the *original* query for title/operation matching since
+            # the user's verbatim wording is more reliable than the LLM rewrite.
+            title_boost = self._title_boost(query_tokens, title_tokens, original_query, chunk.title)
+            operation_boost = self._operation_boost(original_query, chunk.title, search_content)
+            rerank_score = min(1.0, 0.45 * keyword_score + 0.45 * vector_score + title_boost + operation_boost)
+
+            if rerank_score > 0:
+                hits.append(RetrievalHit(chunk, keyword_score, vector_score, rerank_score, aud))
+
+        hits.sort(key=lambda h: h.rerank_score, reverse=True)
+        return hits[: self.settings.top_k * 3]  # Keep a broader pool per sub-query for merging
+
+    @staticmethod
+    def _merge_multi_hits(hits: list[RetrievalHit], top_k: int = 5) -> list[RetrievalHit]:
+        """Merge hits from multiple sub-queries, deduplicating by chunk id.
+
+        When the same chunk is retrieved by multiple sub-queries, keep the
+        entry with the highest rerank_score (best match for its sub-query).
+        """
+        if not hits:
+            return []
+        best: dict[str, RetrievalHit] = {}
+        for hit in hits:
+            key = hit.chunk.id
+            if key not in best or hit.rerank_score > best[key].rerank_score:
+                best[key] = hit
+        merged = sorted(best.values(), key=lambda h: h.rerank_score, reverse=True)
+        return merged[:top_k]
 
     def _confidence(self, score: float, hit_count: int) -> ConfidenceLevel:
         if hit_count == 0:
