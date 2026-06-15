@@ -72,8 +72,12 @@ class AppContainer:
             self.rerank_provider = None
         else:
             self.rerank_provider = HttpRerankProvider(
-                self.settings.llm_rerank_api_base or self.settings.llm_api_base,
-                self.settings.llm_rerank_api_key or self.settings.llm_api_key,
+                self.settings.llm_rerank_api_base
+                or self.settings.llm_query_rewrite_api_base
+                or self.settings.llm_api_base,
+                self.settings.llm_rerank_api_key
+                or self.settings.llm_query_rewrite_api_key
+                or self.settings.llm_api_key,
                 self.settings.llm_rerank_model,
             )
         self.ingestion_service = IngestionService(self.embedding_provider)

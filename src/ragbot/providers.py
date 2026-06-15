@@ -166,7 +166,7 @@ class HttpLLMProvider:
                 "temperature": 0.1,
                 "max_tokens": 80,
             },
-            timeout=5,
+            timeout=15,
         )
         response.raise_for_status()
         data = response.json()
