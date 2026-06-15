@@ -97,7 +97,11 @@ def _select_relevant_snippets(retrieval: RetrievalResult, limit: int = 4) -> lis
     snippets: list[str] = []
     seen: set[str] = set()
     for _, _, line in ranked:
-        key = re.sub(r"\W+", "", line)
+        # Normalize for dedup: strip leading step numbers ("1）", "4. 1）", "2.", etc.)
+        # then remove all non-word chars.  This prevents the same content with
+        # different numbering from appearing as duplicate snippets.
+        normalized = re.sub(r"^(?:\d+[.)、）]\s*)+", "", line)
+        key = re.sub(r"\W+", "", normalized)
         if not key or key in seen:
             continue
         seen.add(key)
