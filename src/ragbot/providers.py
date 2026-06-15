@@ -172,6 +172,36 @@ class HttpLLMProvider:
         data = response.json()
         return data["choices"][0]["message"]["content"].strip()
 
+    def classify_intent(self, prompt: str) -> str:
+        """Send a classification prompt and return raw response text.
+
+        Used by IntentClassifier for intent classification + multi-intent
+        decomposition.  Callers should handle exceptions and parse the JSON.
+
+        Args:
+            prompt: Full classification prompt including examples and user query.
+
+        Returns:
+            Raw LLM response text (expected to be JSON).
+
+        Raises:
+            httpx.HTTPError: On network or API errors.
+        """
+        response = httpx.post(
+            f"{self.api_base}/chat/completions",
+            headers={"Authorization": f"Bearer {self.api_key}"},
+            json={
+                "model": self.model,
+                "messages": [{"role": "user", "content": prompt}],
+                "temperature": 0.0,
+                "max_tokens": 300,
+            },
+            timeout=5,
+        )
+        response.raise_for_status()
+        data = response.json()
+        return data["choices"][0]["message"]["content"].strip()
+
 
 def cosine_similarity(left: list[float], right: list[float]) -> float:
     if not left or not right or len(left) != len(right):

@@ -7,6 +7,7 @@ from ragbot.config import get_settings
 from ragbot.ingestion import IngestionService
 from ragbot.providers import HashEmbeddingProvider, HttpEmbeddingProvider, HttpLLMProvider, MockLLMProvider
 from ragbot.repositories import InMemoryKnowledgeRepository, PostgresKnowledgeRepository
+from ragbot.intent import IntentClassifier
 from ragbot.retrieval import RetrievalService
 from ragbot.review import ReviewService
 from ragbot.workflow import CapturingWechatBotAdapter, MessagePreprocessor, WechatRagWorkflow
@@ -54,10 +55,24 @@ class AppContainer:
                 self.settings.llm_query_rewrite_api_key or self.settings.llm_api_key,
                 self.settings.llm_query_rewrite_model,
             )
+        if self.settings.intent_classify_provider == "mock":
+            self.intent_classify_provider = None
+        else:
+            self.intent_classify_provider = HttpLLMProvider(
+                self.settings.intent_classify_api_base or self.settings.llm_api_base,
+                self.settings.intent_classify_api_key or self.settings.llm_api_key,
+                self.settings.intent_classify_model,
+            )
+        self.intent_classifier = IntentClassifier(
+            self.intent_classify_provider,
+            enabled=self.settings.intent_classify_enabled,
+            decompose_enabled=self.settings.multi_intent_decompose_enabled,
+        )
         self.ingestion_service = IngestionService(self.embedding_provider)
         self.retrieval_service = RetrievalService(
             self.repository, self.embedding_provider, self.settings,
             llm_provider=self.query_rewrite_provider,
+            intent_classifier=self.intent_classifier,
         )
         self.answer_service = AnswerService(self.llm_provider, self.settings.max_llm_context_chars)
         if self.settings.worktool_robot_id:
