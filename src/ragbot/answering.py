@@ -36,25 +36,18 @@ class AnswerService:
         )
 
     def _compact_contexts(self, contexts: list[str]) -> list[str]:
-        """Keep only short precise answers; skip long generic chunks entirely.
+        """Keep only the top-ranked answer, regardless of length.
 
-        Long chunks tend to be generic help-center articles that dilute the
-        LLM prompt without adding signal.  Short snippets (≤ 200 chars) are
-        almost always a targeted answer (操作步骤 / 标准回答).
-
-        When no short snippet survives, the LLM will receive an empty context
-        list and fall back to the handoff reply, which is the correct
-        behaviour — the KB doesn't have a concise answer for this query.
+        The retrieval + rerank pipeline has already determined which chunk is
+        the best match.  Adding lower-ranked chunks usually dilutes the prompt
+        without adding signal — the LLM should generate from the single most
+        relevant piece.
         """
         cleaned = [self._clean_context(c) for c in contexts]
-        short = [c for c in cleaned if c and len(c) <= 200]
-        compacted: list[str] = []
-        remaining = self.max_context_chars
-        for context in short:
-            if remaining >= len(context):
-                compacted.append(context)
-                remaining -= len(context)
-        return compacted
+        first = next((c for c in cleaned if c), None)
+        if first is None:
+            return []
+        return [first[:self.max_context_chars]]
 
     def _clean_context(self, context: str) -> str:
         context = re.sub(r"\[图片:[^\]]+\]", "", context)
