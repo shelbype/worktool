@@ -11,7 +11,7 @@ from ragbot.domain import ConfidenceLevel, HelpDocument, KnowledgeChunk, Retriev
 from ragbot.fast_answer import has_fast_answer_template
 from ragbot.ingestion import IngestionService
 from ragbot.providers import HashEmbeddingProvider, HttpEmbeddingProvider
-from ragbot.quality_config import load_json_config, string_list
+
 from ragbot.quality_report import build_quality_report
 from ragbot.repositories import InMemoryKnowledgeRepository, PostgresKnowledgeRepository
 from ragbot.retrieval import RetrievalService
@@ -524,20 +524,9 @@ def run_eval_full(
 
 
 def _would_auto_reply(question: str, result: RetrievalResult) -> bool:
-    if _requires_human(question):
-        return False
     if result.confidence == ConfidenceLevel.HIGH:
         return True
     return result.confidence == ConfidenceLevel.MEDIUM and has_fast_answer_template(question)
-
-
-def _requires_human(question: str) -> bool:
-    rules = load_json_config(
-        "config/handoff_rules.json",
-        {"patterns": ["报价", "合同", "退款", "退费", "赔偿", "发票", "绑定学生", "签约", "订单取消"]},
-    )
-    patterns = string_list(rules.get("patterns")) if isinstance(rules, dict) else []
-    return any(pattern in question for pattern in patterns)
 
 
 def _case_matches(expected_keywords: list[str], expected_source_ids: list[str], hits) -> bool:

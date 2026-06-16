@@ -101,7 +101,7 @@ class AppContainer:
             self.retrieval_service,
             self.answer_service,
             self.wechat_adapter,
-            MessagePreprocessor(rules_path=self.settings.handoff_rules_path),
+            MessagePreprocessor(),
         )
         self.review_service = ReviewService(
             self.repository,

@@ -2,29 +2,14 @@ from __future__ import annotations
 
 from ragbot.answering import AnswerService
 from ragbot.domain import ConversationLog, ImageRef, ReviewItem, WechatMessage
-from ragbot.quality_config import load_json_config, string_list
 from ragbot.repositories import KnowledgeRepository
 from ragbot.retrieval import RetrievalService
 
 
-DEFAULT_HANDOFF_PATTERNS = ["报价", "合同", "退款", "退费", "赔偿", "发票", "绑定学生", "签约", "订单取消"]
-
-
 class MessagePreprocessor:
-    def __init__(self, sensitive_patterns: list[str] | None = None, rules_path: str = "config/handoff_rules.json") -> None:
-        if sensitive_patterns is not None:
-            self.sensitive_patterns = sensitive_patterns
-            return
-        rules = load_json_config(rules_path, {"patterns": DEFAULT_HANDOFF_PATTERNS})
-        configured_patterns = string_list(rules.get("patterns")) if isinstance(rules, dict) else []
-        self.sensitive_patterns = configured_patterns or DEFAULT_HANDOFF_PATTERNS
-
     def should_ignore(self, message: WechatMessage) -> bool:
         content = message.content.strip()
         return message.message_type != "text" or len(content) < 3
-
-    def requires_human(self, message: WechatMessage) -> bool:
-        return any(pattern in message.content for pattern in self.sensitive_patterns)
 
 
 class WechatBotAdapter:
@@ -72,27 +57,6 @@ class WechatRagWorkflow:
             return existing
         if self.preprocessor.should_ignore(message):
             return None
-        route = self.retrieval_service.route_query(message.content)
-        if self.preprocessor.requires_human(message):
-            log = ConversationLog(
-                group_id=message.group_id,
-                user_id=message.user_id,
-                message_id=message.message_id,
-                question=message.content,
-                confidence="low",
-                confidence_score=0.0,
-                retrieved_chunk_ids=[],
-                draft_answer=None,
-                final_answer=None,
-                auto_replied=False,
-                needs_human=True,
-                routed_audiences=route.audiences if route else [],
-                routing_confidence=route.confidence if route else None,
-                routing_reason=route.reason if route else None,
-            )
-            self.repository.save_conversation(log)
-            self.repository.add_review_item(ReviewItem(log.id, message.content, None))
-            return log
 
         retrieval = self.retrieval_service.retrieve(message.content, intent_result=intent_result)
         decision = self.answer_service.answer(message.content, retrieval)

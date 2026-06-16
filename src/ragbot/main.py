@@ -117,12 +117,6 @@ def worktool_qa_callback(payload: WorkToolQaCallbackIn) -> WorkToolQaResponse:
     if container.workflow.preprocessor.should_ignore(message):
         log_worktool_response(message, "ignored", started)
         return WorkToolQaResponse.no_reply()
-    if container.workflow.preprocessor.requires_human(message):
-        log = container.workflow.handle_message(message, send_auto_reply=False)
-        if log is not None:
-            submit_human_handoff(payload.groupName or message.group_id, log, "sensitive_or_rule")
-        log_worktool_response(message, "human_handoff", started)
-        return WorkToolQaResponse.no_reply()
 
     # ---- Intent-based handoff detection (force / sensitive / negative) ----
     intent_result = container.retrieval_service.classify_intent(message.content)

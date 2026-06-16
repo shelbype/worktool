@@ -25,7 +25,7 @@ from ragbot.repositories import InMemoryKnowledgeRepository
 from ragbot.retrieval import RetrievalService
 from ragbot.review import ReviewService
 from ragbot.text_utils import normalize_customer_text
-from ragbot.workflow import CapturingWechatBotAdapter, MessagePreprocessor, WechatRagWorkflow
+from ragbot.workflow import CapturingWechatBotAdapter, WechatRagWorkflow
 
 
 class FakeImageExtractor(ImageTextExtractor):
@@ -92,30 +92,6 @@ def test_low_confidence_does_not_auto_reply():
 
     assert decision.auto_reply is False
     assert decision.needs_human is True
-
-
-def test_preprocessor_routes_sensitive_and_known_gap_questions_to_human():
-    preprocessor = MessagePreprocessor()
-
-    assert preprocessor.requires_human(
-        WechatMessage(message_id="s1", group_id="g1", user_id="u1", content="订单退费怎么操作")
-    )
-    assert preprocessor.requires_human(
-        WechatMessage(message_id="s2", group_id="g1", user_id="u1", content="家长端怎么绑定学生")
-    )
-
-
-def test_preprocessor_can_load_handoff_rules_from_config(tmp_path):
-    rules_path = tmp_path / "handoff_rules.json"
-    rules_path.write_text('{"patterns": ["特殊人工"]}', encoding="utf-8")
-    preprocessor = MessagePreprocessor(rules_path=str(rules_path))
-
-    assert preprocessor.requires_human(
-        WechatMessage(message_id="s3", group_id="g1", user_id="u1", content="这个要特殊人工处理")
-    )
-    assert not preprocessor.requires_human(
-        WechatMessage(message_id="s4", group_id="g1", user_id="u1", content="订单退费怎么操作")
-    )
 
 
 def test_retrieval_can_load_query_aliases_from_config(tmp_path):
@@ -775,36 +751,6 @@ def test_eval_routing_cases_reports_accuracy():
 
     assert report["evaluated"] == 2
     assert report["top1_accuracy"] == 1.0
-
-
-# ── handoff rules enhancement tests ──
-
-def test_handoff_rules_loads_expanded_keywords():
-    """New config includes explicit handoff, emotion, and sensitive patterns."""
-    preprocessor = MessagePreprocessor()
-
-    # L1: explicit handoff keywords (always trigger)
-    assert preprocessor.requires_human(
-        WechatMessage(message_id="h1", group_id="g1", user_id="u1", content="转人工")
-    )
-    assert preprocessor.requires_human(
-        WechatMessage(message_id="h2", group_id="g1", user_id="u1", content="有真人吗")
-    )
-
-    # L2: emotion keywords (always trigger)
-    assert preprocessor.requires_human(
-        WechatMessage(message_id="h3", group_id="g1", user_id="u1", content="太慢了影响上课")
-    )
-
-    # L3: sensitive business patterns (trigger when not a safe query)
-    assert preprocessor.requires_human(
-        WechatMessage(message_id="h4", group_id="g1", user_id="u1", content="金额不对")
-    )
-
-    # Existing patterns still work
-    assert preprocessor.requires_human(
-        WechatMessage(message_id="h5", group_id="g1", user_id="u1", content="这个报价有问题")
-    )
 
 
 def test_mock_llm_uses_new_handoff_message():
