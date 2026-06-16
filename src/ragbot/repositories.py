@@ -49,6 +49,16 @@ class KnowledgeRepository(Protocol):
     def get_conversation_by_message_id(self, message_id: str) -> ConversationLog | None:
         ...
 
+    def list_recent_user_conversations(
+        self, group_id: str, user_id: str, limit: int = 3
+    ) -> list[ConversationLog]:
+        """Return recent conversations for a user in a group, newest first.
+
+        Used by escalation detection to track whether the user has been asking
+        about the same topic over multiple rounds without resolution.
+        """
+        ...
+
     def list_conversations(self, limit: int = 50) -> list[ConversationLog]:
         ...
 
@@ -115,6 +125,20 @@ class InMemoryKnowledgeRepository:
 
     def get_conversation_by_message_id(self, message_id: str) -> ConversationLog | None:
         return self._conversations.get(message_id)
+
+    def list_recent_user_conversations(
+        self, group_id: str, user_id: str, limit: int = 3
+    ) -> list[ConversationLog]:
+        matching = sorted(
+            (
+                log
+                for log in self._conversations.values()
+                if log.group_id == group_id and log.user_id == user_id
+            ),
+            key=lambda log: log.created_at,
+            reverse=True,
+        )
+        return matching[:limit]
 
     def list_conversations(self, limit: int = 50) -> list[ConversationLog]:
         return sorted(self._conversations.values(), key=lambda log: log.created_at, reverse=True)[:limit]
@@ -442,6 +466,45 @@ class PostgresKnowledgeRepository:
             routing_reason=row["routing_reason"],
             created_at=row["created_at"],
         )
+
+    def list_recent_user_conversations(
+        self, group_id: str, user_id: str, limit: int = 3
+    ) -> list[ConversationLog]:
+        with self._connect() as conn:
+            rows = conn.execute(
+                """
+                SELECT id, group_id, user_id, message_id, question, confidence,
+                       confidence_score, retrieved_chunks, draft_answer, final_answer,
+                       auto_replied, needs_human, routed_audiences,
+                       routing_confidence, routing_reason, created_at
+                FROM conversation_logs
+                WHERE group_id = %s AND user_id = %s
+                ORDER BY created_at DESC
+                LIMIT %s
+                """,
+                (group_id, user_id, limit),
+            ).fetchall()
+        logs: list[ConversationLog] = []
+        for row in rows:
+            logs.append(ConversationLog(
+                id=row["id"],
+                group_id=row["group_id"],
+                user_id=row["user_id"],
+                message_id=row["message_id"],
+                question=row["question"],
+                confidence=ConfidenceLevel(row["confidence"]),
+                confidence_score=float(row["confidence_score"]),
+                retrieved_chunk_ids=self._json_value(row["retrieved_chunks"], []),
+                draft_answer=row["draft_answer"],
+                final_answer=row["final_answer"],
+                auto_replied=bool(row["auto_replied"]),
+                needs_human=bool(row["needs_human"]),
+                routed_audiences=self._json_value(row["routed_audiences"], []),
+                routing_confidence=row["routing_confidence"],
+                routing_reason=row["routing_reason"],
+                created_at=row["created_at"],
+            ))
+        return logs
 
     def list_conversations(self, limit: int = 50) -> list[ConversationLog]:
         with self._connect() as conn:

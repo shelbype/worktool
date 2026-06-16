@@ -64,7 +64,9 @@ class WechatRagWorkflow:
         self.wechat_adapter = wechat_adapter
         self.preprocessor = preprocessor or MessagePreprocessor()
 
-    def handle_message(self, message: WechatMessage, send_auto_reply: bool = True) -> ConversationLog | None:
+    def handle_message(
+        self, message: WechatMessage, send_auto_reply: bool = True, intent_result=None
+    ) -> ConversationLog | None:
         existing = self.repository.get_conversation_by_message_id(message.message_id)
         if existing:
             return existing
@@ -92,7 +94,7 @@ class WechatRagWorkflow:
             self.repository.add_review_item(ReviewItem(log.id, message.content, None))
             return log
 
-        retrieval = self.retrieval_service.retrieve(message.content)
+        retrieval = self.retrieval_service.retrieve(message.content, intent_result=intent_result)
         decision = self.answer_service.answer(message.content, retrieval)
         if send_auto_reply and decision.auto_reply and decision.answer:
             self.wechat_adapter.send_group_message(message.group_id, decision.answer)

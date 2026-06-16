@@ -109,6 +109,9 @@ class RetrievalResult:
     is_multi_intent: bool = False
     intent_sub_queries: list[str] = field(default_factory=list)
     intent_reasoning: str | None = None
+    needs_handoff: bool = False
+    handoff_type: str = ""
+    handoff_confidence: float = 0.0
 
 
 @dataclass(slots=True)
