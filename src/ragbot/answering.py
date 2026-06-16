@@ -36,17 +36,39 @@ class AnswerService:
         )
 
     def _compact_contexts(self, contexts: list[str]) -> list[str]:
+        """Pack contexts into the token budget, favouring short precise answers.
+
+        Long generic chunks can crowd out the short, high-precision snippet
+        that directly answers the question.  A two-pass strategy ensures the
+        best-matching short answer is always included intact before large
+        chunks consume the remaining capacity.
+
+        * Pass 1 — preserve short snippets (≤ 200 chars) in ranking order.
+        * Pass 2 — top-off with longer chunks, each truncated to fit.
+        """
+        cleaned = [self._clean_context(c) for c in contexts]
+        cleaned = [c for c in cleaned if c]
+
         compacted: list[str] = []
         remaining = self.max_context_chars
-        for context in contexts:
+
+        # Pass 1: short, high-signal snippets — keep intact
+        for context in cleaned:
             if remaining <= 0:
                 break
-            cleaned = self._clean_context(context)
-            if not cleaned:
-                continue
-            clipped = cleaned[:remaining]
-            compacted.append(clipped)
-            remaining -= len(clipped)
+            if len(context) <= 200 and remaining >= len(context):
+                compacted.append(context)
+                remaining -= len(context)
+
+        # Pass 2: longer chunks fill the remaining budget
+        for context in cleaned:
+            if remaining <= 0:
+                break
+            if len(context) > 200:
+                clipped = context[:remaining]
+                compacted.append(clipped)
+                remaining -= len(clipped)
+
         return compacted
 
     def _clean_context(self, context: str) -> str:
