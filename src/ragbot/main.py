@@ -118,8 +118,16 @@ def worktool_qa_callback(payload: WorkToolQaCallbackIn) -> WorkToolQaResponse:
         log_worktool_response(message, "ignored", started)
         return WorkToolQaResponse.no_reply()
 
-    # ---- Intent-based handoff detection (force / sensitive / negative) ----
+    # ---- Intent classification ----
     intent_result = container.retrieval_service.classify_intent(message.content)
+
+    # Chitchat / off-topic: do not reply unless it is a handoff request
+    # (e.g. "有真人吗" is chitchat but needs_handoff=True → still handled).
+    if intent_result.primary_intent == "chitchat" and not intent_result.needs_handoff:
+        log_worktool_response(message, "chitchat_ignored", started)
+        return WorkToolQaResponse.no_reply()
+
+    # ---- Intent-based handoff detection (force / sensitive / negative) ----
     if intent_result.needs_handoff:
         handoff_reason = f"intent:{intent_result.handoff_type}"
         escalate = False
