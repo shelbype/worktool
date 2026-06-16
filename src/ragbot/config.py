@@ -62,7 +62,7 @@ class Settings(BaseSettings):
     fast_image_answer_chars: int = Field(default=700, ge=200, le=2000)
     human_handoff_enabled: bool = True
     human_handoff_mention_name: str = "校校助理"
-    human_handoff_message_prefix: str = "老师稍等，我们这边具体看下问题。@{mention}"
+    human_handoff_message_prefix: str = "老师稍等，我们这边具体看下问题。@校校助理"
     query_aliases_path: str = "config/query_aliases.json"
     fast_answer_templates_path: str = "config/fast_answer_templates.json"
     audience_routing_enabled: bool = False
