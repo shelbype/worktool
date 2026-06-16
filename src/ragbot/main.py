@@ -5,6 +5,8 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from time import perf_counter, sleep
 
+import jieba
+
 from fastapi import FastAPI, HTTPException, Query as FastAPIQuery
 
 from ragbot.adapters.wechat import HttpWechatBotAdapter
@@ -59,6 +61,9 @@ def query(payload: QueryIn) -> dict[str, object]:
         "is_multi_intent": retrieval.is_multi_intent,
         "intent_sub_queries": retrieval.intent_sub_queries,
         "intent_reasoning": retrieval.intent_reasoning,
+        "needs_handoff": retrieval.needs_handoff,
+        "handoff_type": retrieval.handoff_type,
+        "handoff_confidence": retrieval.handoff_confidence,
     }
 
 
@@ -119,8 +124,60 @@ def worktool_qa_callback(payload: WorkToolQaCallbackIn) -> WorkToolQaResponse:
         log_worktool_response(message, "human_handoff", started)
         return WorkToolQaResponse.no_reply()
 
+    # ---- Intent-based handoff detection (force / sensitive / negative) ----
+    intent_result = container.retrieval_service.classify_intent(message.content)
+    if intent_result.needs_handoff:
+        handoff_reason = f"intent:{intent_result.handoff_type}"
+        escalate = False
+        if intent_result.handoff_type in ("force", "sensitive"):
+            escalate = True
+        elif intent_result.handoff_type == "negative":
+            recent_logs = container.repository.list_recent_user_conversations(
+                message.group_id, message.user_id, limit=3
+            )
+            ai_replied = [log for log in recent_logs if log.auto_replied]
+            if ai_replied:
+                # Condition A: short negative feedback — implicitly about the
+                # previous AI reply regardless of token overlap.
+                if len(message.content) < 10:
+                    escalate = True
+                    handoff_reason += "|short_negative"
+                else:
+                    # Condition B: same-topic tracking — the same problem has
+                    # been asked across ≥ 2 AI-replied rounds.
+                    same_topic = _count_same_topic(
+                        message.content,
+                        [log.question for log in ai_replied],
+                        threshold=0.4,
+                    )
+                    if same_topic >= 2:
+                        escalate = True
+                        handoff_reason += f"|same_topic={same_topic}"
+        if escalate:
+            log = ConversationLog(
+                group_id=message.group_id,
+                user_id=message.user_id,
+                message_id=message.message_id,
+                question=message.content,
+                confidence="low",
+                confidence_score=0.0,
+                retrieved_chunk_ids=[],
+                draft_answer=None,
+                final_answer=None,
+                auto_replied=False,
+                needs_human=True,
+                routed_audiences=[],
+                routing_confidence=None,
+                routing_reason=None,
+            )
+            container.repository.save_conversation(log)
+            container.repository.add_review_item(ReviewItem(log.id, message.content, None))
+            submit_human_handoff(payload.groupName or message.group_id, log, handoff_reason)
+            log_worktool_response(message, "handoff_intent", started)
+            return WorkToolQaResponse.no_reply()
+
     if container.settings.fast_image_reply_enabled:
-        retrieval = container.retrieval_service.retrieve(message.content)
+        retrieval = container.retrieval_service.retrieve(message.content, intent_result=intent_result)
         template_available = has_fast_answer_template(message.content)
         fast_reply_allowed = (
             retrieval.confidence == ConfidenceLevel.HIGH and (retrieval_has_images(retrieval) or template_available)
@@ -153,7 +210,7 @@ def worktool_qa_callback(payload: WorkToolQaCallbackIn) -> WorkToolQaResponse:
             log_worktool_response(message, "fast_image_reply", started, len(answer))
             return WorkToolQaResponse.reply(answer)
 
-    log = container.workflow.handle_message(message, send_auto_reply=False)
+    log = container.workflow.handle_message(message, send_auto_reply=False, intent_result=intent_result)
     if log is None or not log.auto_replied or not log.final_answer:
         if log is not None and log.needs_human:
             submit_human_handoff(payload.groupName or message.group_id, log, "low_confidence")
@@ -293,6 +350,39 @@ def send_human_handoff(group_id: str, message_id: str, question: str, reason: st
             "failed to send WorkTool human handoff",
             extra={"group_id": group_id, "message_id": message_id, "reason": reason},
         )
+
+
+# High-frequency tokens that carry no topic signal for same-topic detection.
+_TOPIC_STOP_WORDS = frozenset(
+    {
+        "怎么", "如何", "什么", "为什么", "能不能", "可以", "应该",
+        "的", "了", "吗", "呢", "吧", "啊", "呀", "是", "有", "在",
+        "我", "你", "他", "她", "它", "我们", "你们", "这个", "那个",
+        "不", "没", "很", "都", "就", "也", "还", "要", "会", "能",
+        "一个", "一下", "搞", "弄", "做", "用", "让", "给", "把", "被",
+        "请", "帮", "看", "说", "想", "知道",
+    }
+)
+
+
+def _count_same_topic(current: str, history_queries: list[str], threshold: float = 0.4) -> int:
+    """Count how many history queries share the same topic as *current*.
+
+    Tokenises with Jieba, strips high-frequency function words, then
+    computes Jaccard similarity.  A round counts as same-topic when the
+    filtered token-set overlap is ≥ *threshold* (default 0.4).
+    """
+    curr_tokens = set(jieba.lcut(current)) - _TOPIC_STOP_WORDS
+    count = 0
+    for prev_q in history_queries:
+        prev_tokens = set(jieba.lcut(prev_q)) - _TOPIC_STOP_WORDS
+        denom = max(1, min(len(curr_tokens), len(prev_tokens)))
+        if denom == 0:
+            continue
+        overlap = len(curr_tokens & prev_tokens) / denom
+        if overlap >= threshold:
+            count += 1
+    return count
 
 
 def build_human_handoff_message(question: str, mention_name: str, prefix: str) -> str:

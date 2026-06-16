@@ -92,11 +92,21 @@ class RetrievalService:
         except Exception:
             return query
 
+    def classify_intent(self, query: str):
+        """Public entry point for pre-retrieval intent classification.
+
+        Returns an IntentResult that may carry handoff flags.  The caller can
+        short-circuit the RAG pipeline when ``needs_handoff`` is True without
+        paying the cost of a full retrieval.
+        """
+        return self._classify_intent(query)
+
     def retrieve(
         self,
         query: str,
         product_module: str | None = None,
         audiences: list[str] | None = None,
+        intent_result=None,
     ) -> RetrievalResult:
         route: AudienceRoute | None = None
         if audiences is None:
@@ -106,7 +116,8 @@ class RetrievalService:
             audiences = [audience for audience in audiences if audience in AUDIENCES]
 
         # ---- Intent classification + multi-intent decomposition (P1-11) ----
-        intent_result = self._classify_intent(query)
+        if intent_result is None:
+            intent_result = self._classify_intent(query)
         sub_queries = intent_result.sub_queries if intent_result.sub_queries else [query]
 
         # Retrieve hits for each sub-query independently, then merge.
@@ -142,6 +153,9 @@ class RetrievalService:
             is_multi_intent=intent_result.is_multi if intent_result else False,
             intent_sub_queries=intent_result.sub_queries if intent_result else [],
             intent_reasoning=intent_result.reasoning if intent_result else None,
+            needs_handoff=intent_result.needs_handoff if intent_result else False,
+            handoff_type=intent_result.handoff_type if intent_result else "",
+            handoff_confidence=intent_result.handoff_confidence if intent_result else 0.0,
         )
 
     # ------------------------------------------------------------------
