@@ -36,18 +36,18 @@ class AnswerService:
         )
 
     def _compact_contexts(self, contexts: list[str]) -> list[str]:
-        """Keep only the top-ranked answer, regardless of length.
-
-        The retrieval + rerank pipeline has already determined which chunk is
-        the best match.  Adding lower-ranked chunks usually dilutes the prompt
-        without adding signal — the LLM should generate from the single most
-        relevant piece.
-        """
-        cleaned = [self._clean_context(c) for c in contexts]
-        first = next((c for c in cleaned if c), None)
-        if first is None:
-            return []
-        return [first[:self.max_context_chars]]
+        compacted: list[str] = []
+        remaining = self.max_context_chars
+        for context in contexts:
+            if remaining <= 0:
+                break
+            cleaned = self._clean_context(context)
+            if not cleaned:
+                continue
+            clipped = cleaned[:remaining]
+            compacted.append(clipped)
+            remaining -= len(clipped)
+        return compacted
 
     def _clean_context(self, context: str) -> str:
         context = re.sub(r"\[图片:[^\]]+\]", "", context)

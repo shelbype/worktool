@@ -200,9 +200,13 @@ class RetrievalService:
                 )
             i = j + 1
 
-        # Overwrite rerank_score for downstream confidence calculation
+        # LLM score as bonus on top of rule score (max +0.15).
+        # Rule score sets the baseline; LLM fine-tunes within narrow bounds
+        # so that short precise answers are not crowded out by long generic ones.
+        alpha = 0.15
         for hit in hits:
-            hit.rerank_score = hit.llm_score
+            bonus = alpha * hit.llm_score
+            hit.rerank_score = min(1.0, hit.rerank_score + bonus)
 
         return hits
 
