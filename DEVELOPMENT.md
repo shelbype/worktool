@@ -30,6 +30,8 @@
 | P1-13 | - | 上下文窗口智能组装 (`feat/context-window`) | ⬜ |
 | P1-14 | - | 图片发送意图感知 (`feat/image-intent`) | ⬜ |
 | P1-17 | - | 回答质量评估 (`feat/eval-judge`) | ⬜ |
+| — | 2026-06-16 | 意图驱动转人工检测 (`feat/handoff-intent`) | ✅ |
+| — | 2026-06-16 | Fast Answer 模板关闭（生产） | ✅ |
 
 ---
 
@@ -135,24 +137,21 @@ ssh ... "kill \$(ps aux | grep 'uvicorn ragbot' | grep -v grep | awk '{print \$2
 
 ### 文件更改清单
 ```
-P0 (已部署):
-  db/init/001_schema.sql     ← 新增 search_text, answer_content
-  scripts/import_standard_kb.py ← build_search_text/build_answer_content
-  src/ragbot/domain.py       ← KnowledgeChunk 新增字段
-  src/ragbot/ingestion.py    ← embedding 使用 search_text
+当前生产 (2026-06-16, commit 7bce0bd):
+  src/ragbot/intent.py       ← (新建) IntentClassifier + 意图+转人工 Prompt
+  src/ragbot/providers.py    ← HttpLLMProvider (rewrite/classify) + HttpRerankProvider
+  src/ragbot/retrieval.py    ← 意图分类 + 多意图分解 + LLM 重排 + Jieba 分词
+  src/ragbot/repositories.py ← HNSW 索引 + BM25 + list_recent_user_conversations
+  src/ragbot/config.py       ← 全部 P1 配置项
+  src/ragbot/container.py    ← 全部 Provider 注入
+  src/ragbot/domain.py       ← RetrievalHit(LLM_score) + RetrievalResult(intent/handoff)
+  src/ragbot/main.py         ← API 响应(intent/handoff) + 转人工判定 + _count_same_topic
+  src/ragbot/workflow.py     ← intent_result 透传
+  src/ragbot/fast_answer.py  ← 增强去重正则 + Jieba 分词
   src/ragbot/answering.py    ← 上下文使用 answer_content
-  src/ragbot/fast_answer.py  ← snippet 使用 answer_content, 模板去重
-  src/ragbot/providers.py    ← embedding LRU 缓存, prompt 优化 + rewrite_query
-  src/ragbot/repositories.py ← schema/upsert/select 适配新字段
-  src/ragbot/retrieval.py    ← 关键词/加权使用 search_text + LLM rewrite
-  src/ragbot/config.py       ← 新增 llm_query_rewrite_* 配置
-  src/ragbot/container.py    ← 新增 query_rewrite_provider
-  src/ragbot/cli.py          ← eval-full 命令 + baseline 对比
-  eval/baseline.json         ← 评估基线
-
-待实施:
-  src/ragbot/repositories.py ← HNSW 索引替代 IVFFlat
-  src/ragbot/config.py       ← VECTOR_INDEX_TYPE 配置
+  src/ragbot/ingestion.py    ← embedding 使用 search_text
+  src/ragbot/cli.py          ← eval-full + baseline + migrate-index-type
+  eval/baseline.json         ← 评估基线 (top1=95.69%, auto_reply=98.37%)
 ```
 
 ---
@@ -254,13 +253,101 @@ LLM_RERANK_API_KEY=<DashScope API Key>
 
 ---
 
+### 2026-06-16 — 意图驱动转人工检测 (ColdAir-Hao, `feat/handoff-intent`)
+
+**目标**: 在意图分类的同一 LLM 调用中自动识别需要转人工的场景，避免机器人处理敏感业务（财务/课时）或激怒已不满的用户。
+
+**方案**:
+1. **扩展 `intent.py` 分类 Prompt** — 同一 LLM 调用新增 `needs_handoff` / `handoff_type` / `handoff_confidence` 输出：
+   - `force`: 用户明确要求找人工（"有真人吗""转人工""叫客服出来"等）
+   - `sensitive`: 涉及财务/课时/权限等敏感操作（合同、退款、扣课时、删除、修改课消等）
+   - `negative`: 表达不满或催促（"怎么又不行""还是不行""投诉""着急"等）
+2. **`domain.py`**: `RetrievalResult` +3 字段 (`needs_handoff`, `handoff_type`, `handoff_confidence`)
+3. **`retrieval.py`**: 新增 `classify_intent()` 公开方法，`retrieve()` 接受可选 `intent_result` 参数防止二次 LLM 调用
+4. **`main.py`**: 转人工判定逻辑：
+   - `force` / `sensitive` → 立即转人工，跳过 RAG 检索
+   - `negative` → 检查同用户近 3 轮对话历史：
+     - 短文本(<10字) → 转人工（隐式针对上次 AI 回复）
+     - 长文本 → `_count_same_topic()` Jieba+Jaccard 同话题检测 (≥2轮 → 转人工)
+5. **`repositories.py`**: 新增 `list_recent_user_conversations()` (内存 + PostgreSQL 双实现)
+6. **`workflow.py`**: `handle_message()` 透传 `intent_result`
+7. **`main.py` API 响应**: 暴露 `needs_handoff` / `handoff_type` / `handoff_confidence` 字段
+
+**转人工判定流程**:
+```
+LLM 分类 → needs_handoff?
+  ├─ force    → 立即转人工
+  ├─ sensitive → 立即转人工
+  ├─ negative → 查历史 →
+  │     ├─ 短文本(<10字) → 转人工
+  │     └─ 长文本 → Jaccard同话题≥2轮 → 转人工
+  └─ false → 正常 RAG 流程
+```
+
+**涉及文件**:
+- `src/ragbot/intent.py` — 扩展 Prompt + IntentResult 字段 + 解析
+- `src/ragbot/domain.py` — RetrievalResult 新增 handoff 字段
+- `src/ragbot/retrieval.py` — classify_intent() 公开 + intent_result 参数
+- `src/ragbot/repositories.py` — list_recent_user_conversations()
+- `src/ragbot/main.py` — 转人工判定 + _count_same_topic() + API 响应
+- `src/ragbot/workflow.py` — intent_result 透传
+
+**验收**:
+- "课时扣错了能改吗" → `needs_handoff: true, handoff_type: sensitive, confidence: 0.92`
+- "能找个活人过来吗" → `needs_handoff: true, handoff_type: force, confidence: 0.95`
+- "怎么创建班级" → `needs_handoff: false, handoff_type: ""`
+
+---
+
+### 2026-06-16 — 生产环境配置上线
+
+**服务器**: 139.196.6.90 (Alibaba Cloud ECS)
+**部署方式**: paramiko SFTP 上传 tar → 解压 → pkill + nohup 重启
+
+**当前启用的功能**:
+
+| 功能 | 配置项 | 值 |
+|------|--------|-----|
+| LLM 回答 | `LLM_PROVIDER` | `http` (DeepSeek v4-flash) |
+| 语义 Embedding | `EMBEDDING_PROVIDER` | `http` (DashScope text-embedding-v4, 1024维) |
+| 受众路由 | `AUDIENCE_ROUTING_ENABLED` | `true` |
+| 意图分类 | `INTENT_CLASSIFY_ENABLED` | `true` (qwen-turbo) |
+| 多意图分解 | `MULTI_INTENT_DECOMPOSE_ENABLED` | `true` |
+| LLM 重排序 | `LLM_RERANK_ENABLED` | `true` (qwen3-rerank) |
+| 转人工检测 | 随意图分类自动生效 | `true` |
+| 图片回复 | `REPLY_IMAGES_ENABLED` | `true` |
+
+**当前关闭的功能**:
+
+| 功能 | 配置项 | 原因 |
+|------|--------|------|
+| Fast Answer 模板 | `FAST_IMAGE_REPLY_ENABLED=false` | 全部走 LLM 生成，避免重复拼接 |
+| LLM 查询改写 | `LLM_QUERY_REWRITE_ENABLED=false` | 意图分类已含子查询改写 |
+
+**部署历史** (最近 3 次):
+
+| 时间 | Commit | 内容 |
+|------|--------|------|
+| 2026-06-16 18:25 | `7bce0bd` | handoff-intent 转人工检测 |
+| 2026-06-16 18:20 | `867c493` | 同时启用 Intent Classify + Rerank，关闭 Fast Answer |
+| 2026-06-16 18:15 | `867c493` | Fast Answer 去重增强 + Rerank 集成 |
+
+---
+
 ## 评估基线演进
 
-| 指标 | P0 (Hash 64dim) | P1 语义 (1024dim) | P1 BM25 + HNSW |
-|------|-----------------|-------------------|----------------|
-| Top-1 命中率 | 93.10% | 96.55% | **95.69%** |
-| Top-3 命中率 | 98.28% | 100.00% | **100.00%** |
-| 自动回复准确率 | 93.50% | 97.56% | **98.37%** |
-| 转人工准确率 | 93.50% | 97.56% | **98.37%** |
-| 路由 Top-1 | 92.78% | 92.78% | **92.78%** |
-| 路由覆盖 | 100.00% | 100.00% | **100.00%** |
+| 指标 | P0 (Hash) | P1 语义 | P1 +BM25+HNSW | P1 全功能(生产) |
+|------|-----------|---------|---------------|-----------------|
+| Top-1 命中率 | 93.10% | 96.55% | 95.69% | **95.69%** |
+| Top-3 命中率 | 98.28% | 100.00% | 100.00% | **100.00%** |
+| 自动回复准确率 | 93.50% | 97.56% | 98.37% | **98.37%** |
+| 转人工准确率 | 93.50% | 97.56% | 98.37% | **98.37%** |
+| 路由 Top-1 | 92.78% | 92.78% | 92.78% | **92.78%** |
+| 路由覆盖 | 100.00% | 100.00% | 100.00% | **100.00%** |
+
+> **生产新增能力**（不改变检索指标，改善回答质量和用户体验）：
+> - 意图分类 (5 类) + 多意图分解 (复合问题拆 2-3 子查询)
+> - LLM 语义重排序 (qwen3-rerank tiebreak fusion)
+> - 意图驱动转人工 (force/sensitive/negative 三级)
+> - Fast Answer 模板关闭 (全部走 LLM 生成)
+> - 置信度提升: 多意图复合问题从 0.60 → 0.87 (+45%)
