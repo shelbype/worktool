@@ -175,7 +175,7 @@ class RetrievalService:
         if len(hits) <= 1:
             return hits
 
-        documents = [hit.chunk.effective_search_text for hit in hits]
+        documents = [hit.chunk.effective_answer_content for hit in hits]
         try:
             scores = self.rerank_provider.rerank(query, documents)
         except Exception:

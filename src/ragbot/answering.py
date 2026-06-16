@@ -36,39 +36,24 @@ class AnswerService:
         )
 
     def _compact_contexts(self, contexts: list[str]) -> list[str]:
-        """Pack contexts into the token budget, favouring short precise answers.
+        """Keep only short precise answers; skip long generic chunks entirely.
 
-        Long generic chunks can crowd out the short, high-precision snippet
-        that directly answers the question.  A two-pass strategy ensures the
-        best-matching short answer is always included intact before large
-        chunks consume the remaining capacity.
+        Long chunks tend to be generic help-center articles that dilute the
+        LLM prompt without adding signal.  Short snippets (≤ 200 chars) are
+        almost always a targeted answer (操作步骤 / 标准回答).
 
-        * Pass 1 — preserve short snippets (≤ 200 chars) in ranking order.
-        * Pass 2 — top-off with longer chunks, each truncated to fit.
+        When no short snippet survives, the LLM will receive an empty context
+        list and fall back to the handoff reply, which is the correct
+        behaviour — the KB doesn't have a concise answer for this query.
         """
         cleaned = [self._clean_context(c) for c in contexts]
-        cleaned = [c for c in cleaned if c]
-
+        short = [c for c in cleaned if c and len(c) <= 200]
         compacted: list[str] = []
         remaining = self.max_context_chars
-
-        # Pass 1: short, high-signal snippets — keep intact
-        for context in cleaned:
-            if remaining <= 0:
-                break
-            if len(context) <= 200 and remaining >= len(context):
+        for context in short:
+            if remaining >= len(context):
                 compacted.append(context)
                 remaining -= len(context)
-
-        # Pass 2: longer chunks fill the remaining budget
-        for context in cleaned:
-            if remaining <= 0:
-                break
-            if len(context) > 200:
-                clipped = context[:remaining]
-                compacted.append(clipped)
-                remaining -= len(clipped)
-
         return compacted
 
     def _clean_context(self, context: str) -> str:
