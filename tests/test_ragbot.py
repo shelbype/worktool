@@ -775,3 +775,71 @@ def test_eval_routing_cases_reports_accuracy():
 
     assert report["evaluated"] == 2
     assert report["top1_accuracy"] == 1.0
+
+
+# ── handoff rules enhancement tests ──
+
+def test_handoff_rules_loads_expanded_keywords():
+    """New config includes explicit handoff, emotion, and sensitive patterns."""
+    preprocessor = MessagePreprocessor()
+
+    # L1: explicit handoff keywords (always trigger)
+    assert preprocessor.requires_human(
+        WechatMessage(message_id="h1", group_id="g1", user_id="u1", content="转人工")
+    )
+    assert preprocessor.requires_human(
+        WechatMessage(message_id="h2", group_id="g1", user_id="u1", content="有真人吗")
+    )
+
+    # L2: emotion keywords (always trigger)
+    assert preprocessor.requires_human(
+        WechatMessage(message_id="h3", group_id="g1", user_id="u1", content="太慢了影响上课")
+    )
+
+    # L3: sensitive business patterns (trigger when not a safe query)
+    assert preprocessor.requires_human(
+        WechatMessage(message_id="h4", group_id="g1", user_id="u1", content="金额不对")
+    )
+
+    # Existing patterns still work
+    assert preprocessor.requires_human(
+        WechatMessage(message_id="h5", group_id="g1", user_id="u1", content="这个报价有问题")
+    )
+
+
+def test_mock_llm_uses_new_handoff_message():
+    """MockLLMProvider returns the updated handoff message when no contexts."""
+    provider = MockLLMProvider()
+
+    answer = provider.generate_answer("合同金额不对", [])
+
+    assert answer == "老师稍等，我们这边具体看下问题。"
+    assert "@校校助理" not in answer
+
+
+def test_llm_prompt_contains_prohibited_content_rules():
+    """The LLM answer prompt includes the 10 prohibited content rules."""
+    # Verify the prompt string embedded in HttpLLMProvider contains the rules
+    from ragbot.providers import HttpLLMProvider
+
+    provider = HttpLLMProvider(
+        api_base="https://test.example.com",
+        api_key="test-key",
+        model="test-model",
+    )
+    # Access the prompt generated within generate_answer by calling with empty contexts
+    # We can inspect the source directly since the prompt is constructed in the method
+    import inspect
+
+    source = inspect.getsource(provider.generate_answer)
+
+    # Check prohibited content rules are present
+    assert "严格禁止输出以下内容" in source
+    assert "判断任何金额、费用、结算、退款金额是否正确" in source
+    assert "判断课时扣减、课消是否正确" in source
+    assert "承诺可以恢复、删除、修改数据" in source
+    assert "引导用户绕过权限限制" in source
+    assert "编造知识库中没有的功能或操作路径" in source
+    assert "给出没有文档依据的原因判断或结论" in source
+    assert "对客户内部规则、流程做主观评价" in source
+    assert "对财务、合同、经营数据下任何结论" in source

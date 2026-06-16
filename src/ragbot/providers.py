@@ -87,7 +87,7 @@ class HttpEmbeddingProvider:
 class MockLLMProvider:
     def generate_answer(self, question: str, contexts: list[str]) -> str:
         if not contexts:
-            return "稍等老师，这个问题 @校校助理 帮您看下，尽快回复您。"
+            return "老师稍等，我们这边具体看下问题。"
         context = contexts[0].strip().replace("\n", " ")
         return f"老师，您可以先看下这个说明：{context}"
 
@@ -106,8 +106,18 @@ class HttpLLMProvider:
             "1. 用真人客服助理口吻回答，可以称呼“老师”，但不要每句都重复称呼。\n"
             "2. 不要使用机械开头，例如“可以，按下面步骤处理”“根据帮助文档”。\n"
             "3. 操作类问题优先用编号步骤，保留菜单名、按钮名、注意事项。\n"
-            "4. 如果知识片段不足以确认答案，请只回复“稍等老师，这个问题 @校校助理 帮您看下，尽快回复您。”\n"
-            "5. 语气自然、简洁、可执行，不使用表情，不做价格、合同、退款等承诺。\n\n"
+            "4. 如果知识片段不足以确认答案，请只回复“老师稍等，我们这边具体看下问题。”\n"
+            "5. 语气自然、简洁、可执行，不使用表情。\n"
+            "6. 严格禁止输出以下内容（即使知识片段包含相关文字，也必须拒绝回答）：\n"
+            "   a) 判断任何金额、费用、结算、退款金额是否正确\n"
+            "   b) 判断课时扣减、课消是否正确\n"
+            "   c) 承诺可以恢复、删除、修改数据\n"
+            "   d) 引导用户绕过权限限制\n"
+            "   e) 编造知识库中没有的功能或操作路径\n"
+            "   f) 给出没有文档依据的原因判断或结论\n"
+            "   g) 对客户内部规则、流程做主观评价\n"
+            "   h) 对财务、合同、经营数据下任何结论\n"
+            "   如涉及以上任何情况，只回复“老师稍等，我们这边具体看下问题。”\n\n"
             "参考示例：\n"
             "问：学生如何查看错题分析？\n"
             "答：老师，学生可以在学生端首页点击“错题本”，选择对应科目即可查看错题分析和订正建议。\n\n"
@@ -226,7 +236,7 @@ class HttpRerankProvider:
             top_n: Optional limit on returned results.
 
         Returns:
-            Dict mapping original document index to relevance_score (0–1).
+            Dict mapping original document index to relevance_score (0-1).
         """
         body: dict[str, object] = {
             "model": self.model,
